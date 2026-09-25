@@ -1,0 +1,70 @@
+﻿@* @{
+    ViewData["Title"] = "Manage";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="main-body">
+    <div class="row mb-4">
+        <div class="col-9">
+            <div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+            <div class="pgName">Manage Department</div>
+        </div>
+        <div class="col-3 text-end">
+            <a href="@Url.Content("~/Master/Department/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="fmbdy">
+            <div class="row gx-2">
+                <div class="col-xl-6 mbc">
+                    <label>Name</label>
+                    <input type="text" class="form-control" />
+                </div>
+                <div class="col-xl-2 mbc">
+                    <label>Short Code</label>
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="row gx-2">
+                <div class="col-xl-8 mbc">
+                    <label>Description</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="row gx-2">
+                <div class="col-xl-2 mbc">
+                    <label>Status</label>
+                    <div class="switch">
+                        <label>
+                            <input type="checkbox" name="Is_Active" checked="" id="Is_Active" value="true">
+                            <span class="lever">
+                                <span class="unckeckS">No</span>
+                                <span class="ckeckS">Yes</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xl-2 mbc">
+                    <label>Is Vendor</label>
+                    <div class="switch">
+                        <label>
+                            <input type="checkbox" name="Is_Vendor" checked="" id="Is_Vendor" value="true">
+                            <span class="lever">
+                                <span class="unckeckS">No</span>
+                                <span class="ckeckS">Yes</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-container mt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+ *@

@@ -1,0 +1,110 @@
+﻿@model ModelLayer.Models.IAM.App.AppRequestModel
+@{
+	ViewData["Title"] = (Model?.App_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+	<link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+	<link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.App_Id ?? 0) > 0 ? "Edit" : "Add") App</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/App/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="App" asp-action="Save" id="AppForm" onsubmit="SubmitForm('AppForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.App_Id" id="hdnAppId" />
+				<div class="row gx-2 mb-1">
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Product</label>
+								<select name="Product_Id" asp-for="@Model.Product_Id" asp-items="@(new SelectList(ViewBag.ProductList,"Id","Name"))" class="form-control dropdown slct2" id="DDLProductId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+							</div>
+							<div class="col-xl-5 mbc">
+								<label class="required">Name</label>
+								<input name="App_Name" type="text" asp-for="@Model.App_Name" class="form-control" placeholder="Enter App Name" />
+								<span class="text-danger" asp-validation-for="@Model.App_Name"></span>
+							</div>
+							<div class="col-xl-3 mbc">
+								<label class="required">Application Code</label>
+								<input name="Application_Code" type="text" asp-for="@Model.Application_Code" class="form-control" placeholder="Enter Application Code" />
+								<span class="text-danger" asp-validation-for="@Model.Application_Code"></span>
+							</div>
+							<div class="col-xl-3 mbc">
+								<label class="required">Application Id</label>
+								<input name="Application_Id" type="text" asp-for="@Model.Application_Id" class="form-control" placeholder="Enter Application Id" />
+								<span class="text-danger" asp-validation-for="@Model.Application_Id"></span>
+							</div>
+							<div class="col-xl-3 mbc">
+								<label class="required">Version</label>
+								<input name="App_Version" type="text" asp-for="@Model.App_Version" class="form-control" placeholder="Enter App Version" />
+								<span class="text-danger" asp-validation-for="@Model.App_Version"></span>
+							</div>
+							<div class="col-xl-3 mbc">
+								<label class="required">Min Sdk Version</label>
+								<input name="App_Min_Sdk_Version" type="text" asp-for="@Model.App_Min_Sdk_Version" class="form-control" placeholder="Enter App Min Sdk Version" />
+								<span class="text-danger" asp-validation-for="@Model.App_Min_Sdk_Version"></span>
+							</div>
+							<div class="col-xl-3 mbc">
+								<label class="required">App Target Sdk Version</label>
+								<input name="App_Target_Sdk_Version" type="text" asp-for="@Model.App_Target_Sdk_Version" class="form-control" placeholder="Enter App Target Sdk Version" />
+								<span class="text-danger" asp-validation-for="@Model.App_Target_Sdk_Version"></span>
+							</div>
+							<div class="col-xl-3 mbc">
+								<label class="required">App Play Store Url</label>
+								<input name="App_Play_Store_Url" type="text" asp-for="@Model.App_Play_Store_Url" class="form-control" placeholder="Enter App Play Store Url" />
+								<span class="text-danger" asp-validation-for="@Model.App_Play_Store_Url"></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-3 d-flex justify-content-center align-items-center">
+						<div class="pubox">
+							<img alt="upload photo" class="uploadpic" src="@(!string.IsNullOrEmpty(Model.App_Logo) ? Url.Content(Model.App_Logo) : "/images/default-user.svg")" id="viewImage">
+							<div class="puboxfile">
+								<span class="flabel">Upload Logo</span>
+								<input type="file" name="POSTED_FILE" id="fileUpload" class="uploadfile" />
+								<input type="hidden" name="App_Logo" asp-for="@Model.App_Logo" id="hdlApp_Logo" class="uploadfile" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active" />
+								<span class="lever">
+									<span class="unckeckS">No</span>
+									<span class="ckeckS">Yes</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/scripts/iam/app/app.js"></script>
+}

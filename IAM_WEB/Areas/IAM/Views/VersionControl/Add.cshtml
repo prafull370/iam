@@ -1,0 +1,103 @@
+﻿@model ModelLayer.Models.IAM.VersionControl.VersionControlRequestModel
+@{
+	ViewData["Title"] = (Model?.Version_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section styles
+{
+	<link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+	<link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+    <link href="~/lib/datepicker/flatpickr.css" rel="stylesheet" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Version_Id ?? 0) > 0 ? "Edit" : "Add") Version</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/VersionControl/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="VersionControl" asp-action="Save" id="VersionForm" onsubmit="SubmitForm('VersionForm', event); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Version_Id" id="hdnAppId" />
+				<div class="row gx-2 mb-1">
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Product</label>
+								<select name="Product_Id" asp-for="@Model.Product_Id" asp-items="@(new SelectList(ViewBag.ProductList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLProductId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Version Point</label>
+								<select name="Version_Point" asp-for="@Model.Version_Point" class="form-control dropdown slct2" id="DDLVersionId">
+									<option value="">Select</option>
+									<option value="1">App</option>
+									<option value="2">Web</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Name"></span>
+							</div>
+							<div class="col-xl-4 mbc d-none" id="DivAPP">
+								<label class="required">App</label>
+								<select asp-for="@Model.App_Id" class="form-control dropdown slct2" id="DDLAppId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.App_Id"></span>
+							</div>
+							<div class="col-xl-3 mbc">
+								<label class="required">Version</label>
+								<input name="Version" type="text" asp-for="@Model.Version" class="form-control" placeholder="Enter App Version" />
+								<span class="text-danger" asp-validation-for="@Model.Version"></span>
+							</div>
+							<div class="col-lg-4 col-sm-4 col-6 mbc-sm">
+								<label class="required">Version Date</label>
+								<input type="text" asp-for="@Model.Created_On" class="form-control calicnrgt" placeholder="DD-MMM-YYYY" id="txtFromDate" />
+								<span class="text-danger" asp-validation-for="@Model.Created_On"></span>
+							</div>
+						</div>
+						<div class="col-xl-8 mbc">
+							<label>Description</label>
+							<textarea name="Description" asp-for="@Model.Description" class="form-control" autocomplete="off" placeholder="Enter Description" rows="3"></textarea>
+							<span class="text-danger" asp-validation-for="@Model.Description"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active" />
+								<span class="lever">
+									<span class="unckeckS">No</span>
+									<span class="ckeckS">Yes</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()"></script>
+    <script src="~/lib/datepicker/flatpickr.js"></script>
+	<script src="@Url.Content("~/scripts/common/common.js").ToLower()"></script>
+	<script src="~/scripts/iam/versioncontrol/versioncontrol.js"></script>
+	
+}

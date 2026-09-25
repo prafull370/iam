@@ -1,0 +1,160 @@
+﻿@model ModelLayer.Models.IAM.Company.CompanyRequestModel;
+@{
+	ViewData["Title"] = (Model?.Company_Id ?? 0) > 0 ? "Edit" : "Add";
+	// Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+	Layout = "~/Views/Shared/_SuperAdminLayout.cshtml";
+}
+
+@section Styles {
+	<link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Company_Id ?? 0) > 0 ? "Edit" : "Add") Company</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Company/List")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Company" asp-action="Save" id="CompanyForm" onsubmit="SubmitForm('CompanyForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Company_Id" id="hdnCompanyId" />
+				<div class="row gx-2">
+					<div class="col-3 d-flex justify-content-center align-items-start">
+						<div class="pubox">
+							<img alt="upload photo" class="uploadpic" src="@(!string.IsNullOrEmpty(Model.Company_Logo) ? Url.Content(Model.Company_Logo) : "/images/default-user.svg")" id="viewImage">
+							<div class="puboxfile">
+								<span class="flabel">Upload Photo</span>
+								<input type="file" name="POSTED_FILE" id="fileUpload" class="uploadfile" accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg" />
+								<input type="hidden" name="Company_Logo" asp-for="@Model.Company_Logo" id="hdlCompany_Logo" class="uploadfile" />
+							</div>
+						</div>
+					</div>
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Company Name</label>
+								<input name="Company_Name" type="text" asp-for="@Model.Company_Name" class="form-control" autocomplete="off" placeholder="Enter Company Name" />
+								<span class="text-danger" asp-validation-for="@Model.Company_Name"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Company Short Name</label>
+								<input name="Company_Short_Name" type="text" asp-for="@Model.Company_Short_Name" class="form-control" autocomplete="off" placeholder="Enter Short Name" />
+								<span class="text-danger" asp-validation-for="@Model.Company_Short_Name"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label>Company Regional Name</label>
+								<input name="Company_Name_Regional" type="text" asp-for="@Model.Company_Name_Regional" class="form-control" autocomplete="off" placeholder="Enter Regional Name" />
+								<span class="text-danger" asp-validation-for="@Model.Company_Name_Regional"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label>GST</label>
+								<input name="Gst" type="text" asp-for="@Model.Gst" class="form-control" autocomplete="off" placeholder="Enter GST" />
+								<span class="text-danger" asp-validation-for="@Model.Gst"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label>CIN</label>
+								<input name="Cin" type="text" asp-for="@Model.Cin" class="form-control" autocomplete="off" placeholder="Enter CIN" />
+								<span class="text-danger" asp-validation-for="@Model.Cin"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label>TIN</label>
+								<input name="Tin" type="text" asp-for="@Model.Tin" class="form-control" autocomplete="off" placeholder="Enter TIN" />
+								<span class="text-danger" asp-validation-for="@Model.Tin"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Toll Free Number</label>
+								<input name="Toll_Free_Number" type="text" asp-for="@Model.Toll_Free_Number" class="form-control" autocomplete="off" placeholder="Enter Toll Free No." id="tollFreeNo" />
+								<span class="text-danger" asp-validation-for="@Model.Toll_Free_Number"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Website</label>
+								<input name="Company_Website" type="text" asp-for="@Model.Company_Website" class="form-control" autocomplete="off" placeholder="Enter Web Url" />
+								<span class="text-danger" asp-validation-for="@Model.Company_Website"></span>
+							</div>
+							<div class="col-sm-4 mbc">
+								<label class="required">Plan</label>
+								<select class="form-control slct2 dropdown" asp-for="@Model.Plan_Id" asp-items="@(new SelectList(ViewBag.Plan_List,"Id","Name"))" id="plan_id">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Plan_Id"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-6 mbc">
+						<label>Description</label>
+						<textarea name="Company_Desc" class="form-control" asp-for="@Model.Company_Desc" rows="3" autocomplete="off" placeholder="Enter Description Here"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Company_Desc"></span>
+					</div>
+					<div class="col-xl-6 mbc">
+						<label>Address</label>
+						<textarea name="Address" class="form-control" asp-for="@Model.Address" rows="3" autocomplete="off" placeholder="Enter Address"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Address"></span>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="row gx-2">
+					<div class="col-3">
+						<div class="col-xl-9 mbc">
+							<h5 class="fw-bold mb-0">Contact Details</h5>
+						</div>
+					</div>
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Contact Person Name</label>
+								<input name="Contact_Person_Name" type="text" asp-for="@Model.Contact_Person_Name" class="form-control" autocomplete="off" placeholder="Enter Contact Person Name" />
+								<span class="text-danger" asp-validation-for="@Model.Contact_Person_Name"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Contact Person Mobile No.</label>
+								<input name="Contact_Mobile_No" type="text" asp-for="@Model.Contact_Mobile_No" class="form-control" id="contactNo" autocomplete="off" placeholder="Enter Contact Person Mobile No." />
+								<span class="text-danger" asp-validation-for="@Model.Contact_Mobile_No"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Contact Person Email ID</label>
+								<input name="Contact_Email_Id" type="text" asp-for="@Model.Contact_Email_Id" class="form-control" autocomplete="off" placeholder="Enter Contact Person Email ID" />
+								<span class="text-danger" asp-validation-for="@Model.Contact_Email_Id"></span>
+							</div>
+							<div class="col-xl-7 mbc">
+								<label>Remarks</label>
+								<textarea name="Remarks" class="form-control" asp-for="@Model.Remarks" rows="3" autocomplete="off" placeholder="Enter Remarks"></textarea>
+								<span class="text-danger" asp-validation-for="@Model.Remarks"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/scripts/iam/company/company.js").ToLower()"></script>
+}

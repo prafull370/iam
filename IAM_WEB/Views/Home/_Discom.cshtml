@@ -1,0 +1,22 @@
+﻿@model List<ModelLayer.Models.IAM.User.UserDiscomPermissionModel>;
+@{
+	ViewData["Title"] = "Discom";
+	int i = 1;
+}
+@if (Model != null)
+{
+	@foreach (var item in Model)
+	{
+		<div class="col-xl-2 col-sm-3 col-xs-4 col-6 mbcs discom-item" data-id="@item.Discom_Id" onclick="bindProduct(@item.Discom_Id);">
+			<div class="srcsBox d-flex flex-column text-center">
+				<a href="javascript:void(0)" class="srvcIcon">
+					<div class="sIconIn">
+						<img src="@(!string.IsNullOrEmpty(item.Discom_Logo) ? item.Discom_Logo :  "/images//configuration.svg")" height="40" width="40">
+					</div>
+				</a>
+				<a href="javascript:void(0)" class="srvcName">@item.Discom_Name</a>
+			</div>
+		</div>
+		i++;
+	}
+}

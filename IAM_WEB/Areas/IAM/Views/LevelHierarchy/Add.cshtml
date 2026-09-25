@@ -1,0 +1,185 @@
+﻿@model ModelLayer.Models.IAM.LevelHierarchy.LevelHierarchyRequestModel;
+@{
+	ViewData["Title"] = (Model?.Level_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Level_Id ?? 0) > 0 ? "Edit" : "Add") Level Hierarchy</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/LevelHierarchy/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="LevelHierarchy" asp-action="Save" id="LevelHierarchyForm" onsubmit="SubmitForm('LevelHierarchyForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				@* <input type="hidden" asp-for="@Model.Level_Id" id="hdnDesignationId" /> *@
+				<input type="hidden" id="lastSelectedId" />
+				<input type="hidden" value="@Model.Level_Id" id="levelId" />
+				<input type="hidden" value="@Model.Level1_Id" id="level1Id" />
+				<input type="hidden" value="@Model.Level2_Id" id="level2Id" />
+				<input type="hidden" value="@Model.Level3_Id" id="level3Id" />
+				<input type="hidden" value="@Model.Level4_Id" id="level4Id" />
+				<input type="hidden" value="@Model.Level5_Id" id="level5Id" />
+				<div class="row gx-2 mb-1">
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Level Type</label>
+								<select name="Level_Type" asp-for="@Model.Level_Type" asp-items="@(new SelectList(ViewBag.Level,"Name","Name"))" class="form-control dropdown slct2" id="lvlType">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Level_Type"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label for="DDLZoneId" id="ZoneLabel">Level1</label>
+								<select name="Zone_Id" asp-items="@(new SelectList(ViewBag.ZoneList,"Id","Name"))" class="form-control dropdown slct2" id="DDLZoneId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" id="zone_errmsg"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label for="DDLCircleId" id="CircleLabel">Level2</label>
+								<select name="Circle_Id" class="form-control dropdown slct2" id="DDLCircleId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" id="circle_errmsg"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label for="DDLDivisionId" id="DivLabel">Level3</label>
+								<select name="Division_Id" class="form-control dropdown slct2" id="DDLDivisionId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" id="div_errmsg"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label for="DDLSubDivisionId" id="SubDivLabel">Level4</label>
+								<select name="SubDivision_Id" class="form-control dropdown slct2" id="DDLSubDivisionId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" id="sdiv_errmsg"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label for="DDLBlockId" id="BlockLabel">Level5</label>
+								<select name="Block_Id" class="form-control dropdown slct2" id="DDLBlockId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" id="block_errmsg"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Level Name</label>
+								<input name="Level_Name" type="text" asp-for="@Model.Level_Name" class="form-control" autocomplete="off" placeholder="Enter Level Name" />
+								<span class="text-danger" asp-validation-for="@Model.Level_Name"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Level Code</label>
+								<input name="Level_Code" type="text" asp-for="@Model.Level_Code" class="form-control" autocomplete="off" placeholder="Enter Level Code" />
+								<span class="text-danger" asp-validation-for="@Model.Level_Code"></span>
+							</div>
+							<div></div>
+							<div class="col-xl-8 mbc">
+								<label>Description</label>
+								<textarea name="Remarks" asp-for="@Model.Remarks" class="form-control" autocomplete="off" placeholder="Enter Description" maxlength="200" rows="3"></textarea>
+								<span class="text-danger" asp-validation-for="@Model.Remarks"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc me-2">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+	<script src="@Url.Content("~/scripts/iam/levelhierarchy/levelhierarchy.js").ToLower()"></script>
+	<script src="@Url.Content("~/scripts/common/common.js").ToLower()"></script>
+	<script>
+		$(document).ready(function () {
+			// Edit
+			var isEdit = @((Model.Level_Id > 0).ToString().ToLower()) ;// will be "true" or "false"
+			var level1 = @Model.Level1_Id;
+			var level2 = @Model.Level2_Id;
+			var level3 = @Model.Level3_Id;
+			var level4 = @Model.Level4_Id;
+			var level5 = @Model.Level5_Id;
+
+			if (isEdit) {
+				//$('#DDLZoneId').val(level1);
+				$('#DDLZoneId').val(level1).trigger('change');
+				BindDynamicDropdown($('#DDLCircleId'), 'CIRCLE', level2, level1);
+				BindDynamicDropdown($('#DDLDivisionId'), 'DIVISION', level3, level2);
+				BindDynamicDropdown($('#DDLSubDivisionId'), 'SUBDIVISION', level4, level3);
+				BindDynamicDropdown($('#DDLBlockId'), 'BLOCK', level5, level4);
+			}
+
+
+			// 🔁 On change of Zone
+			$('#DDLZoneId').on('change', function () {
+				let selectedZoneId = $(this).val();
+				$('#DDLCircleId, #DDLDivisionId, #DDLSubDivisionId, #DDLBlockId').html('<option value="">Select</option>');
+
+				if (selectedZoneId) {
+					BindDynamicDropdown($('#DDLCircleId'), 'CIRCLE', '', selectedZoneId);
+				}
+			});
+
+			// 🔁 On change of Circle
+			$('#DDLCircleId').on('change', function () {
+				let selectedCircleId = $(this).val();
+				$('#DDLDivisionId, #DDLSubDivisionId, #DDLBlockId').html('<option value="">Select</option>');
+
+				if (selectedCircleId) {
+					BindDynamicDropdown($('#DDLDivisionId'), 'DIVISION', '', selectedCircleId);
+				}
+			});
+
+			// 🔁 On change of Division
+			$('#DDLDivisionId').on('change', function () {
+				let selectedDivisonId = $(this).val();
+				$('#DDLSubDivisionId, #DDLBlockId').html('<option value="">Select</option>');
+
+				if (selectedDivisonId) {
+					BindDynamicDropdown($('#DDLSubDivisionId'), 'SUBDIVISION', '', selectedDivisonId);
+				}
+			});
+
+			// 🔁 On change of Sub Division
+			$('#DDLSubDivisionId').on('change', function () {
+				let selectedSubDivisonId = $(this).val();
+				$('#DDLBlockId').html('<option value="">Select</option>');
+
+				if (selectedSubDivisonId) {
+					BindDynamicDropdown($('#DDLBlockId'), 'BLOCK', '', selectedSubDivisonId);
+				}
+			});
+		});
+	</script>
+}

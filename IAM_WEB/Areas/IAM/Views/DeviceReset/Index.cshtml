@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+}
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">App Device List</div>
+        </div>
+
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+    <div class="row gx-2">
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="dvCategory">
+            <label>Search</label>
+            <input type="text" class="form-control form-control-sm" id="txtsearch" autocomplete="off" name="txtsearch" placeholder="Search Here">
+        </div>
+        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end" id="dvbtn">
+            <div class="btn-group">
+                <button type="button" id="btnsearch" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">search</i>
+                </button>
+                <button type="button" id="btnreset" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">restart_alt</i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cardbox">
+        <div id="dvTableWrapper">
+            <table class="table table-dtc thwsnw" id="tblDepartmentlist">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Login Id</th>
+                        <th>Device Id</th>
+                        <th>Mobile Number</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Reset Device Id</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- Empty State -->
+        <div class="emptydiv text-center d-none" id="imgchooseflt">
+            <img class="fltr-img" src="/images/no_data.svg" height="135" />
+            <div class="fltr-desc">
+                No records to display at the moment.<br />
+                No App Device records found.
+            </div>
+        </div>
+    </div>
+
+    <div class="modal mbdrds fade" id="vlModal" tabindex="-1" aria-labelledby="vlModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-head d-flex justify-content-between">
+                    <div class="modal-ttl">Department Detail</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-dtc thwsnw">
+                        <thead>
+                            <tr>
+                                <th>Department Name</th>
+                                <th>Department Code</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyDepartment">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    @* <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> *@
+    <script src="~/scripts/iam/devicereset/devicereset.js"></script>
+}

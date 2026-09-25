@@ -1,0 +1,329 @@
+@model List<ModelLayer.Models.IAM.RolePageMapping.ProductViewModel>;
+
+@if (Model?.Any() == true)
+{
+    <thead>
+        <tr>
+            <th width="500">Structure Name
+                <div class="hrchy">Product Name <i class="ugo-icons"> chevron_right </i> Service Name <i class="ugo-icons"> chevron_right </i> Module <i class="ugo-icons"> chevron_right </i> Page</div>
+            </th>
+            <th class="text-center">Active</th>
+            <th class="text-center">Landing Page</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            bool productHasChildren = product.Services.Count > 0;
+
+            <tr class="level-0 toggle-row" data-id="0">
+                <td class="hierarchy-col @(productHasChildren ? "toggle-parent" : "")" data-level="0">
+                    @if (productHasChildren)
+                    {
+                        <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                    }
+                    else
+                    {
+                        <span class="toggle-icon-spacer"></span>
+                    }
+                    <span class="tree-label">@product.Product_Name</span>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+
+            int i = 0;
+
+            for (int si = 0; si < product.Services.Count; si++)
+            {
+                var service = product.Services[si];
+                bool serviceMore = si < product.Services.Count - 1;
+                bool serviceHasChildren = service.Modules.Count > 0 || service.ParentPages.Count > 0;
+                var serviceAncestors = new List<bool>();
+
+                <tr class="level-1 child-of-0 toggle-row d-none" data-id="1">
+                    <td class="hierarchy-col @(serviceHasChildren ? "toggle-parent" : "")" data-level="1">
+                        <span class="tree-rails">
+                            @foreach (var more in serviceAncestors)
+                            {
+                                <span class="rail @(more ? "rail-line" : "")"></span>
+                            }
+                            <span class="rail rail-own @(serviceMore ? "rail-more" : "")"></span>
+                        </span>
+                        @if (serviceHasChildren)
+                        {
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                        }
+                        else
+                        {
+                            <span class="toggle-icon-spacer"></span>
+                        }
+                        <span class="tree-label">@service.Service_Name</span>
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+
+                if (service.Modules.Any())
+                {
+                    for (int mi = 0; mi < service.Modules.Count; mi++)
+                    {
+                        var module = service.Modules[mi];
+                        bool moduleMore = mi < service.Modules.Count - 1;
+                        var modParentPages = module.ParentPages.Where(p => p.Is_Parent).ToList();
+                        bool moduleHasChildren = modParentPages.Count > 0;
+                        var moduleAncestors = new List<bool> { serviceMore };
+
+                        <tr class="level-2 child-of-1 toggle-row d-none" data-id="2">
+                            <td class="hierarchy-col @(moduleHasChildren ? "toggle-parent" : "")" data-level="2">
+                                <span class="tree-rails">
+                                    @foreach (var more in moduleAncestors)
+                                    {
+                                        <span class="rail @(more ? "rail-line" : "")"></span>
+                                    }
+                                    <span class="rail rail-own @(moduleMore ? "rail-more" : "")"></span>
+                                </span>
+                                @if (moduleHasChildren)
+                                {
+                                    <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                                }
+                                else
+                                {
+                                    <span class="toggle-icon-spacer"></span>
+                                }
+                                <span class="tree-label">@module.Module_Name</span>
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+
+                        for (int pi = 0; pi < modParentPages.Count; pi++)
+                        {
+                            var pg = modParentPages[pi];
+                            bool pageMore = pi < modParentPages.Count - 1;
+                            bool pageHasChildren = pg.ChildPages.Any();
+                            var pageAncestors = new List<bool> { serviceMore, moduleMore };
+                            var pageItem = pg.Page_Id;
+                            i++;
+                            var groupId = i;
+
+                            <tr class="level-3 parentpage child-of-2 page d-none" data-group="group-@groupId" id="parent-row">
+                                <td class="hierarchy-col @(pageHasChildren ? "toggle-parent" : "")" data-level="3">
+                                    <span class="tree-rails">
+                                        @foreach (var more in pageAncestors)
+                                        {
+                                            <span class="rail @(more ? "rail-line" : "")"></span>
+                                        }
+                                        <span class="rail rail-own @(pageMore ? "rail-more" : "")"></span>
+                                    </span>
+                                    @if (pageHasChildren)
+                                    {
+                                        <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                                    }
+                                    else
+                                    {
+                                        <span class="toggle-icon-spacer"></span>
+                                    }
+                                    <span class="tree-label">@pg.Page_Name</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="toggle-switch">
+                                        <input type="checkbox"
+                                               class="parent-checkbox"
+                                               data-group="group-@groupId"
+                                               data-product-id="@product.Product_Id"
+                                               data-service-id="@service.Service_Id"
+                                               data-module-id="@module.Module_Id"
+                                               data-page-id="@pageItem"
+                                               data-is-parent="true"
+                                        @(pg.Is_Page_Mapped ? "checked" : "") />
+                                        <span class="toggle-slider"></span>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    @if (!pageHasChildren)
+                                    {
+                                        <input type="radio"
+                                               name="landingPage_@service.Service_Id"
+                                               data-product-id="@product.Product_Id"
+                                               data-service-id="@service.Service_Id"
+                                               data-module-id="@module.Module_Id"
+                                               data-page-id="@pageItem"
+                                               data-is-parent="true"
+                                        @(pg.Is_Landing_Page ? "checked" : "") />
+                                    }
+                                </td>
+                            </tr>
+
+                            for (int ci = 0; ci < pg.ChildPages.Count; ci++)
+                            {
+                                var child = pg.ChildPages[ci];
+                                bool childMore = ci < pg.ChildPages.Count - 1;
+                                var childAncestors = new List<bool> { serviceMore, moduleMore, pageMore };
+                                var childPageItem = child.Page_Id;
+
+                                <tr class="level-4 child-of-3 page d-none" data-group="group-@groupId" id="child-row">
+                                    <td class="hierarchy-col" data-level="4">
+                                        <span class="tree-rails">
+                                            @foreach (var more in childAncestors)
+                                            {
+                                                <span class="rail @(more ? "rail-line" : "")"></span>
+                                            }
+                                            <span class="rail rail-own @(childMore ? "rail-more" : "")"></span>
+                                        </span>
+                                        <span class="toggle-icon-spacer"></span>
+                                        <span class="tree-label">@child.Page_Name</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="toggle-switch">
+                                            <input type="checkbox"
+                                                   class="child-checkbox"
+                                                   data-group="group-@groupId"
+                                                   data-product-id="@product.Product_Id"
+                                                   data-service-id="@service.Service_Id"
+                                                   data-module-id="@module.Module_Id"
+                                                   data-page-id="@childPageItem"
+                                                   data-is-parent="false"
+                                            @(child.Is_Page_Mapped ? "checked" : "") />
+                                            <span class="toggle-slider"></span>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="radio"
+                                               name="landingPage_@service.Service_Id"
+                                               data-product-id="@product.Product_Id"
+                                               data-service-id="@service.Service_Id"
+                                               data-module-id="@module.Module_Id"
+                                               data-page-id="@childPageItem"
+                                               data-is-parent="false"
+                                        @(child.Is_Landing_Page ? "checked" : "") />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+
+                if (service.ParentPages.Any())
+                {
+                    var svcParentPages = service.ParentPages.Where(p => p.Is_Parent).ToList();
+
+                    for (int pi = 0; pi < svcParentPages.Count; pi++)
+                    {
+                        var pg = svcParentPages[pi];
+                        bool pageMore = pi < svcParentPages.Count - 1;
+                        bool pageHasChildren = pg.ChildPages.Any();
+                        var pageAncestors = new List<bool> { serviceMore, false };
+                        var pageItem = pg.Page_Id;
+                        i++;
+                        var groupId = i;
+
+                        <tr class="level-2 notmodule parentpage child-of-1 page d-none" data-group="group-@groupId" id="parent-row">
+                            <td class="hierarchy-col @(pageHasChildren ? "toggle-parent" : "")" data-level="3">
+                                <span class="tree-rails">
+                                    @foreach (var more in pageAncestors)
+                                    {
+                                        <span class="rail @(more ? "rail-line" : "")"></span>
+                                    }
+                                    <span class="rail rail-own @(pageMore ? "rail-more" : "")"></span>
+                                </span>
+                                @if (pageHasChildren)
+                                {
+                                    <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                                }
+                                else
+                                {
+                                    <span class="toggle-icon-spacer"></span>
+                                }
+                                <span class="tree-label">@pg.Page_Name</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="toggle-switch">
+                                    <input type="checkbox"
+                                           class="parent-checkbox"
+                                           data-group="group-@groupId"
+                                           data-product-id="@product.Product_Id"
+                                           data-service-id="@service.Service_Id"
+                                           data-module-id="0"
+                                           data-page-id="@pageItem"
+                                           data-is-parent="true"
+                                    @(pg.Is_Page_Mapped ? "checked" : "") />
+                                    <span class="toggle-slider"></span>
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @if (!pageHasChildren)
+                                {
+                                    <input type="radio"
+                                           name="landingPage_@service.Service_Id"
+                                           data-product-id="@product.Product_Id"
+                                           data-service-id="@service.Service_Id"
+                                           data-module-id="0"
+                                           data-page-id="@pageItem"
+                                           data-is-parent="true"
+                                    @(pg.Is_Landing_Page ? "checked" : "") />
+                                }
+                            </td>
+                        </tr>
+
+                        for (int ci = 0; ci < pg.ChildPages.Count; ci++)
+                        {
+                            var child = pg.ChildPages[ci];
+                            bool childMore = ci < pg.ChildPages.Count - 1;
+                            var childAncestors = new List<bool> { serviceMore, false, false, pageMore };
+                            var childPageItem = child.Page_Id;
+
+                            <tr class="level-3 notmodule child-of-2 page d-none" data-group="group-@groupId" id="child-row">
+                                <td class="hierarchy-col" data-level="4">
+                                    <span class="tree-rails">
+                                        @foreach (var more in childAncestors)
+                                        {
+                                            <span class="rail @(more ? "rail-line" : "")"></span>
+                                        }
+                                        <span class="rail rail-own @(childMore ? "rail-more" : "")"></span>
+                                    </span>
+                                    @* <span class="toggle-icon-spacer"></span> *@
+                                    @if (child.ChildPages != null && child.ChildPages.Count > 0)
+                                    {
+                                        <span class="toggle-icon-spacer"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="empty-spacer"></span>
+                                    }
+
+                                    <span class="tree-label">@child.Page_Name</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="toggle-switch">
+                                        <input type="checkbox"
+                                               class="child-checkbox"
+                                               data-group="group-@groupId"
+                                               data-product-id="@product.Product_Id"
+                                               data-service-id="@service.Service_Id"
+                                               data-module-id="0"
+                                               data-page-id="@childPageItem"
+                                               data-is-parent="false"
+                                        @(child.Is_Page_Mapped ? "checked" : "") />
+                                        <span class="toggle-slider"></span>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <input type="radio"
+                                           name="landingPage_@service.Service_Id"
+                                           data-product-id="@product.Product_Id"
+                                           data-service-id="@service.Service_Id"
+                                           data-module-id="0"
+                                           data-page-id="@childPageItem"
+                                           data-is-parent="false"
+                                    @(child.Is_Landing_Page ? "checked" : "") />
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            }
+
+            i++;
+        }
+    </tbody>
+}
+
+

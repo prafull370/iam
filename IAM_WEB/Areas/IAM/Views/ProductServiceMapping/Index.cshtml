@@ -1,0 +1,56 @@
+﻿@model ModelLayer.Models.IAM.ProductServiceMapping.ProductServiceMappingRequestModel;
+@{
+    ViewData["Title"] = "Add Product Service Mapping";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Product Service Mapping</div>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+
+    <form asp-area="IAM" asp-controller="ProductServiceMapping" asp-action="Save" id="PSMForm" onsubmit="SubmitForm('PSMForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+        <div class="row gx-2">
+            <div class="col-lg-3 col-sm-4 mbc">
+                <label class="required">Product Name</label>
+                <select name="Product_Id" asp-for="@Model.Product_Id" asp-items="@(new SelectList(ViewBag.ProductList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLProductId">
+                    <option value="">Select</option>
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+            </div>
+        </div>
+        <!-- Empty State -->
+        <div class="emptydiv text-center" id="imgchooseflt">
+            <img class="fltr-img" src="/images/no_data.svg" height="135" />
+            <div class="fltr-desc">
+                No records to display at the moment.<br />
+                Please select a Product to view the available Service.
+            </div>
+        </div>
+        <div class="d-none" id="btn">
+            <div class="formbox">
+                <div class="fmbdy">
+                    <div class="pbtitle">Service List</div>
+                    <div id="serviceListPartial"></div>
+                    <div class="bd-clearfix my-3"></div>
+                    <div class="btn-container">
+                        <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/iam/ProductServiceMapping/ProductServiceMapping.js").ToLower()"></script>
+}

@@ -1,0 +1,176 @@
+﻿@model ModelLayer.Models.IAM.Vendor.VendorRequestModel;
+@{
+	ViewData["Title"] = (Model?.Vendor_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Vendor_Id ?? 0) > 0 ? "Edit" : "Add") Vendor</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Vendor/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Vendor" asp-action="Save" id="VendorForm" onsubmit="SubmitForm('VendorForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Vendor_Id" id="hdnVendorId" />
+				<div class="row gx-2 mb-1">
+					<div class="col-xl-4 mbc">
+						<label class="required">Name</label>
+						<input name="Vendor_Name" type="text" asp-for="@Model.Vendor_Name" class="form-control" autocomplete="off" placeholder="Enter Vendor Name" />
+						<span class="text-danger" asp-validation-for="@Model.Vendor_Name"></span>
+					</div>
+					<div class="col-xl-4 mbc">
+						<label class="required">Country</label>
+						<select name="Country_Id" asp-for="@Model.Country_Id" asp-items="@(new SelectList(ViewBag.CountryList,"Id","Name"))" class="form-control dropdown slct2" id="DDLCountryId">
+							<option value="">Select</option>
+						</select>
+						<span class="text-danger" asp-validation-for="@Model.Country_Id"></span>
+					</div>
+					<div class="col-xl-4 mbc">
+						<label class="required">State</label>
+						<select name="State_Id" asp-for="@Model.State_Id" class="form-control dropdown slct2" id="DDLStateId">
+							<option value="">Select</option>
+						</select>
+						<span class="text-danger" asp-validation-for="@Model.State_Id"></span>
+					</div>
+					<div class="col-xl-4 mbc">
+						<label class="required">District</label>
+						<select name="District_Id" asp-for="@Model.District_Id" class="form-control dropdown slct2" id="DDLDistrictId">
+							<option value="">Select</option>
+						</select>
+						<span class="text-danger" asp-validation-for="@Model.District_Id"></span>
+					</div>
+					<div class="col-xl-4 mbc">
+						<label class="required">City</label>
+						<input name="City_Name" type="text" asp-for="@Model.City_Name" class="form-control" autocomplete="off" placeholder="Enter City Name" />
+						<span class="text-danger" asp-validation-for="@Model.City_Name"></span>
+					</div>
+					<div class="col-xl-4 mbc">
+						<label class="required">Pincode</label>
+						<input name="Pin_Code" type="text" asp-for="@Model.Pin_Code" class="form-control numeric" autocomplete="off" placeholder="Enter PinCode" />
+						<span class="text-danger" asp-validation-for="@Model.Pin_Code"></span>
+					</div>
+					<div class="col-xl-6 mbc">
+						<label>Description</label>
+						<textarea name="Vendor_Desc" class="form-control" asp-for="@Model.Vendor_Desc" rows="4" autocomplete="off" maxlength="200" placeholder="Enter Description Here"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Vendor_Desc"></span>
+					</div>
+					<div class="bd-clearfix my-2"></div>
+					<div class="col-xl-4 mbc">
+						<label class="required">Contact Person Name</label>
+						<input name="Contact_Person_Name" type="text" asp-for="@Model.Contact_Person_Name" class="form-control" autocomplete="off" placeholder="Enter Contact Person Name" />
+						<span class="text-danger" asp-validation-for="@Model.Contact_Person_Name"></span>
+					</div>
+					<div class="col-xl-4 mbc">
+						<label class="required">Contact Person Mobile No.</label>
+						<input name="Contact_Person_Mobile_No" type="text" asp-for="@Model.Contact_Person_Mobile_No" class="form-control numeric" autocomplete="off" placeholder="Enter Contact Person Mobile No" />
+						<span class="text-danger" asp-validation-for="@Model.Contact_Person_Mobile_No"></span>
+					</div>
+					<div class="col-xl-4 mbc">
+						<label class="required">Contact Person Email</label>
+						<input name="Contact_Person_Email_Id" type="text" asp-for="@Model.Contact_Person_Email_Id" class="form-control" autocomplete="off" placeholder="Enter Contact Person Email ID" />
+						<span class="text-danger" asp-validation-for="@Model.Contact_Person_Email_Id"></span>
+					</div>
+					<div class="col-xl-6 mbc">
+						<label class="required">Address 1</label>
+						<textarea name="Address1" asp-for="@Model.Address1" class="form-control" autocomplete="off" placeholder="Enter Address 1" rows="4"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Address1"></span>
+					</div>
+					<div class="col-xl-6 mbc">
+						<label>Address 2</label>
+						<textarea name="Address2" asp-for="@Model.Address2" class="form-control" autocomplete="off" placeholder="Enter Address 2" rows="4"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Address2"></span>
+					</div>
+				</div>
+				<div class="row gx-2 mb">
+					<div class="col-xl-1 mbc me-2">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix my-2"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			var isEdit = @((Model?.Vendor_Id > 0).ToString().ToLower());
+			var countryId = @Model?.Country_Id ?? 0;
+			var stateId = @Model?.State_Id ?? 0;
+			var districtId = @Model?.District_Id ?? 0;
+
+			function resetDropdown($dropdown, placeholder = "Select") {
+				$dropdown.empty().append($('<option></option>').val('').text(placeholder));
+			}
+
+			if (isEdit) {
+				$("#DDLCountryId").on("change", function () {
+			     const selectedCountry = $(this).val();
+			     if (selectedCountry && selectedCountry !== "") {
+						BindDynamicDropdown($('#DDLStateId'), 'STATE', stateId, countryId);
+						BindDynamicDropdown($('#DDLDistrictId'), 'DISTRICT', districtId, stateId);
+					}
+					else{
+					    resetDropdown($('#DDLStateId'));
+						resetDropdown($('#DDLDistrictId'));
+					}
+				});
+				$('#DDLCountryId').trigger('change');
+				$('#DDLStateId').on("change", function(){
+					const selectedState = $(this).val();
+					if (selectedState && selectedState !== "") {
+						BindDynamicDropdown($('#DDLDistrictId'), 'DISTRICT', '', selectedState);
+					}
+					else {
+						resetDropdown($('#DDLDistrictId'));
+					}
+				});
+			}
+			else{
+				$("#DDLCountryId").on("change", function () {
+					const selectedCountry = $(this).val();
+					if (selectedCountry && selectedCountry !== "") {
+						BindDynamicDropdown($('#DDLStateId'), 'STATE', '', $("#DDLCountryId").val());
+					}
+					else{
+						resetDropdown($('#DDLStateId'));
+						resetDropdown($('#DDLDistrictId'));
+					}
+				})
+
+				$("#DDLStateId").on("change", function () {
+					BindDynamicDropdown($('#DDLDistrictId'), 'DISTRICT', '', $("#DDLStateId").val());
+				})
+			}
+
+		});
+	</script>
+	<script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+	<script src="@Url.Content("~/scripts/common/common.js").ToLower()"></script>
+	<script src="@Url.Content("~/scripts/iam/vendor/vendor.js").ToLower()"></script>
+}

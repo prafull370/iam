@@ -1,0 +1,65 @@
+﻿@model ModelLayer.Models.IAM.Action.ActionRequestModel;
+@{
+	ViewData["Title"] = (Model?.Action_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Action_Id ?? 0) > 0 ? "Edit" : "Add") Action</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Action/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Action" asp-action="Save" id="ActionForm" onsubmit="SubmitForm('ActionForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Action_Id" id="hdnActionId" />
+				<div class="row gx-2">
+					<div class="col-xl-3 mbc">
+						<label class="required">Name</label>
+						<input name="Action_Name" type="text" asp-for="@Model.Action_Name" class="form-control" autocomplete="off" placeholder="Action Name" />
+						<span class="text-danger" asp-validation-for="@Model.Action_Name"></span>
+					</div>
+					<div class="col-xl-3 mbc">
+						<label class="required">Short Code</label>
+						<input name="Action_Code" type="text" asp-for="@Model.Action_Code" class="form-control" placeholder="Enter Action Code" />
+						<span class="text-danger" asp-validation-for="@Model.Action_Code"></span>
+					</div>
+					<div class="col-xl-7 mbc">
+						<label>Description</label>
+						<textarea name="Action_Desc" type="text" asp-for="@Model.Action_Desc" class="form-control" autocomplete="off" rows="3" maxlength="200" placeholder="Enter Description Here"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Action_Desc"></span>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary" permission-action="Add,Edit">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/scripts/iam/action/action.js"></script>
+}

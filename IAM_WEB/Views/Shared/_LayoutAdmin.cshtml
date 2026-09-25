@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles
+{
+    @await RenderSectionAsync("Styles", required: false)
+}
+
+<aside id="sidebar" class="sidebar d-none">
+    <ul class="sidebar-nav" id="sidemenu">
+    </ul>
+</aside>
+
+<main id="main" class="main">
+    @RenderBody()
+</main>
+
+
+@section Scripts
+{  
+    @await RenderSectionAsync("Scripts", required: false)
+    <partial name="_ValidationScriptsPartial" />
+    <script src="@Url.Content("~/scripts/home/index.js").ToLower()"></script>
+}

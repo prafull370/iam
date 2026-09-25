@@ -1,0 +1,55 @@
+﻿@model ModelLayer.Models.IAM.UserDeviceMapping.UserDeviceMappingRequestModel;
+@{
+    ViewData["Title"] = "Role Page Mapping";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">User Device Mapping</div>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc"></div>
+
+    <form asp-area="IAM" asp-controller="UserDeviceMapping" asp-action="Save" id="RPMForm" onsubmit="SubmitForm('RPMForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+        <div class="row gx-2">
+            <div class="col-lg-3 col-sm-4 mbc">
+                <label class="required">User</label>
+                <select name="User_Id" asp-for="@Model.User_Id" asp-items="@(new SelectList(ViewBag.User_List,"Id","Name"))" class="form-control dropdown slct2" id="DDLUserId">
+                    <option value="">Select</option>
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.User_Id"></span>
+            </div>
+        </div>
+        <!-- Empty State -->
+        <div class="emptydiv text-center" id="imgchooseflt">
+            <img class="fltr-img" src="/images/no_data.svg" height="135" />
+            <div class="fltr-desc">
+                No records to display at the moment.<br />
+                Please select a User to view the available device mappings.
+            </div>
+        </div>
+        <div id="btn" class="d-none">
+            <div class="ctvbx">
+                <div class="tblsec">
+                    <table class="table tblbdr cstmRC mb-0" id="userdevicePartial">
+                    </table>
+                </div>
+            </div>
+            <div class="btn-container mt-4">
+                <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+                <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/iam/userdevicemapping/userdevicemapping.js").ToLower()" asp-append-version="true"></script>
+   
+}

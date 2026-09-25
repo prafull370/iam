@@ -1,0 +1,116 @@
+@model ModelLayer.Models.IAM.PageActionMapping.PageActionMappingRequestModel
+@{
+    ViewData["Title"] = "Page Action Mapping";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link href="@Url.Content("~/lib/select2/select2.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+    @* <link href="@Url.Content("~/css/pageactionmapping.css")" rel="stylesheet" asp-append-version="true" /> *@
+}
+
+<div class="main-body">
+    @Html.AntiForgeryToken()
+
+    <div class="row align-items-start mbc">
+        <div class="col-9">
+            <div class="pgName">Page Action Mapping</div>
+            @* <p class="pam-sub">Map actions to a page. Choose Product → Service → Module (optional) → Page, then select the actions to grant.</p> *@
+        </div>
+    </div>
+
+    <div class="pam-card">
+        <div class="row gx-3">
+            <!-- Product -->
+            <div class="col-lg-3 col-md-6 mbc">
+                <label class="required">Product</label>
+                <select id="DDLProductId" class="form-control dropdown slct2"
+                        asp-items="@(new SelectList(ViewBag.ProductList, "Id", "Name"))">
+                    <option value="">Select</option>
+                </select>
+                <span class="pam-dd-spinner"></span>
+            </div>
+
+            <!-- Service -->
+            <div class="col-lg-3 col-md-6 mbc">
+                <label class="required">Service</label>
+                <select id="DDLServiceId" class="form-control dropdown slct2">
+                    <option value="">Select</option>
+                </select>
+                <span class="pam-dd-spinner"></span>
+            </div>
+
+            <!-- Module (optional, hidden until modules exist) -->
+            <div class="col-lg-3 col-md-6 mbc d-none" id="dvModule">
+                <label>Module <span class="pam-optional">(optional)</span></label>
+                <select id="DDLModuleId" class="form-control dropdown slct2">
+                    <option value="">Select</option>
+                </select>
+                <span class="pam-dd-spinner"></span>
+            </div>
+
+            <!-- Master Page -->
+            <div class="col-lg-3 col-md-6 mbc">
+                <label class="required">Master Page</label>
+                <select id="DDLMasterPageId" class="form-control dropdown slct2">
+                    <option value="">Select</option>
+                </select>
+                <span class="pam-dd-spinner"></span>
+            </div>
+
+            <!--Child Page -->
+            <div class="col-lg-3 col-md-6 mbc d-none" id="dvChildPage">
+                <label class="required">Child Page</label>
+                <select id="DDLPageId" class="form-control dropdown slct2">
+                    <option value="">Select</option>
+                </select>
+                <span class="pam-dd-spinner"></span>
+            </div>
+        </div>
+        @* Loader *@
+        <div id="pageLoader" class="loader-overlay d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="col-lg-3 col-md-6 mbc d-none" id="dvActions">
+            <label class="required">Actions</label>
+            <!-- position:relative wrapper -->
+            <div style="position:relative;">
+                <button type="button" id="btnActionsToggle" class="form-control d-flex align-items-center justify-content-between" style="text-align:left;">
+                    <span id="lblActionText" class="text-muted text-truncate">Select</span>
+                    <i class="ugo-icons">expand_more</i>
+                </button>
+                <!-- the checkbox panel (plain div, NOT .dropdown-menu; d-none controls it) -->
+                <div id="actionPanel" class="d-none bg-white border rounded shadow p-2" style="position:absolute; z-index:1050; top:calc(100% + 4px); left:0; right:0; max-height:280px; overflow:auto;">
+                    <label class="d-flex align-items-center fw-bold border-bottom pb-2 mb-1" style="cursor:pointer;">
+                        <input type="checkbox" id="chkSelectAllActions" class="form-check-input mt-0 me-2" />
+                        <span>Select All</span>
+                    </label>
+                    <div id="actionList"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Buttons -->
+        <div class="pam-footer">
+            <button type="button" id="btnSave" class="btn btn-primary">Submit</button>
+            <button type="button" id="btnReset" class="btn btn-outline-dark">Reset</button>
+        </div>
+    </div>
+
+    <div id="dvProcessing" class="text-center my-3 d-none">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/common/common.js").ToLower()"></script>
+    <script src="@Url.Content("~/scripts/iam/pageactionmapping/pageactionmapping.js").ToLower()" asp-append-version="true"></script>
+}

@@ -1,0 +1,27 @@
+﻿@model List<ModelLayer.Models.IAM.DiscomProductMapping.DiscomProductMappingResponseModel>;
+
+@if (Model != null && Model.Count > 0)
+{
+	<div class="row g-3" id="parentDiv">
+		@for (int i = 0; i < Model.Count; i++)
+		{
+			<div class="col-lg-3 col-sm-4">
+				@* <label class="align-self-center">@Model[i].Product_Name</label> *@
+				<div class="switch">
+					<label class="pdclbl d-flex align-items-center justify-content-between">
+						<span class="prdnme">@Model[i].Product_Name</span>
+						<input type="hidden" id="Product_Id_@i" value="@Model[i].Product_Id" />
+						<input type="checkbox" class="checkbox" onchange="BindCheckbox(this,@i)" id="Is_Mapped_@i" name="[@i].Is_Mapped" value="@(Model[i].Is_Mapped ? "true" : "false")" @(Model[i].Is_Mapped ? "checked" : "") />
+						<span class="lever"></span>
+					</label>
+				</div>
+			</div>
+		}
+	</div>
+}
+else
+{
+	<div class="row gx-2 text-center">
+		<h4>No Record Found</h4>
+	</div>
+}

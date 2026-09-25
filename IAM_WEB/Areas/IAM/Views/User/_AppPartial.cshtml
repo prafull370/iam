@@ -1,0 +1,61 @@
+﻿@* @model ModelLayer.Models.IAM.User.UserRequestModel; *@
+@model List<ModelLayer.Models.IAM.User.UserApplicationModel>;
+@{
+	int i = 0;
+	int product_id = 0;
+}
+@if(Model != null){
+
+	<div class="apprm appPermisssion">
+		@if (Model?.Count > 0)
+		{
+			@foreach (var item in Model)
+			{
+				@if (product_id == 0 || item.Product_Id != product_id){
+					<div class="d-flex list">
+						<div class="fw-bold mb-3">
+							Product Name : <span id="appName">@item.Product_Name</span>
+						</div>
+					</div>
+					product_id = @item.Product_Id;
+				}
+				<input type="hidden" value="@item.App_Id" id="appid_@i"/>
+				<input type="hidden" value="@item.Application_Id" id="applicationid_@i" />
+				<input type="hidden" value="@item.App_Version" id="appversion_@i" />
+
+
+				
+				<div class="d-flex list">
+					<div class="me-4">
+						<input type="checkbox" value="@item.Is_Checked" class="chxbx" id="chkbox_@i" @(item.Is_Checked ? "checked" : null)>
+					</div>
+					<div class="appdetail d-flex flex-column mb-3 w-100">
+						<div class="fw-bold mb-3">
+							App Name : <span id="appName">@item.App_Name</span>
+						</div>
+						<div class="d-flex justify-content-between align-items-center mt-2">
+							<div class="otp d-flex align-items-center">
+								<span class="me-2">OTP</span>
+								<div class="switch">
+									<label>
+										<input type="checkbox" value="@item.Otp_Status" class="otpStatus" id="otpStatus_@i" @(item.Otp_Status ? "checked":null)>
+										<span class="lever"></span>
+									</label>
+								</div>
+							</div>
+							<div class="apptime">
+								<input type="text" value="@item.App_Expiry" class="form-control calicnrgt flatpickr-input appExpTm" autocomplete="off" placeholder="DD-MMM-YYYY" id="appExpTm_@i" />
+							</div>
+						</div>
+					</div>
+				</div>
+				i++;
+			}
+
+		}
+		else
+		{
+			<h5 class="text-center">No Record Found!!</h5>
+		}
+	</div>
+}

@@ -1,0 +1,573 @@
+﻿@model ModelLayer.Models.IAM.User.UserRequestModel;
+
+@{
+	ViewData["Title"] = @Model.User_Id > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section styles
+{
+	<link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+	<link href="~/lib/datepicker/flatpickr.css" rel="stylesheet" />
+	<style>
+		.pubox {
+			width: 130px;
+			height: 130px;
+			position: relative;
+			border-radius: .5rem;
+			left: 20px;
+			overflow: hidden;
+		}
+
+			.pubox .uploadpic {
+				width: 100%;
+				max-height: 100%;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			.pubox .puboxfile {
+				overflow: hidden;
+				padding: 3px 5px;
+				cursor: pointer;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				bottom: 0;
+				background: 0 0;
+				text-align: center;
+			}
+
+				.pubox .puboxfile .flabel {
+					color: #fff;
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					text-align: center;
+					background: #74787b;
+					padding: .7rem .875rem .6rem;
+					border-bottom-left-radius: .5rem;
+					border-bottom-right-radius: .5rem;
+					white-space: nowrap;
+					width: 100%;
+					font-size: .72rem;
+					line-height: .72rem;
+					text-transform: capitalize;
+				}
+
+				.pubox .puboxfile input.uploadfile {
+					position: absolute;
+					top: 0;
+					right: 0;
+					margin: 0;
+					padding: 0;
+					width: 100%;
+					height: 100%;
+					cursor: pointer;
+					opacity: 0;
+				}
+
+		.list {
+			border-bottom: .04rem solid #dbe4e4;
+			margin-bottom: 15px;
+		}
+
+		.grybody {
+			background-color: #ebf1f1;
+			border-radius: 0.31rem !important;
+			max-height: 300px;
+			width: 100%;
+			padding: 1rem;
+			overflow-y: auto;
+		}
+
+		.error {
+			border-color: #edbbbb;
+		}
+
+	</style>
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model.User_Id > 0) ? "Edit" : "Add") User</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/User/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="User" asp-action="Save" id="UserForm" onsubmit="SubmitForm('UserForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<div class="row gx-2">
+					<input type="hidden" value="@Model.User_Id" id="hdnUserId" />
+					<div class="col-lg-8 col-md-8">
+						<div class="row gx-2">
+							<div class="col-xl-3 col-lg-2 col-md-2 mt-2">
+								<div class="pubox">
+									<img alt="upload photo" class="uploadpic" src="@(string.IsNullOrEmpty(Model?.User_Logo) ? Url.Content("~/images/default-user.svg") : Url.Content(Model.User_Logo))" id="viewImage" />
+									<div class="puboxfile">
+										<span class="flabel">Upload Photo</span>
+										<input type="file" name="POSTED_FILE" id="fileUpload" class="uploadfile" />
+										<input type="hidden" name="User_Logo" asp-for="@Model.User_Logo" id="User_Logo" class="uploadfile" />
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-9 col-lg-10 col-md-10 mt-2">
+								<div class="row gx-2">
+									<div class="col-sm-4 mb-3">
+										<label for="name" class="required">Name</label>
+										<input type="text" asp-for="@Model.User_Name" class="form-control" id="name" placeholder="Enter User Name" maxlength="50" autocomplete="off">
+										<span class="text-danger" asp-validation-for="@Model.User_Name"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label for="number" class="required">Mobile No</label>
+										<input type="text" asp-for="@Model.Mobile_No" class="form-control" id="number" placeholder="Enter Mobile No" maxlength="10" autocomplete="off">
+										<span class="text-danger" asp-validation-for="@Model.Mobile_No"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label for="login">Login ID</label>
+										<input type="text" asp-for="@Model.Login_Id" class="form-control" id="login" placeholder="Enter Login ID" autocomplete="off">
+										<span class="text-danger" asp-validation-for="@Model.Login_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label for="email" class="required">Email ID</label>
+										<input type="text" asp-for="@Model.Email_Id" class="form-control" id="email" placeholder="Email ID" maxlength="70" autocomplete="off">
+										<span class="text-danger" asp-validation-for="@Model.Email_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label for="joinDate" class="required">Joining Date</label>
+										<input type="text" asp-for="@Model.Join_Date" class="form-control calicnrgt flatpickr-input" placeholder="DD-MMM-YYYY" id="joinDate" />
+										<span class="text-danger" asp-validation-for="@Model.Join_Date"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label class="required">Department</label>
+										<select class="form-control slct2 dropdown" asp-for="@Model.Department_Id" asp-items="@(new SelectList(ViewBag.Department_List,"Id","Name"))" id="department_id">
+											<option value="">Select</option>
+										</select>
+										<span class="text-danger" asp-validation-for="@Model.Department_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label class="required">Designation</label>
+										<select class="form-control slct2 dropdown" asp-for="@Model.Designation_Id" id="designation_id">
+											<option value="">Select</option>
+										</select>
+										<span class="text-danger" asp-validation-for="@Model.Designation_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label class="required">Identity Type</label>
+										<select class="form-control slct2 dropdown" asp-for="@Model.Identity_Type_Id" asp-items="@(new SelectList(ViewBag.Indentity_Type_List,"Id","Name"))" id="identity_type_id">
+											<option value="">Select</option>
+										</select>
+										<span class="text-danger" asp-validation-for="@Model.Identity_Type_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label for="aadhaar" class="required">Identity No.</label>
+										<input type="text" class="form-control" asp-for="@Model.Identity_No" id="identity_no" placeholder="Enter Identity No."  autocomplete="off">
+										<span class="text-danger" asp-validation-for="@Model.Identity_No"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label class="required">Authentication Type</label>
+										<select class="form-control slct2 dropdown" asp-for="@Model.Authentication_Type_Id" asp-items="@(new SelectList(ViewBag.Authentication_Type_List,"Id","Name"))" id="authentication_type_id">
+											<option value="">Select</option>
+										</select>
+										<span class="text-danger" asp-validation-for="@Model.Authentication_Type_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label>Vender</label>
+										<select class="form-control slct2 dropdown" asp-for="@Model.Vendor_Id" asp-items="@(new SelectList(ViewBag.Vendor_List,"Id","Name"))" id="vendor_id">
+											<option value="">Select</option>
+										</select>
+										<span class="text-danger" asp-validation-for="@Model.Vendor_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label>Reporting</label>
+										<select class="form-control slct2 dropdown" asp-for="@Model.Reporting_User_Id" asp-items="@(new SelectList(ViewBag.Reporting_List,"Id","Name"))" id="reporting_user_id">
+											<option value="">Select</option>
+										</select>
+										<span class="text-danger" asp-validation-for="@Model.Reporting_User_Id"></span>
+									</div>
+									<div class="col-sm-4 mb-3">
+										<label>Skill</label>
+										<select class="form-control slct2 dropdown" name="Skill" id="skill_id" multiple="multiple">
+											<option value="">Select Skills</option>
+											@if (ViewBag.SkillList != null)
+											{
+												foreach (var item in ViewBag.SkillList)
+												{
+													var isSelected = false;
+													if (Model?.User_Skill != null && Model.User_Skill.Count > 0)
+													{
+														isSelected = Model.User_Skill.Any(s => s.Skill_Id == item.Id);
+													}
+													<option value="@item.Id" selected="@(isSelected ? "selected" : null)">
+														@item.Name
+													</option>
+												}
+											}
+										</select>
+										<span class="text-danger"></span>
+									</div>
+									<div class="col-lg-4 col-sm-4 col-6 mbc-sm">
+										<label class="required">Start Date</label>
+										<input type="text" asp-for="@Model.Start_Date" class="form-control calicnrgt flatpickr-input" placeholder="DD-MMM-YYYY" id="txtFromDate" />
+										<span class="text-danger" asp-validation-for="@Model.Start_Date"></span>
+									</div>
+									<div class="col-lg-4 col-sm-4 col-6 mbc-sm">
+										<label>End Date</label>
+										<input type="text" class="form-control calicnrgt datepicker validtext" placeholder="DD-MMM-YYYY" id="txtToDate" autocomplete="new-password" data-dtp="dtp_TWsTg" value="@Model.End_Date">
+										<span class="text-danger"></span>
+									</div>
+									@if(Model.User_Id!=0){
+										<div class="col-sm-4 mb-3">
+											<label>Remark</label>
+											<select class="form-control slct2 dropdown" asp-for="@Model.Block_Remark_Type_Id" asp-items="@(new SelectList(ViewBag.Block_Remark_List,"Id","Name"))" id="block__remark_type_id">
+												<option value="">Select</option>
+											</select>
+											<span class="text-danger" id="spnBlockRemark" asp-validation-for="@Model.Block_Remark_Type_Id"></span>
+										</div>
+									}
+									<div class="col-lg-4 col-sm-4 col-6 mbc-sm @(Model.User_Id == 0 ? "d-none" : null)"
+										 id="divUserRoles">
+										<label>Roles</label>
+										<input type="button" class="form-control btn btn-info" data-bs-toggle="modal" data-bs-target="#vlModal" id="btnShowRoles" onclick="BindRolePermission();" value="User Roles" />
+										<span class="text-danger"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 d-flex">
+						<div class="grybody">
+							<div class="pageTitle mt-0">App Permission</div>
+							<!---App Permission -->
+							<div id="appPartial"></div>
+						</div>
+					</div>
+					<div class="bd-clearfix"></div>
+					<div class="col-xl-12 col-lg-12 col-sm-12">
+						<div class="pageTitle">Office Hierarchy</div>
+						<!--START HIREACHY-->
+						<div class="row UserHireachy" id="Levels">
+							<div class="col-sm-12 form-group">
+								<div class="uhrcy">
+									<table id="myTable" class="table table-bordered table-style">
+										<thead>
+											<tr>
+												<th class="nbdr">DISCOM <span class="text-danger">*</span></th>
+												<th class="nbdr">Zone</th>
+												<th class="nbdr">Circle</th>
+												<th class="nbdr">Division</th>
+												<th class="nbdr">Sub Division</th>
+												<th class="nbdr">Block</th>
+												<th class="nbdr">Level6</th>
+												<th class="nbdr">Action</th>
+											</tr>
+										</thead>
+										<tbody id="tbodyrow">
+											@if (Model?.User_Hierarchy?.Count > 0)
+											{
+												@for (int i = 0; i < Model.User_Hierarchy.Count; i++)
+												{
+													var row = Model.User_Hierarchy[i];
+													<tr class="getHierarchy">
+														<td>
+															<select class="form-control discom slct2" id="discom_@i" name="User_Hierarchy[@i].Discom_Id">
+																<option value="">Select</option>
+																@foreach (var item in ViewBag.Discom_List)
+																{
+																	<option value="@item.Id" selected="@(item.Id == row.Discom_Id ? "selected" : null)">
+																		@item.Name
+																	</option>
+																}
+															</select>
+															<span class="text-danger" style="font-size:0.7rem;" id="disErrMsg_@i"></span>
+														</td>
+														<td>
+															<select class="form-control lvl1 slct2" id="ddlLevel1_@i"
+																	data-selected="@row.Level1_Id" data-row="@i">
+																<option value="">Select</option>
+																@foreach (var item in ViewBag.Zone_List)
+																{
+																	<option value="@item.Id" selected="@(item.Id == row.Level1_Id ? "selected" : null)">
+																		@item.Name
+																	</option>
+																}
+															</select>
+														</td>
+														<td>
+															<select class="form-control lvl2 slct2" id="ddlLevel2_@i"
+																	data-selected="@row.Level2_Id">
+																<option value="">Select</option>
+															</select>
+														</td>
+														<td>
+															<select class="form-control lvl3 slct2" id="ddlLevel3_@i"
+																	data-selected="@row.Level3_Id">
+																<option value="">Select</option>
+															</select>
+														</td>
+														<td>
+															<select class="form-control lvl4 slct2" id="ddlLevel4_@i"
+																	data-selected="@row.Level4_Id">
+																<option value="">Select</option>
+															</select>
+														</td>
+														<td>
+															<select class="form-control lvl5 slct2" id="ddlLevel5_@i"
+																	data-selected="@row.Level5_Id">
+																<option value="">Select</option>
+															</select>
+														</td>
+														<td>
+															<select class="form-control lvl6 slct2" id="ddlLevel6_@i"
+																	data-selected="@row.Level6_Id">
+																<option value="">Select</option>
+															</select>
+														</td>
+														<td class="dllrw">
+															@if (i == 0)
+															{
+																<span></span> @* first row – no delete *@
+															}
+															else
+															{
+																<a href="javascript:void(0);" class="btn text-danger deleteRow" data-index="@i">
+																	<i class="ugo-icons">delete</i>
+																</a>
+															}
+														</td>
+													</tr>
+												}
+											}
+											else
+											{
+												<tr class="getHierarchy">
+													<td>
+														<select class="form-control form-control-sm company slct2 dropdown dis_0" asp-for="@Model.User_Hierarchy[0].Discom_Id" asp-items="@(new SelectList(ViewBag.Discom_List,"Id","Name"))" id="discom_0">
+															<option value="">Select</option>
+														</select>
+														<span class="text-danger" asp-validation-for="@Model.User_Hierarchy[0].Discom_Id"></span>
+													</td>
+													<td>
+														<select class="form-control form-control-sm lvl1 slct2 dropdown" asp-items="@(new SelectList(ViewBag.Zone_List,"Id","Name"))" id="ddlLevel1_0">
+															<option value="">Select</option>
+														</select>
+													</td>
+													<td>
+														<select class="form-control form-control-sm lvl2 slct2" id="ddlLevel2_0">
+															<option value="">Select</option>
+														</select>
+													</td>
+													<td>
+														<select class="form-control form-control-sm lvl3 slct2" id="ddlLevel3_0">
+															<option value="">Select</option>
+														</select>
+													</td>
+													<td>
+														<select class="form-control form-control-sm lvl4 slct2" id="ddlLevel4_0">
+															<option value="">Select</option>
+														</select>
+													</td>
+													<td>
+														<select class="form-control form-control-sm lvl5 slct2" id="ddlLevel5_0">
+															<option value="">Select</option>
+														</select>
+													</td>
+													<td>
+														<select class="form-control form-control-sm lvl6 slct2" id="ddlLevel6_0">
+															<option value="">Select</option>
+														</select>
+													</td>
+													<td class="dllrw">
+														@* <a href="javascript:void(0);" disabled="disabled" class="btn text-danger" style="opacity:0.25"><i class="ugo-icons">delete</i></a> *@
+													</td>
+												</tr>
+											}
+										</tbody>
+									</table>
+									<button type="button" class="btn btn-outline-primary btn-sm addRow mb-2" id="addRowBtn"><i class="ugo-icons">add</i> Add Row</button>
+								</div>
+							</div>
+						</div>
+						<!--END-->
+					</div>
+					<div class="bd-clearfix"></div>
+				</div>
+				<div class="btn-container mt-4">
+					<button type="submit" class="btn btn-primary" id="submit">Submit</button>
+					<button type="button" class="btn btn-outline-dark ms-1" id="btnReset">Reset</button>
+				</div>
+			</form>
+		</div>
+		<div class="modal mbdrds fade" id="vlModal" tabindex="-1" aria-labelledby="vlModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg">
+				<div class="modal-content">
+					<div class="modal-head d-flex justify-content-between">
+						<div class="modal-ttl">Roles Details</div>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body overflow-auto">
+						<div id="tbodyRole"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()"></script>
+	<script src="@Url.Content("~/lib/datepicker/flatpickr.js").ToLower()"></script>
+	<script src="@Url.Content("~/scripts/common/common.js").ToLower()"></script>
+	<script src="@Url.Content("~/scripts/iam/user/user.js").ToLower()"></script>
+	<script>
+		$(document).ready(function () {
+			var isEdit = @((Model.User_Id > 0).ToString().ToLower());
+			if (isEdit){
+
+				// Bind Department - Designation on edit page
+				const val = @Model.Designation_Id;
+				if (val) {
+					BindDynamicDropdown($('#designation_id'), 'DEPDESIGN', val, $('#department_id').val());
+						 setTimeout(function () {
+							GetPermissionById(@Model.User_Id);
+		                 },500);
+				}
+
+				$('#tbodyrow tr').each(function () {
+					let $row = $(this);
+
+					// Start from lvl1
+					let lvl1 = $row.find('.lvl1');
+					let lvl2 = $row.find('.lvl2');
+					let lvl3 = $row.find('.lvl3');
+					let lvl4 = $row.find('.lvl4');
+					let lvl5 = $row.find('.lvl5');
+					let lvl6 = $row.find('.lvl6');
+
+					let val1 = lvl1.data('selected');
+					let val2 = lvl2.data('selected');
+					let val3 = lvl3.data('selected');
+					let val4 = lvl4.data('selected');
+					let val5 = lvl5.data('selected');
+					let val6 = lvl6.data('selected');
+
+					// Load Zone
+					// BindDynamicDropdownWithCallback(lvl1, 'ZONE', '', '', function () {
+					// 	lvl1.val(val1).trigger('change');
+
+						// Load Circle
+						if (val1) {
+							BindDynamicDropdownWithCallback(lvl2, 'CIRCLE', val2, val1, function () {
+								lvl2.val(val2).trigger('change');
+
+								// Load Division
+								if (val2) {
+									BindDynamicDropdownWithCallback(lvl3, 'DIVISION', val3, val2, function () {
+										lvl3.val(val3).trigger('change');
+
+										if (val3) {
+											BindDynamicDropdownWithCallback(lvl4, 'SUBDIVISION', val4, val3, function () {
+												lvl4.val(val4).trigger('change');
+
+												if (val4) {
+													BindDynamicDropdownWithCallback(lvl5, 'BLOCK', val5, val4, function () {
+														lvl5.val(val5).trigger('change');
+
+														if (val5) {
+															BindDynamicDropdownWithCallback(lvl6, 'LEVEL6', val6, val5, function () {
+																lvl6.val(val6);
+															});
+														}
+													});
+												}
+											});
+										}
+									});
+								}
+							});
+						}
+					// });
+				});
+
+
+			}
+
+			// On department change bind designation
+			$('#department_id').on('change', function () {
+				$('#designation_id').html('<option value="">Select</option>');
+				var id = $(this).val();
+				if (id && id !== '') {
+					BindDynamicDropdown($('#designation_id'), 'DEPDESIGN', '', $('#department_id').val());
+				}
+			});
+			$('#designation_id').on('change', function () {
+				if($('#designation_id').val()!=="" && $('#designation_id').val()!==undefined && $('#designation_id').val()!==""){
+					$('#divUserRoles').removeClass('d-none');
+				}
+				else{
+					$('#divUserRoles').addClass('d-none');
+				}
+				if ($('.pgName').text() != 'User List') 
+				{
+			     GetAppPermission();
+		        }
+			});
+
+
+			$(document).on('change', '.lvl1', function () {
+				var $row = $(this).closest('tr');
+				$row.find('.lvl2, .lvl3, .lvl4, .lvl5, .lvl6').html('<option value="">Select</option>');
+				var id = $(this).val();
+				if (id) {
+					BindDynamicDropdown($row.find('.lvl2'), 'CIRCLE', '', id);
+				}
+			});
+
+			$(document).on('change', '.lvl2', function () {
+				var $row = $(this).closest('tr');
+				$row.find('.lvl3, .lvl4, .lvl5, .lvl6').html('<option value="">Select</option>');
+				var id = $(this).val();
+				if (id) {
+					BindDynamicDropdown($row.find('.lvl3'), 'DIVISION', '', id);
+				}
+			});
+
+			$(document).on('change', '.lvl3', function () {
+				var $row = $(this).closest('tr');
+				$row.find('.lvl4, .lvl5, .lvl6').html('<option value="">Select</option>');
+				var id = $(this).val();
+				if (id) {
+					BindDynamicDropdown($row.find('.lvl4'), 'SUBDIVISION', '', id);
+				}
+			});
+
+			$(document).on('change', '.lvl4', function () {
+				var $row = $(this).closest('tr');
+				$row.find('.lvl5, .lvl6').html('<option value="">Select</option>');
+				var id = $(this).val();
+				if (id) {
+					BindDynamicDropdown($row.find('.lvl5'), 'BLOCK', '', id);
+				}
+			});
+
+			$(document).on('change', '.lvl5', function () {
+				var $row = $(this).closest('tr');
+				$row.find('.lvl6').html('<option value="">Select</option>');
+				var id = $(this).val();
+				if (id) {
+					BindDynamicDropdown($row.find('.lvl6'), 'LEVEL6', '', id);
+				}
+			});
+
+
+		});
+
+	</script>
+}

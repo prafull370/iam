@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Http;
+@using ModelLayer.Models.IAM.User;
+@inject IHttpContextAccessor HttpContextAccessor;
+@{
+    var UserData = Context.Items["UserInfo"] as UserInfoModel ;
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - IAM WEB</title>
+    <base href='@Url.Content("~/")' />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")" />
+    <!-- PNG Icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/favicon-16x16.png")">
+    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/favicon-32x32.png")">
+    <link rel="icon" type="image/png" sizes="192x192" href="@Url.Content("~/android-chrome-192x192.png")">
+    <link rel="icon" type="image/png" sizes="512x512" href="@Url.Content("~/android-chrome-512x512.png")">
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="@Url.Content("~/apple-touch-icon.png")">
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="@Url.Content("~/site.webmanifest")">
+    <link href="@Url.Content("~/css/ugo-icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/font-family.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/bscss.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/validation/fluentValidationLength.css")" rel="stylesheet" />
+    @await RenderSectionAsync("Styles", required: false)
+    <link href="@Url.Content("~/css/custom.css")" rel="stylesheet" asp-append-version="true" />
+</head>
+<body>
+    <header id="header" class="header fixed-top d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="toggle-sidebar-btn me-3">
+                <i class="ugo-icons mopn">menu</i>
+                <i class="ugo-icons mcls">menu_open</i>
+            </div>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="logo d-flex align-items-center"><span class="logicn d-flex justify-content-center align-items-center"><img src="@Url.Content("~/images/ugo-u.svg")" alt="UGO Logo" height="18" width="18"></span><span class="logttl text-white">@UserData.Company_Name</span></a>
+        </div>
+        <nav class="header-nav navbar-nav ms-auto">
+            <ul class="d-flex align-items-center">
+                <li class="me-3 dropdown">
+                    <a href="javascript:;" class="swicthdd dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="ugo-icons">apps</i>
+                    </a>
+                    <div class="swtbody dropdown-menu">
+                        <h6 class="swttitle ms-2">Apps</h6>
+                        <div class="row gx-0" id="getProductlist">
+                            @await Html.PartialAsync("~/Views/Home/_UserProduct.cshtml")
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-profile d-flex align-items-center p-0" href="javascript:;" data-bs-toggle="dropdown">
+                        @* <img src="@Url.Content("~/images/default-user.svg")" alt="Profile" height="30" width="30" /> *@
+                        <img src="@Url.Content((UserData?.User_Logo))" alt="Profile" height="30" width="30" />
+                    </a><!-- End Profile Iamge Icon -->
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow upd">
+                        <li class="d-flex align-items-center updt">
+                            <div class="user-prof-photo">
+                                @* <img id="imgUser" src="@(UserData.User_Name ?? Url.Content("~/images/default-user.svg"))" alt="@UserData.User_Name"> *@
+                                <img id="imgUser" src="@(string.IsNullOrEmpty(UserData?.User_Logo)? Url.Content("~/images/default-user.svg") : Url.Content(UserData.User_Logo))" alt="@UserData?.User_Name">
+                            </div>
+                            <div class="user-prof-detail">
+                                <div class="user-prof-name">@UserData?.User_Name</div>
+                                <div class="user-prof-code">(@UserData?.User_Code)</div>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="pfLnk" href="/Account/ChangePassword"><i class="ugo-icons">lock</i>Change Password</a>
+                        </li>
+                        <li>
+                            <form action="javascript:;" class="logoutForm d-block" method="get">
+                                <a class="pfLnk" href="~/Account/Logout" onclick="logoutUser()">
+                                    <i class="ugo-icons">logout</i>Logout
+                                </a>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav><!-- End Icons Navigation -->
+
+    </header><!-- End Header -->
+    @RenderBody()
+    <div id="dvProcessing" style="display:none;">
+        <div class="loaderFixed">
+            <img src="@Url.Content("~/images/loader.svg")" alt="Loader" />
+        </div>
+    </div>
+    <div id="divPopUpAlert"></div>
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/js/showalert.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/js/custom.js").ToLower()" asp-append-version="true"></script>
+    <script src="@("~/lib/jquery/dist/jquery.min.js".ToLower())" asp-append-version="true"></script>
+    <script src="@("~/lib/jquery-validation/dist/jquery.validate.min.js".ToLower())" asp-append-version="true"></script>
+    <script src="@("~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js".ToLower())" asp-append-version="true"></script>
+    
+    <!-- Permission Helper -->
+    <script src="@Url.Content("~/scripts/common/PermissionHelper.js").ToLower()"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        // Initialize Permission Framework
+        // This runs on every page load and sets up permission checking
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize permission helper
+            if (typeof Permission !== 'undefined') {
+                Permission.initialize();
+            }
+        });
+
+        // Safety: if no session, clear frontend state
+        function logoutUser() {
+            // Always clear frontend state
+            sessionStorage.clear();
+            localStorage.clear();
+
+            // Then submit form
+            document.getElementsByClassName('logoutForm')[0].submit();
+        }
+    </script>
+</body>
+</html>

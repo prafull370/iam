@@ -1,0 +1,51 @@
+﻿@* @{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="main-body">
+    <div class="row mb-4">
+        <div class="col-9">
+            <div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+            <div class="pgName">Department List</div>
+        </div>
+        <div class="col-3 text-end">
+            <a href="@Url.Content("~/Master/Department/Manage")" class="afBtn"><i class="ugo-icons">add</i></a>
+        </div>
+    </div>
+
+    <div class="row gx-2">
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="dvCategory">
+            <label>Job Name</label>
+            <input type="text" class="form-control form-control-sm" id="txtsearch" autocomplete="off" name="txtsearch" value="">
+        </div>
+        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end" id="dvbtn">
+            <div class="btn-group">
+                <button type="button" id="btnsearch" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">search</i>
+                </button>
+                <button type="button" id="btnreset" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">restart_alt</i>
+                </button>
+            </div>
+            <a href="javascript:;" class="btn btn-sm btn-no ms-2" id="ExcelDownload"><img src="~/images/excel.svg" width="30" height="28"></a>
+        </div>
+    </div>
+
+    <div class="cardbox">
+        <table class="table table-dtc thwsnw" id="tbllist">
+            <thead>
+                <tr>
+                    <th>Department Name</th>
+                    <th>Service Description</th>
+                    <th>Department Short Code</th>
+                    <th class="text-center">Is Vendor</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+</div>
+ *@

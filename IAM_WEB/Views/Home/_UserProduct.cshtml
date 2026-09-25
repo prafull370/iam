@@ -1,0 +1,25 @@
+﻿@using ModelLayer.Models.IAM.User;
+
+@{
+    var products = Context.Items["UserProductInfo"] as List<UserProductPermissionModel>;
+}
+
+@if (products != null && products.Any())
+{
+    foreach (var item in products)
+    {
+        <div class="col-6 d-flex">
+            <a href="@item.Product_Url" target="_blank" class="swt-lnk">
+                <img src="@item.Product_Logo"
+                     alt="@item.Product_Name"
+                     title="@item.Product_Name" />
+                <span class="swt-name">@item.Product_Name</span>
+            </a>
+        </div>
+        
+    }
+}
+else
+{
+    <div class="text-muted">No products available</div>
+}

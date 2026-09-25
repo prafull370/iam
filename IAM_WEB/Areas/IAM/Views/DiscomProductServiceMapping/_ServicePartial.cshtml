@@ -1,0 +1,60 @@
+﻿@model ModelLayer.Models.IAM.ServiceDomainMapping.ServiceDomainMappingRequestModel
+
+@if (Model.Service_Data != null && Model.Service_Data.Count > 0)
+{
+    <input type="hidden" value="@Model.Product_Url" id="hdnPrUrl" />
+    <input type="hidden" value="@Model.Product_Api_Url" id="hdnPrApiUrl" />
+    <div class="tblbox">
+        <div class="cbheader">Micro Service List</div>
+        <div class="tblwrp">
+            <table id="tbllist domainTable" class="table tblbx">
+                <thead>
+                    <tr>
+                        <th width="5px">SR.</th>
+                        <th width="200px">MICRO SERVICE NAME</th>
+                        <th width="200px">MAIN URL</th>
+                        <th width="200px">API URL</th>
+                        @* <th width="10px">IS MAPPED</th> *@
+                    </tr>
+                </thead>
+                <tbody id="Domaintbody">
+                    @for (int i = 0; i < Model.Service_Data.Count; i++)
+                    {
+                        <tr class="clsRow_@i">
+                            <td width="5px">
+                                <span class="text-center">@(i + 1)</span>
+                            </td>
+                            <td width="200px">
+                                <input type="hidden" id="Service_Id_@i" value="@Model.Service_Data[i].Service_Id" />
+                                <span class="form-control clsMicroService" name="[@i].Service_Name">
+                                    <strong>@Model.Service_Data[i].Service_Name</strong>
+                                </span>
+                                <span class="text-danger" asp-validation-for="@Model.Service_Data[i].Service_Name"></span>
+                            </td>
+                            <td width="200px">
+                                <input type="text" class="form-control clsMainUrl" oninput="validate(this)" asp-for="@Model.Service_Data[i].Service_Url" id="Service_Url_@i" />
+                                <span class="text-danger" asp-validation-for="@Model.Service_Data[i].Service_Url" id="spnService_Url_@i" style="font-size : 0.675rem;"></span>
+                            </td>
+                            <td width="200px">
+                                <input type="text" class="form-control clsApiUrl" oninput="validate(this)" asp-for="@Model.Service_Data[i].Service_Api_Url" id="Service_Api_Url_@i" />
+                                <span class="text-danger" asp-validation-for="@Model.Service_Data[i].Service_Api_Url" id="spnService_API_Url_@i" style="font-size : 0.675rem;"></span>
+                            </td>
+                            @* <td width="10px">
+						<div class="switch">
+							<label>
+								<input type="checkbox" onchange="switchValidate(this)" name="Is_Mapped" name="@Model.Service_Data[i].Is_Mapped" id="isMapped_@i" value="@(Model.Service_Data[i].Is_Mapped == true ? "true" : "false")" @(Model.Service_Data[i].Is_Mapped == true ? "checked" : "") />
+								<span class="lever">
+									<span class="unckeckS">No</span>
+									<span class="ckeckS">Yes</span>
+
+								</span>
+							</label>
+						</div>
+					</td> *@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

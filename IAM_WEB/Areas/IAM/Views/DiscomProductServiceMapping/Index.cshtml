@@ -1,0 +1,89 @@
+﻿@model ModelLayer.Models.IAM.ServiceDomainMapping.ServiceDomainMappingRequestModel;
+@{
+    ViewData["Title"] = "Add Discom Product Service Domain Mapping";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Discom Product Service URL Mapping</div>
+        </div>
+    </div>
+
+    <div class="formbox">
+        <div class="fmbdy">
+            <form asp-area="IAM" asp-controller="DiscomProductServiceMapping" asp-action="Save" id="DPSMForm" onsubmit="SubmitForm('DPSMForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+                <div class="row gx-2 mb-1">
+                    <div class="col-lg-3 col-sm-4 mbc">
+                        <label class="required">DISCOM</label>
+                        <select name="Discom_Id" asp-for="@Model.Discom_Id" asp-items="@(new SelectList(ViewBag.DiscomList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLDiscomId">
+                            <option value="">Select</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="@Model.Discom_Id"></span>
+                    </div>
+                </div>
+                <div class="row gx-2 mb-1">
+                    <div class="col-lg-3 col-sm-4 mbc">
+                        <label class="required">Product Name</label>
+                        <select name="Product_Id" asp-for="@Model.Product_Id" class="form-control dropdown slct2" id="DDLProductId">
+                            <option value="">Select</option>
+                        </select>
+                        <span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+                    </div>
+                    <div class="col-lg-3 col-sm-4 mbc">
+                        <label class="required">Main URL</label>
+                        <input type="text" name="Product_Url" asp-for="@Model.Product_Url" id="Product_Url" class="form-control" autocomplete="off" placeholder="Enter Product URL" />
+                        <span class="text-danger" asp-validation-for="@Model.Product_Url"></span>
+                    </div>
+                    <div class="col-lg-3 col-sm-4 mbc">
+                        <label class="required">API URL</label>
+                        <input type="text" name="Product_Api_Url" asp-for="@Model.Product_Api_Url" id="Product_Api_Url" class="form-control" autocomplete="off" placeholder="Enter Product API URL" />
+                        <span class="text-danger" asp-validation-for="@Model.Product_Api_Url"></span>
+                    </div>
+                </div>
+                <!-- Empty State -->
+                <div class="emptydiv text-center" id="imgchooseflt">
+                    <img class="fltr-img" src="/images/no_data.svg" height="135" />
+                    <div class="fltr-desc">
+                        No records to display at the moment.<br />
+                        Please select a Discom And Product to view the available Services.
+                    </div>
+                </div>
+                <div class="d-none" id="btn">
+                    <div id="servicePartial"></div>
+                    <div class="btn-container mt-4">
+                        <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#DDLDiscomId").on("change", function () {
+                const Id = $(this).val();
+                if (Id && Id !== "") {
+                    BindDynamicDropdown($("#DDLProductId"), 'DISCOMPRODUCT', '', Id);
+                }
+                else {
+                    resetDropdown($('#DDLProductId'));
+                }
+            });
+
+            function resetDropdown(elem){
+                elem.empty().append($('<option></option>').val('').text('Select'));
+            }
+        });
+    </script>
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/common/common.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/iam/DiscomProductServiceMapping/DiscomProductService.js").ToLower()" asp-append-version="true"></script>
+}

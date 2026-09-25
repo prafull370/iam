@@ -1,0 +1,78 @@
+﻿@model ModelLayer.Models.IAM.Module.ModuleRequestModel;
+@{
+	ViewData["Title"] = (Model?.Module_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+	<link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Module_Id ?? 0) > 0 ? "Edit" : "Add") Module</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Module/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Module" asp-action="Save" id="ModuleForm" onsubmit="SubmitForm('ModuleForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Module_Id" id="hdnModuleId" />
+				<div class="row gx-2 mb-1">
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Name</label>
+								<input name="Module_Name" type="text" asp-for="@Model.Module_Name" class="form-control" autocomplete="off" placeholder="Enter Module Name" />
+								<span class="text-danger" asp-validation-for="@Model.Module_Name"></span>
+							</div>
+							<div></div>
+							<div class="col-xl-8 mbc">
+								<label>Description</label>
+								<textarea name="Module_Desc" asp-for="@Model.Module_Desc" class="form-control" autocomplete="off" placeholder="Enter Description" maxlength="200" rows="3"></textarea>
+								<span class="text-danger" asp-validation-for="@Model.Module_Desc"></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-3 d-flex justify-content-center align-items-center">
+						<div class="pubox">
+							<img alt="upload photo" class="uploadpic" src="@(!string.IsNullOrEmpty(Model.Module_Logo) ? Url.Content(Model.Module_Logo) : "/images/default-user.svg")" id="viewImage">
+							<div class="puboxfile">
+								<span class="flabel">Upload Photo</span>
+								<input type="file" name="POSTED_FILE" id="fileUpload" class="uploadfile" accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.tiff,.ico" />
+								<input type="hidden" name="Module_Logo" asp-for="@Model.Module_Logo" id="hdlModule_Logo" class="uploadfile" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc me-2">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/scripts/iam/module/module.js").ToLower()"></script>
+}

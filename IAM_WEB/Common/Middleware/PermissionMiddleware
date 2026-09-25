@@ -1,0 +1,195 @@
+using IAM_WEB.Common.Helper.APIHelper;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.IdentityModel.Tokens;
+using ModelLayer.Models.Common;
+using ModelLayer.Models.IAM.User;
+
+namespace IAM_WEB.Common.Middleware
+{
+    public class PermissionMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly IAPIHelper _factoryservice;
+        private readonly IConfiguration _config;
+        private readonly IMemoryCache _cache;
+        private static readonly SemaphoreSlim _cacheLock = new SemaphoreSlim(1, 1);
+
+        public PermissionMiddleware(RequestDelegate next, HttpClient client, IConfiguration configuration, IAPIHelper aPIHelper, IMemoryCache cache)
+        {
+            _next = next;
+            _config = configuration;
+            _factoryservice = aPIHelper;
+            _cache = cache;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            var area = context.GetRouteValue("area")?.ToString()?.ToLower();
+            var controller = context.GetRouteValue("controller")?.ToString()?.ToLower();
+
+            // Skip permission check for public controllers
+            var skipControllers = new[] { "account", "errors", "companyproductmapping", "companyowner", "company" };
+
+            if (!string.IsNullOrEmpty(controller) && !skipControllers.Contains(controller))
+            {
+                context.Request.Cookies.TryGetValue("IAM_Token", out var cookieToken);
+                string finaltoken = cookieToken ?? "";
+
+                if (string.IsNullOrEmpty(finaltoken))
+                {
+                    context.Response.Redirect("/Account/Login");
+                    return;
+                }
+
+                context.Session.SetString("Token_Id", finaltoken);
+
+                // Verify permission
+                bool? hasPermission = await VerifyUserPermissionAsync(area, controller);
+
+                if (hasPermission == null || hasPermission == false)
+                {
+                    HandlePermissionDenied(context, hasPermission);
+                    return;
+                }
+
+                // Load user data (with synchronization to prevent cache race conditions)
+                await LoadUserDataAsync(context, finaltoken);
+            }
+
+            await _next(context);
+        }
+
+        private async Task<bool?> VerifyUserPermissionAsync(string? area, string? controller)
+        {
+            try
+            {
+                string pageUrl = string.IsNullOrEmpty(area) ? "/" + controller : "/" + area + "/" + controller;
+                var apiUrl = $"UserPermission/verifyPagePermission?Host_Url={_config["SSO:WebUrl"]}&Page_Url={pageUrl}";
+                var result = await _factoryservice.GetAsync<bool?>(apiUrl);
+                
+                // Check API response status
+                if (result?.Status == false)
+                {
+                    return null; // API returned error - trigger logout
+                }
+
+                return result?.ResponseData ?? false;
+            }
+            catch (HttpRequestException ex)
+            {
+                // Network error - don't logout, let retry happen
+                System.Diagnostics.Debug.WriteLine($"Permission check failed: {ex.Message}");
+                return true; // Allow request to proceed (fallback to cached data)
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Unexpected error in permission check: {ex.Message}");
+                return null; // Logout on unexpected errors
+            }
+        }
+
+        private async Task LoadUserDataAsync(HttpContext context, string finaltoken)
+        {
+            // Check if data already cached
+            var cachedProductInfo = _cache.Get<List<UserProductPermissionModel>>("USER_PRODUCT_INFO_" + finaltoken);
+            var cachedUserInfo = _cache.Get<UserInfoModel>("USER_INFO_" + finaltoken);
+
+            if (cachedProductInfo != null && cachedUserInfo != null)
+            {
+                context.Items["UserProductInfo"] = cachedProductInfo;
+                context.Items["UserInfo"] = cachedUserInfo;
+                return;
+            }
+
+            // Use semaphore to prevent multiple threads from fetching simultaneously
+            await _cacheLock.WaitAsync();
+            try
+            {
+                // Double-check after acquiring lock
+                cachedProductInfo = _cache.Get<List<UserProductPermissionModel>>("USER_PRODUCT_INFO_" + finaltoken);
+                cachedUserInfo = _cache.Get<UserInfoModel>("USER_INFO_" + finaltoken);
+
+                if (cachedProductInfo != null && cachedUserInfo != null)
+                {
+                    context.Items["UserProductInfo"] = cachedProductInfo;
+                    context.Items["UserInfo"] = cachedUserInfo;
+                    return;
+                }
+
+                // Fetch fresh data
+                await UserProductsSetting(context, finaltoken);
+            }
+            finally
+            {
+                _cacheLock.Release();
+            }
+        }
+
+        private void HandlePermissionDenied(HttpContext context, bool? hasPermission)
+        {
+            if (hasPermission == null)
+            {
+                // API error or unauthorized - logout
+                context.Response.Redirect("/Account/Logout");
+                return;
+            }
+
+            // User lacks permission
+            if (context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                context.Response.StatusCode = 403;
+                context.Response.WriteAsJsonAsync(new
+                {
+                    Status = false,
+                    Message = "You do not have permission to access this page.",
+                    ResponseType = "PermissionDenied"
+                }).GetAwaiter().GetResult();
+            }
+            else
+            {
+                context.Response.StatusCode = 403;
+                context.Response.Redirect("/Errors/Error403");
+            }
+        }
+
+        private async Task UserProductsSetting(HttpContext context, string finaltoken)
+        {
+            try
+            {
+                var hostInfoResult = await _factoryservice.GetAsync<HostInfoModel>(
+                    "UserPermission/getHostInfoByHostUrl?hosturl=" + _config["SSO:WebUrl"]);
+
+                if (hostInfoResult?.Status == false || hostInfoResult?.ResponseData?.Host_Discom_Id == null)
+                {
+                    return; // Silent fail - use cached or empty data
+                }
+
+                var apiUrl = $"UserPermission/getProductById?Discom_Id={hostInfoResult.ResponseData.Host_Discom_Id}";
+                var productResult = await _factoryservice.GetAsync<List<UserProductPermissionModel>>(apiUrl);
+
+                if (productResult?.Status == true && productResult.ResponseData != null)
+                {
+                    int expireHours = int.TryParse(_config["SSO:ExpireTime"], out var hours) ? hours : 24;
+                    _cache.Set("USER_PRODUCT_INFO_" + finaltoken, productResult.ResponseData, 
+                        TimeSpan.FromHours(expireHours));
+                    context.Items["UserProductInfo"] = productResult.ResponseData;
+                }
+
+                var userApiUrl = $"UserPermission/getuserinfo?hosturl={_config["SSO:WebUrl"]}";
+                var userResult = await _factoryservice.GetAsync<UserInfoModel>(userApiUrl);
+
+                if (userResult?.Status == true && userResult.ResponseData != null)
+                {
+                    int expireHours = int.TryParse(_config["SSO:ExpireTime"], out var hours) ? hours : 24;
+                    _cache.Set("USER_INFO_" + finaltoken, userResult.ResponseData, 
+                        TimeSpan.FromHours(expireHours));
+                    context.Items["UserInfo"] = userResult.ResponseData;
+                }
+            }
+            catch
+            {
+                // Silent fail - don't interrupt request pipeline
+            }
+        }
+    }
+}

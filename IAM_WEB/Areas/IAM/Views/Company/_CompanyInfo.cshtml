@@ -1,0 +1,43 @@
+﻿@model ModelLayer.Models.IAM.Company.CompanyResponseModel;
+@{
+	if (Model != null)
+	{
+		<table id="tbllist" class="table tbl-view">
+			<tbody>
+				<tr>
+					<th>Company</th>
+					<td>@Model.Company_Name</td>
+					<th>Web Url</th>
+					<td>@Model.Company_Website</td>
+				</tr>
+				<tr>
+					<th>Logo</th>
+					<td>
+						<a href="@(!string.IsNullOrEmpty(Model.Company_Logo) ? Model.Company_Logo : "/images/default-user.svg")" alt="Page_logo" target="_blank" class="ms-2">
+							<img src="@(!string.IsNullOrEmpty(Model.Company_Logo) ? Model.Company_Logo : "/images/default-user.svg")" alt="Page Logo" style="height:40px;width:auto;" />
+						</a>
+					</td>
+					<th>GST</th>
+					<td>@Model.Gst</td>
+				</tr>
+				<tr>
+					<th>CIN</th>
+					<td>@Model.Cin</td>
+					<th>TIN</th>
+					<td>@Model.Tin</td>
+				</tr>
+				<tr>
+					<th>Address</th>
+					<td>@Model.Address</td>
+					<th>Remarks</th>
+					<td>@Model.Remarks</td>
+				</tr>
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<div class="mdlstl">No Data Found</div>
+
+	}
+}

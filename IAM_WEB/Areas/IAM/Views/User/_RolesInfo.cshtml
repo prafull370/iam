@@ -1,0 +1,46 @@
+﻿@model List<ModelLayer.Models.IAM.DesignationRoleMapping.DesignationRoleMappingResponseModel>
+
+@{
+    var roleList = Model
+    .Where(x => x != null)
+    .GroupBy(x => new { Id = x.Role_Id, Value = x.Role_Name })
+    .Select(g => new SelectListItem
+            {
+                Value = g.Key.Id.ToString(),
+                Text = g.Key.Value
+            })
+    .ToList();
+    var roleListJson = System.Text.Json.JsonSerializer.Serialize(roleList);
+    // Ensure at least one empty row if no model data
+    var rows = Model != null && Model.Any() ? Model : new List<ModelLayer.Models.IAM.DesignationRoleMapping.DesignationRoleMappingResponseModel> { new ModelLayer.Models.IAM.DesignationRoleMapping.DesignationRoleMappingResponseModel() };
+}
+<input type="hidden" id="rolesId" value='@Html.Raw(roleListJson)' />
+<div class="tblbox" id="designationRolesContainer">
+    <div class="cbheader">Role List</div>
+    <div class="tblwrp">
+        <table class="table tblbx">
+            <thead>
+                <tr>
+                    <th class="text-center">ROLE NAME</th>
+                </tr>
+            </thead>
+            <tbody id="rolesTableBody">
+                @for (int i = 0; i < rows.Count; i++)
+                {
+                    
+                        @if (rows[i].Is_Mapped == true)
+                        {
+                          
+                            <tr>
+                                <td class="text-center">
+                                @rows[i].Role_Name
+                                </td>
+                            </tr>
+                            
+                        }
+                    
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

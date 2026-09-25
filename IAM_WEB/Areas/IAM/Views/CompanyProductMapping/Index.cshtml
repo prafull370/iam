@@ -1,0 +1,50 @@
+﻿@model ModelLayer.Models.IAM.CompanyProductMapping.CompanyProductMappingRequestModel;
+@{
+    ViewData["Title"] = "Add Company Product Mapping";
+    // Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_SuperAdminLayout.cshtml";
+    
+
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Company Product Mapping</div>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+
+    <form asp-area="IAM" asp-controller="CompanyProductMapping" asp-action="Save" id="DPMForm" onsubmit="SubmitForm('DPMForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+        <div class="row gx-2">
+            <div class="col-lg-3 col-sm-4 mbc">
+                <label class="required">Company Name</label>
+                <select name="Company_Id" asp-for="@Model.Company_Id" asp-items="@(new SelectList(ViewBag.CompanyList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLCompanyId">
+                    <option value="">Select</option>
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.Company_Id"></span>
+            </div>
+        </div>
+        <div class="d-none" id="btn">
+            <div class="formbox">
+                <div class="fmbdy">
+                    <div class="pbtitle">Product List</div>
+                    <div id="productListPartial"></div>
+                    <div class="bd-clearfix my-3"></div>
+                    <div class="btn-container">
+                        <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js")" asp-append-version="true"></script>
+<script src="~/scripts/iam/companyproductpapping/companyproductmapping.js"></script>
+}

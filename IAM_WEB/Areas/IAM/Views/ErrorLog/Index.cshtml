@@ -1,0 +1,93 @@
+﻿@model ModelLayer.Models.IAM.ErrorLog.ErrorLogModel
+
+@{
+    ViewData["Title"] = "Error Log";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Error Log</div>
+        </div>
+    </div>
+
+    <div class="bd-clearfix mbc-sm"></div>
+
+    <form asp-area="IAM"
+          asp-controller="ErrorLog"
+          asp-action="Get"
+          id="ErrorLogForm"
+          onsubmit="LoadErrorLogData(); return false;"
+          asp-antiforgery="true"
+          class="frmSubmit">
+
+        <div class="row gx-2">
+            <div class="col-lg-3 col-sm-4 col-6 mbc-sm">
+                <label>Search</label>
+                <input type="text"
+                       id="txtsearch"
+                       class="form-control form-control-sm"
+                       placeholder="Search" />
+            </div>
+
+            <div class="col-lg-2 col-sm-4 col-6 mbc-sm">
+                <label>Start Date</label>
+                <input type="text"
+                       class="form-control form-control-sm calicnrgt flatpickr-input"
+                       placeholder="DD-MM-YYYY"
+                       id="txtFromDate" />
+            </div>
+
+            <div class="col-lg-2 col-sm-4 col-6 mbc-sm">
+                <label>End Date</label>
+                <input type="text" class="form-control form-control-sm calicnrgt flatpickr-input" placeholder="DD-MM-YYYY" id="txtEndDate" />
+            </div>
+
+            <div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end">
+                <div class="btn-group">
+                    <button type="button" id="btnsearch" class="btn btn-sm btn-outline-filter">
+                        <i class="ugo-icons">search</i>
+                    </button>
+                    <button type="button" id="btnreset" class="btn btn-sm btn-outline-filter">
+                        <i class="ugo-icons">restart_alt</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="cardbox">
+        <table class="table table-dtc thwsnw" id="tblErrorDatalist" width="100%">
+            <thead>
+                <tr>
+                    <th>Error Message</th>
+                    <th>Error Source</th>
+                    <th>Error Action</th>
+                    <th>Error Type</th>
+                    <th>Error Date</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="~/scripts/iam/errorlogs/errorlog.js"></script>
+}

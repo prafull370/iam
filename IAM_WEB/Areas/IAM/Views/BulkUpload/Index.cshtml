@@ -1,0 +1,158 @@
+﻿@model ModelLayer.Models.IAM.BulkUpload.BulkUploadFilesRequestModel 
+@{
+    ViewData["Title"] = "Bulk Upload";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+   }
+   <style>
+    .ddbwsf {
+        border: 2px dashed #cfd8dc;
+        border-radius: 12px;
+        background: #f8fbfd;
+        height: 75px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-box-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .upload-icon {
+        font-size: 34px;
+        color: #0d6efd;
+    }
+
+    .upload-text {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .ntd {
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    .filename {
+        font-size: 12px;
+        color: #0d6efd;
+        margin-top: 2px;
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+   </style>
+<div class="main-body">
+    <div class="mbc">
+        <div class="pgName">Bulk Upload</div>
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+    <form asp-area="IAM" asp-controller="BulkUpload" asp-action="SaveFiles" id="BulkUploadForm" onsubmit="SubmitForm('BulkUploadForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+        <div class="row mb-2">
+            <div class="col-md-6 col-sm-7">
+                <div class="row gx-2">
+                    <div class="col-lg-3 col-sm-4 mbc-sm">
+                        <label class="required">Upload Type</label>
+                        <select asp-for="@Model.Bulk_Type_Id" asp-items="@(new SelectList(ViewBag.BulkUpload_Type_List,"Id","Name"))" class="form-control form-control-sm" id="ddlUploadType" onchange="SetSampleFile();">
+                            <option value="">Select</option>
+                        </select>
+                        <span asp-validation-for="@Model.Bulk_Type_Id" class="fv-error"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-5">
+                <div class="mbc-sm fubx">
+                    <div class="ddbwsf">
+                        <label class="ddlabel" for="importfile">
+                            <div class="upload-box-content">
+                                <!-- LEFT ICON -->
+                                <div class="upload-icon">
+                                    <i class="ugo-icons">upload</i>
+                                </div>
+
+                                <!-- RIGHT TEXT -->
+                                <div class="upload-text">
+                                    <div>
+                                        Drag and Drop or <span class="text-primary">browse files</span>
+                                    </div>
+                                    <div class="ntd">Import data in Excel format.</div>
+                                    <div class="filename" id="fileName">No file chosen</div>
+                                </div>
+                            </div>
+                        </label>
+
+                        <input asp-for="@Model.File_Name" type="file" class="cfile" accept=".xlsx" id="importfile" hidden />
+                    </div>
+                </div>
+
+
+
+                @* <span asp-validation-for="File_Base" class="fv-error"></span> *@
+				<span asp-validation-for="@Model.File_Name" id="spfileimport" class="text-danger"></span>
+                <a href="~/Assets/SampleFiles/Level_Bulk_Upload_Sample_File.xlsx" id="fileLevel" download class="d-none">Download sample file</a>
+                <a href="~/Assets/sampleFiles/Vendor_Bulk_Upload_Sample_File.xlsx" id="fileVendor" download class="d-none">Download sample file</a>
+                <a href="~/Assets/SampleFiles/User_Bulk_Upload_Sample_File.xlsx" id="fileUser" download class="d-none">Download sample file</a>
+            </div>
+
+        </div>
+
+        <div class="bd-clearfix mb-2"></div>
+
+        <div class="mbc">
+            @* <button type="submit" class="btn btn-primary" permission-action="Upload">Upload</button> *@
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </form>
+    <div class="cardbox">
+        <table class="table table-dtc thwsnw" id="tblBulkUploadlist">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Upload Type</th>
+                    <th>Total</th>
+                    <th>Success</th>
+                    <th>Failure</th>
+                    <th>Status</th>
+                    <th>Upload Date</th>
+                    <th>Uploaded By</th>
+                    @* <th permission-action="Import,Download">Action</th> *@
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <!-- SweetAlert JS -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="@Url.Content("~/scripts/iam/bulkupload/bulkupload.js").ToLower()"></script>
+    <script>
+                   document.getElementById("importfile").addEventListener("change", function () {
+            if (this.files.length > 0) {
+                document.getElementById("fileName").innerText = this.files[0].name;
+            } else {
+                document.getElementById("fileName").innerText = "No file chosen";
+            }
+        });
+
+    </script>
+}

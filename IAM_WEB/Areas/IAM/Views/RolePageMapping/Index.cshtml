@@ -1,0 +1,359 @@
+﻿@model ModelLayer.Models.IAM.RolePageMapping.RolePageMappingRequestModel;
+@{
+    ViewData["Title"] = "Role Page Mapping";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Role Page Mapping</div>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc"></div>
+
+    <form asp-area="IAM" asp-controller="RolePageMapping" asp-action="Save" id="RPMForm" onsubmit="SubmitForm('RPMForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+        <div class="row gx-2">
+            <div class="col-lg-3 col-sm-4 mbc">
+                <label class="required">Role</label>
+                <select name="Role_Id" asp-for="@Model.Role_Id" asp-items="@(new SelectList(ViewBag.RoleList,"Id","Name"))" class="form-control dropdown slct2" id="DDLRoleId">
+                    <option value="">Select</option>
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.Role_Id"></span>
+            </div>
+        </div>
+        <!-- Empty State -->
+        <div class="emptydiv text-center" id="imgchooseflt">
+            <img class="fltr-img" src="/images/no_data.svg" height="135" />
+            <div class="fltr-desc">
+                No records to display at the moment.<br />
+                Please select a Role to view the available Pages.
+            </div>
+        </div>
+        <div id="btn" class="d-none">
+            <div class="ctvbx">
+                <div class="tblsec">
+                    <table class="table tblbdr cstmRC tree-table mb-0" id="rolePagePartial">
+                    </table>
+                </div>
+            </div>
+            <div class="btn-container mt-4">
+                <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+                <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="ctvbx d-none">
+        <div class="tblsec">
+            <table class="table tblbdr cstmRC tree-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Structure Name</th>
+                        <th class="text-center">Active</th>
+                        <th class="text-center">Landing Page</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Level 0 -->
+                    <tr class="level-0 toggle-row" data-id="0">
+                        <td class="toggle-parent hierarchy-col" data-level="0">
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">CSMI Web</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                   <!-- Level 1 -->
+                    <tr class="level-1 child-of-0 toggle-row d-none" data-id="1">
+                        <td class="toggle-parent hierarchy-col" data-level="1">
+                            <span class="tree-rails">
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Consumer Survey</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <!-- Level 2 -->
+                    <tr class="level-2 child-of-1 toggle-row d-none" data-id="2">
+                        <td class="toggle-parent hierarchy-col" data-level="2">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Workforce Management</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <!-- Pages -->
+                    <tr class="level-3 parentpage child-of-2 d-none">
+                        <td class="toggle-parent hierarchy-col" data-level="3">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Manage Consumer</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="level-4 child-of-3 d-none">
+                        <td class="hierarchy-col" data-level="4">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own rail-more"></span>
+                            </span>
+                            <span class="toggle-icon-spacer"></span>
+                            <span class="tree-label">Consumer List</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td class="text-center"><input type="radio"></td>
+                    </tr>
+                    <tr class="level-4 child-of-3 d-none">
+                        <td class="hierarchy-col" data-level="4">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <span class="toggle-icon-spacer"></span>
+                            <span class="tree-label">Upload Consumer</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td class="text-center"><input type="radio"></td>
+                    </tr>
+
+
+
+                    <!-- Level 0 -->
+                    <tr class="level-0 toggle-row" data-id="0">
+                        <td class="toggle-parent hierarchy-col" data-level="0">
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Energy Enalytics</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <!-- Level 1 -->
+                    <tr class="level-1 child-of-0 toggle-row d-none" data-id="1">
+                        <td class="toggle-parent hierarchy-col" data-level="1">
+                            <span class="tree-rails">
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Consumer Survey</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <!-- Level 2 -->
+                    <tr class="level-2 child-of-1 toggle-row d-none" data-id="2">
+                        <td class="toggle-parent hierarchy-col" data-level="2">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Workforce Management</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <!-- Pages -->
+                    <tr class="level-3 parentpage child-of-2 d-none">
+                        <td class="toggle-parent hierarchy-col" data-level="3">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Manage Consumer</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="level-4 child-of-3 d-none">
+                        <td class="hierarchy-col" data-level="4">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own rail-more"></span>
+                            </span>
+                            <span class="toggle-icon-spacer"></span>
+                            <span class="tree-label">Consumer List</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td class="text-center"><input type="radio"></td>
+                    </tr>
+                    <tr class="level-4 child-of-3 d-none">
+                        <td class="hierarchy-col" data-level="4">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <span class="toggle-icon-spacer"></span>
+                            <span class="tree-label">Upload Consumer</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td class="text-center"><input type="radio"></td>
+                    </tr>
+
+
+
+                    <!-- Level 0 -->
+                    <tr class="level-0 toggle-row" data-id="0">
+                        <td class="toggle-parent hierarchy-col" data-level="0">
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">MDM</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <!-- Level 1 -->
+                    <tr class="level-1 child-of-0 toggle-row d-none" data-id="1">
+                        <td class="toggle-parent hierarchy-col" data-level="1">
+                            <span class="tree-rails">
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Consumer Survey</span>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <!-- Pages (direct under service, no module) -->
+                    <tr class="level-2 notmodule parentpage child-of-1 d-none">
+                        <td class="toggle-parent hierarchy-col" data-level="3">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <i class="toggle-icon ugo-icons">keyboard_arrow_down</i>
+                            <span class="tree-label">Manage Consumer</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="level-3 notmodule child-of-2 d-none">
+                        <td class="hierarchy-col" data-level="4">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own rail-more"></span>
+                            </span>
+                            <span class="toggle-icon-spacer"></span>
+                            <span class="tree-label">Consumer List</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td class="text-center"><input type="radio"></td>
+                    </tr>
+                    <tr class="level-3 notmodule child-of-2 d-none">
+                        <td class="hierarchy-col" data-level="4">
+                            <span class="tree-rails">
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail"></span>
+                                <span class="rail rail-own"></span>
+                            </span>
+                            <span class="toggle-icon-spacer"></span>
+                            <span class="tree-label">Upload Consumer</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></span>
+                        </td>
+                        <td class="text-center"><input type="radio"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/iam/RolePageMapping/RolePageMapping.js").ToLower()" asp-append-version="true"></script>
+    @* <script>
+
+        // Expand-Collapse Logic
+        $('.toggle-parent').on("click", function () {
+            const $this = $(this);
+            const level = parseInt($this.data('level'));
+            const $row = $this.closest('tr');
+            const $icon = $this.find('.toggle-icon');
+            const isExpanded = $icon.text() === 'remove';
+
+            // Toggle icon
+            $icon.text(isExpanded ? 'add' : 'remove');
+
+            // Show/hide children recursively
+            toggleChildren($row, level, !isExpanded);
+        });
+
+        function getRowLevel($tr) {
+            const className = $tr.attr('class');
+            const match = className.match(/level-(\d+)/);
+            return match ? parseInt(match[1]) : -1;
+        }
+
+        function toggleChildren($row, parentLevel, show) {
+            let next = $row.next();
+
+            while (next.length) {
+                const nextLevel = getRowLevel(next);
+                if (nextLevel <= parentLevel) break;
+
+                if (show && nextLevel === parentLevel + 1) {
+                    next.removeClass('d-none');
+                } else {
+                    next.addClass('d-none');
+                    next.find('.toggle-icon').text('add');
+                }
+
+                if (!show) {
+                    // If collapsing, recursively collapse deeper levels too
+                    const childLevel = getRowLevel(next);
+                    toggleChildren(next, childLevel, false);
+                }
+
+                next = next.next();
+            }
+        }
+
+    </script> *@
+}

@@ -1,0 +1,140 @@
+﻿@model ModelLayer.Models.IAM.Page.PageGetRequestModel;
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Page List</div>
+        </div>
+        <div class="col-3 text-end">
+            <a href="@Url.Content("~/IAM/Page/Add")" class="afBtn"><i class="ugo-icons">add</i></a>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+    <div class="row gx-2">
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="dvCategory">
+            <label>Search</label>
+            <input type="text" class="form-control form-control-sm" id="txtsearch" autocomplete="off" name="txtsearch" value="" placeholder="Search here">
+        </div>
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="">
+            <label class="">Product</label>
+            <select name="Product_Id" asp-for="@Model.Product_Id" asp-items="@(new SelectList(ViewBag.ProductList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLProductId">
+                <option value="">Select</option>
+            </select>
+            <span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+        </div>
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="">
+            <label class="">Service</label>
+            <select name="Service_Id" asp-for="@Model.Service_Id" asp-items="@(new SelectList(ViewBag.ServiceList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLServiceId">
+                <option value="">Select</option>
+            </select>
+            <span class="text-danger" asp-validation-for="@Model.Service_Id"></span>
+        </div>
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="">
+            <label class="">Access Point</label>
+            <select name="AccessPoint_Id" asp-for="@Model.Access_Id" asp-items="@(new SelectList(ViewBag.AccessList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLAccessId">
+                <option value="">Select</option>
+            </select>
+            <span class="text-danger" asp-validation-for="@Model.Access_Id"></span>
+        </div>
+        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end" id="dvbtn">
+            <div class="btn-group">
+                <button type="button" id="btnsearch" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">search</i>
+                </button>
+                <button type="button" id="btnreset" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">restart_alt</i>
+                </button>
+            </div>
+            @* <a href="javascript:;" class="btn btn-sm btn-no ms-2" id="ExcelDownload"><img src="~/images/excel.svg" width="30" height="28"></a> *@
+        </div>
+    </div>
+
+    <div class="cardbox">
+        <table class="table table-dtc thwsnw" id="tblPagelist">
+            <thead>
+                <tr>
+                    <th>Page Name</th>
+                    <th>Product Name</th>
+                    <th>Service Name</th>
+                    <th>Status</th>
+                    <th>Is Parent</th>
+                    <th>Created On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+
+    <div class="modal mbdrds fade" id="vlModal" tabindex="-1" aria-labelledby="vlModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-head d-flex justify-content-between">
+                    <div class="modal-ttl">Page Details</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body overflow-auto">
+                    <div id="tbodyPage"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <script src="@Url.Content("~/scripts/iam/page/page.js").ToLower()"></script>
+
+    <script>
+        $(document).ready(function () {
+            var productId = '@(Model?.Product_Id ?? 0)';
+            var serviceId = '@(Model?.Service_Id ?? 0)';
+            var accessId  = '@(Model?.Access_Id ?? 0)';
+
+            // =====================================================
+            // 🔁 Product change → Service load
+            // =====================================================
+            $('#DDLProductId').on('change', function () {
+
+                let product_id = $(this).val();
+
+                $('#DDLServiceId').html('<option value="">Select</option>');
+                $('#DDLAccessId').html('<option value="">Select</option>');
+
+                if (product_id) {
+                    BindDynamicDropdown($('#DDLServiceId'), 'SERVICES', '', product_id);
+                }
+            });
+
+            // =====================================================
+            // 🔁 Service change → Access load
+            // =====================================================
+            $('#DDLServiceId').on('change', function () {
+
+                let service_id = $(this).val();
+
+                $('#DDLAccessId').html('<option value="">Select</option>');
+
+                if (service_id) {
+                    BindDynamicDropdown($('#DDLAccessId'), 'ACCESS', '', service_id);
+                }
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,23 @@
+﻿@model List<ModelLayer.Models.IAM.User.UserModulePermissionModel>;
+@{
+	ViewData["Title"] = "Module";
+	var i = 1;
+}
+
+@if (Model != null)
+{
+	@foreach (var item in Model)
+	{
+		<div class="col-xl-2 col-sm-3 col-xs-4 col-6 mbcs module-item" data-id="@item.Module_Id" onclick="bindPages(@item.Module_Id, 'Module');">
+			<div class="srcsBox d-flex flex-column text-center">
+				<a href="javascript:void(0)" class="srvcIcon">
+					<div class="sIconIn">
+						<img src="@(!string.IsNullOrEmpty(item.Module_Logo) ? item.Module_Logo :  "/images//configuration.svg")" height="40" width="40">
+					</div>
+				</a>
+				<a href="javascript:void(0)" class="srvcName">@item.Module_Name</a>
+			</div>
+		</div>
+		i++;
+	}
+}

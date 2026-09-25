@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "404 - Page Not Found";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-control" content="public">
+    <meta name="theme-color" content="#0599EF" />
+    <base href='@Url.Content("~/")' />
+    <title>@ViewData["Title"]</title>
+    <base href='@Url.Content("~/")' />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")" />
+    <!-- PNG Icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/favicon-16x16.png")">
+    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/favicon-32x32.png")">
+    <link rel="icon" type="image/png" sizes="192x192" href="@Url.Content("~/android-chrome-192x192.png")">
+    <link rel="icon" type="image/png" sizes="512x512" href="@Url.Content("~/android-chrome-512x512.png")">
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="@Url.Content("~/apple-touch-icon.png")">
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="@Url.Content("~/site.webmanifest")">
+    <link href="@Url.Content("~/css/ugo-icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/font-family.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/bscss.min.css")" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="error-body">
+    <div class="container">
+        <div class="row gx-5 align-items-center">
+            <div class="col-lg-5 d-flex flex-column align-items-center">
+                <h1 class="error-number">404</h1>
+                <h2 class="error-title">Page Not Found</h2>
+                <p class="error-text">Oopps. The page you were looking for doesn't exist. You may have mistyped the address or the page may have moved.</p>
+                <a href="javascript: history.go(-1)" class="btn btn-primary btn-lg"><i class="ugo-icons me-1 fs-4">arrow_back</i>Back to Page</a>
+            </div>
+            <div class="col-8 col-lg-6 mb-5 mb-lg-0">
+                <dotlottie-player src="https://lottie.host/3e8a462f-ba8a-4f8a-b5e5-53185878f012/f9i6rrDwRB.lottie" background="transparent" speed="1" class="errImg" loop autoplay></dotlottie-player>
+            </div>
+        </div>
+    </div>
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js")"></script>
+    <script src="@Url.Content("~/js/custom.js")" asp-append-version="true"></script>
+    <script src="@Url.Content("~/lib/lottiefiles/dotlottie-player.mjs")" type="module"></script>
+</body>
+</html>

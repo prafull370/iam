@@ -1,0 +1,26 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles{
+	<style>
+
+		.header .toggle-sidebar-btn{
+			display:none;
+		}
+	</style>
+}
+<div class="container mbsContainer">
+	<div class="row justify-content-center">
+		<input type="hidden" id="hdnDiscomId" />
+		<input type="hidden" id="hdnProductId" />  <!-- Add new by fetch page on the bases of product-->
+		<div id="discomContainer" class="d-flex justify-content-center"></div>
+		<div id="productContainer" class="d-flex justify-content-center"></div>
+		<div id="serviceContainer" class="d-flex justify-content-center"></div>
+		<div id="moduleContainer" class="d-flex justify-content-center"></div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/scripts/home/index.js").ToLower()"></script>
+}

@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "List";
+    // Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_SuperAdminLayout.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+    <link href="@Url.Content("~/lib/datepicker/flatpickr.css")" rel="stylesheet" />
+    <!-- CSS (optional for custom themes; base styles load without explicit CSS) -->
+    <link rel="stylesheet" href="@Url.Content("https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css")" />
+
+    <style>
+        button.btn.custom-color {
+            background-color: #1dacb4;
+            border-color: #1dacb4;
+            color: #fff;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #ccc;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            text-transform: uppercase;
+            overflow: hidden;
+        }
+
+        table th, table td {
+            vertical-align: middle;
+        }
+
+    </style>
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Company Owner List</div>
+        </div>
+        @* <div class="col-3 text-end">
+            <a href="@Url.Content("~/IAM/User/Add")" class="afBtn"><i class="ugo-icons">add</i></a>
+        </div> *@
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+    <div class="row gx-2">
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="dvCategory">
+            <label>Search</label>
+            <input type="text" class="form-control form-control-sm" id="txtsearch" autocomplete="off" name="txtsearch" value="" placeholder="Search Here">
+        </div>
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="dvCategory">
+            <label>Status</label>
+            <select class="form form-control slct" id="statusId">
+                <option value="">Select</option>
+                <option value="1">Active</option>
+                <option value="0">InActive</option>
+            </select>
+        </div>
+        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end" id="dvbtn">
+            <div class="btn-group">
+                <button type="button" id="btnSearch" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">search</i>
+                </button>
+                <button type="button" id="btnReset" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">restart_alt</i>
+                </button>
+            </div>
+            <button type="button" class="btn btn-sm btn-no ms-2" id="ExcelDownload">
+                <img src="/images//excel.svg" height="28">
+            </button>
+        </div>
+    </div>
+
+    <div class="cardbox">
+        <table class="table table-dtc thwsnws" id="tblUserlist">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>User Code</th>
+                    <th>Login ID</th>
+                    <th>Mobile</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Created On</th>
+                    <th>Reset Password</th>
+                    <th>Status</th>
+                    @* <th>Action</th>*@
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datepicker/flatpickr.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/sweetalert/sweetalert.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/scripts/iam/companyowner/companyowner.js").ToLower()"></script>
+
+    <!-- JS -->
+    <script src="@Url.Content("https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js").ToLower()"></script>
+
+}

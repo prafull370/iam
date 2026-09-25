@@ -1,0 +1,85 @@
+﻿@using ModelLayer.Models.IAM.ApplicationErrorLog
+@model ApplicationErrorLogListModel
+
+@{
+    ViewData["Title"] = "Application Error Log";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Application Error Log</div>
+        </div>
+    </div>
+
+    <div class="cardbox">
+        <!-- Empty State -->
+        <div class="emptydiv text-center" id="imgchooseflt"
+             style="@(Model?.Logs != null && Model.Logs.Any() ? "display:none;" : "")">
+            <img class="fltr-img" src="/images/no_data.svg" height="135" />
+            <div class="fltr-desc">
+                No records to display at the moment.<br />
+                No application error logs were found for the last 15 days.
+            </div>
+        </div>
+        <div id="dvTableWrapper"
+             style="@(Model?.Logs != null && Model.Logs.Any() ? "" : "display:none;")">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:80px;">S.No.</th>
+                        <th style="width:200px;">File Name</th>
+                        <th>Error Message</th>
+                        <th style="width:180px;">Last Modified</th>
+                        <th style="width:120px;">Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model?.Logs != null && Model.Logs.Any())
+                    {
+                        foreach (var file in Model.Logs)
+                        {
+                            <tr>
+                                <td>@file.S_No</td>
+                                <td>@file.FileName</td>
+                                <td style="max-width:400px; word-wrap:break-word;">
+                                    @file.ErrorMessage
+                                </td>
+                                <td>@file.LastModified</td>
+                                <td>
+                                    <a href="@Url.Action("DownloadExcel", "ApplicationErrorLog", new { area = "IAM", fileName = file.FileName })"
+                                       class="btn btn-sm btn-success">
+                                        Download
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="~/scripts/iam/application_errorlog/application_errorlog.js"></script>
+}

@@ -1,0 +1,79 @@
+﻿@model ModelLayer.Models.IAM.DesignationRoleMapping.DesignationRoleMappingRequestModel;
+@{
+    ViewData["Title"] = "Add Designation Role Mapping";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Designation Role Mapping</div>
+        </div>
+    </div>
+
+
+    <form asp-area="IAM" asp-controller="DesignationRoleMapping" asp-action="Save" id="DDMForm" onsubmit="SubmitForm('DDMForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+        <div class="row gx-2">
+            <div class="col-lg-3 col-sm-4 mbc">
+                <label class="required">Department</label>
+                <select name="Department_Id" asp-for="@Model.Department_Id" asp-items="@(new SelectList(ViewBag.DepartmentList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLDepId">
+                    <option value="">Select</option>
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.Department_Id"></span>
+            </div>
+            <div class="col-lg-3 col-sm-4 mbc">
+                <label class="required">Designation</label>
+                <select name="Designation_Id" asp-for="@Model.Designation_Id" class="form-control dropdown slct2" id="DDLDesgId" disabled>
+                    <option value="">Select</option>
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.Designation_Id"></span>
+            </div>
+        </div>
+        <!-- Empty State -->
+        <div class="emptydiv text-center" id="imgchooseflt">
+            <img class="fltr-img" src="/images/no_data.svg" height="135" />
+            <div class="fltr-desc">
+                No records to display at the moment.<br />
+                Please select a Department And Designation to view the available Role.
+            </div>
+        </div>
+        <div class="d-none" id="btn">
+            <div class="formbox">
+                <div class="fmbdy">
+                    <div id="roleListPartial"></div>
+                    <div class="bd-clearfix my-3"></div>
+                    <div class="btn-container">
+                        <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script>
+            $(document).ready(function () {
+            $("#DDLDesgId").prop("disabled", true);
+            $("#DDLDepId").on("change", function () {
+            const id = $(this).val();
+                if (!id) {
+                    $("#DDLDesgId")
+                        .prop("disabled", true).empty()
+                        .append('<option value="">Select</option>');
+                    return;
+                }
+                BindDynamicDropdown( $("#DDLDesgId"),"DEPDESIGN","", id);
+            });
+        });
+
+    </script>
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/common/common.js").ToLower()"></script>
+    <script src="@Url.Content("~/scripts/iam/designationrolemapping/designationrolemapping.js").ToLower()" asp-append-version="true"></script>
+}

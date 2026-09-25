@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataValidators\IAM\AppDeviceReset\**" />
+    <Compile Remove="DataValidators\IAM\NewFolder1\**" />
+    <EmbeddedResource Remove="DataValidators\IAM\AppDeviceReset\**" />
+    <EmbeddedResource Remove="DataValidators\IAM\NewFolder1\**" />
+    <None Remove="DataValidators\IAM\AppDeviceReset\**" />
+    <None Remove="DataValidators\IAM\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NPOI" Version="2.7.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataValidators\IAM\PageActionMapping\" />
+  </ItemGroup>
+
+</Project>

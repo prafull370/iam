@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+}
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Discom List</div>
+        </div>
+        <div class="col-3 text-end">
+            <a href="@Url.Content("~/IAM/Discom/Add")" class="afBtn"><i class="ugo-icons">add</i></a>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+    <div class="row gx-2">
+        <div class="col-lg-2 col-sm-4 mbc-sm" id="dvCategory">
+            <label>Search</label>
+            <input type="text" class="form-control form-control-sm" id="txtsearch" autocomplete="off" name="txtsearch" value="" placeholder="Search Here">
+        </div>
+        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end" id="dvbtn">
+            <div class="btn-group">
+                <button type="button" id="btnsearch" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">search</i>
+                </button>
+                <button type="button" id="btnreset" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">restart_alt</i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cardbox">
+        <table class="table table-dtc thwsnw" id="tblDiscomlist">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    @* <th>Logo</th> *@
+                    <th>Short Code</th>
+                    <th>Regional Name</th>
+                    <th>Status</th>
+                    <th>Created On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="modal mbdrds fade" id="vlModal" tabindex="-1" aria-labelledby="vlModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-head d-flex justify-content-between">
+                    <div class="modal-ttl">Discom Details</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body overflow-auto">
+                    <table class="table table-dtc thwsnw">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                @* <th>Logo</th> *@
+                                <th>Regional Name</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyDiscom">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <script src="@Url.Content("~/scripts/iam/discom/discom.js").ToLower()"></script>
+}

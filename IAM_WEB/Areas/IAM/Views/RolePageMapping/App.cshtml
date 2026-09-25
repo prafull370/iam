@@ -1,0 +1,54 @@
+﻿@model ModelLayer.Models.IAM.RolePageMapping.AppRolePageMappingRequestModel;
+@{
+    ViewData["Title"] = "App Role Page Mapping";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">App Role Page Mapping</div>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc"></div>
+
+    <form asp-area="IAM" asp-controller="RolePageMapping" asp-action="Save" id="RPMForm" onsubmit="SubmitForm('RPMForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+        <div class="row gx-2">
+            <div class="col-lg-3 col-sm-4 mbc">
+                <label class="required">Role</label>
+                <select name="Role_Id" asp-for="@Model.Role_Id" asp-items="@(new SelectList(ViewBag.RoleList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLRoleId">
+                    <option value="">Select</option>
+                </select>
+                <span class="text-danger" asp-validation-for="@Model.Role_Id"></span>
+            </div>
+        </div>
+        <!-- Empty State -->
+        <div class="emptydiv text-center" id="imgchooseflt">
+            <img class="fltr-img" src="/images/no_data.svg" height="135" />
+            <div class="fltr-desc">
+                No records to display at the moment.<br />
+                Please select a Role to view the available Pages.
+            </div>
+        </div>
+        <div id="btn" class="d-none">
+            <div class="ctvbx">
+                <div class="tblsec">
+                    <table class="table tblbdr cstmRC mb-0" id="rolePagePartial">
+                    </table>
+                </div>
+            </div>
+            <div class="btn-container mt-4">
+                <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+                <button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/iam/RolePageMapping/AppRolePageMapping.js").ToLower()" asp-append-version="true"></script>
+}

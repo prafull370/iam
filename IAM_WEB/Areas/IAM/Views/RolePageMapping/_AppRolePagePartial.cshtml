@@ -1,0 +1,125 @@
+﻿@model List<ModelLayer.Models.IAM.RolePageMapping.AppViewModel>
+
+@if (Model?.Any() == true)
+{
+    <thead>
+        <tr>
+            <th>Application</th>
+            <th>Service</th>
+            <th>Page Name</th>
+            <th class="text-center">Active</th>
+            <th class="text-center">Landing Page</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var app in Model)
+        {
+            <!-- ================= APP ROW ================= -->
+            <tr class="level-0 toggle-row">
+                <td class="toggle-parent" data-level="0">
+                    @if (app.Services.Any())
+                    {
+                        <i class="toggle-icon ugo-icons">add</i>
+                    }
+                    @app.App_Name
+                </td>
+                <td colspan="4"></td>
+            </tr>
+
+            int groupIndex = 0;
+
+            @foreach (var service in app.Services)
+            {
+                <!-- ================= SERVICE ROW ================= -->
+                <tr class="level-1 child-of-0 toggle-row d-none">
+                    <td></td>
+                    <td class="toggle-parent" data-level="1">
+                        @if (service.ParentPages.Any())
+                        {
+                            <i class="toggle-icon ugo-icons">add</i>
+                        }
+                        @service.Service_Name
+                    </td>
+                    <td colspan="3"></td>
+                </tr>
+
+                @foreach (var parent in service.ParentPages.Where(p => p.Is_Parent))
+                {
+                    groupIndex++;
+                    var parentPageId = parent.Page_Id;
+
+                    <!-- ================= PARENT PAGE ================= -->
+                    <tr class="level-2 parentpage child-of-1 page d-none"
+                        data-group="group-@groupIndex">
+
+                        <td colspan="2"></td>
+
+                        <td>@parent.Page_Name</td>
+
+                        <td class="text-center">
+                            <input type="checkbox"
+                                   class="parent-checkbox"
+                                   data-group="group-@groupIndex"
+                                   data-app-id="@app.App_Id"
+                                   data-service-id="@service.Service_Id"
+                                   data-page-id="@parentPageId"
+                                   data-is-parent="true"
+                            @(parent.Is_Page_Mapped ? "checked" : "") />
+                        </td>
+
+                        <td class="text-center">
+                            @if (!parent.ChildPages.Any())
+                            {
+                                <input type="radio"
+                                       class="landing-radio"
+                                       name="@($"landingPage_{app.App_Id}_{service.Service_Id}")"
+                                       data-app-id="@app.App_Id"
+                                       data-service-id="@service.Service_Id"
+                                       data-page-id="@parentPageId"
+                                       data-is-parent="true"
+                                @(parent.Is_Landing_Page ? "checked" : "") />
+                            }
+                        </td>
+                    </tr>
+
+                    <!-- ================= CHILD PAGES ================= -->
+                    @foreach (var child in parent.ChildPages)
+                    {
+                        var childPageId = child.Page_Id;
+
+                        <tr class="level-2 child-of-1 page d-none"
+                            data-group="group-@groupIndex">
+
+                            <td colspan="2"></td>
+
+                            <td class="ps-4">@child.Page_Name</td>
+
+                            <td class="text-center">
+                                <input type="checkbox"
+                                       class="child-checkbox"
+                                       data-group="group-@groupIndex"
+                                       data-app-id="@app.App_Id"
+                                       data-service-id="@service.Service_Id"
+                                       data-page-id="@childPageId"
+                                       data-is-parent="false"
+                                @(child.Is_Page_Mapped ? "checked" : "") />
+                            </td>
+
+                            <td class="text-center">
+                                <input type="radio"
+                                       class="landing-radio"
+                                       name="@($"landingPage_{app.App_Id}_{service.Service_Id}")"
+                                       data-app-id="@app.App_Id"
+                                       data-service-id="@service.Service_Id"
+                                       data-page-id="@childPageId"
+                                       data-is-parent="false"
+                                @(child.Is_Landing_Page ? "checked" : "") />
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+    </tbody>
+}

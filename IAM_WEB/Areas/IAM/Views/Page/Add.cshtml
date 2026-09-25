@@ -1,0 +1,276 @@
+﻿@model ModelLayer.Models.IAM.Page.PageRequestModel;
+@{
+	ViewData["Title"] = (Model?.Page_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+	<link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Page_Id ?? 0) > 0 ? "Edit" : "Add") Page</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Page/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Page" asp-action="Save" id="PageForm" onsubmit="SubmitForm('PageForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Page_Id" id="hdnPageId" />
+				<input type="hidden" value="@Model.Parent_Id" id="hdnParentId" />
+				<input type="hidden" value="@Model.App_Id" id="hdnAppId" />
+				<div class="row gx-2 mb-1">
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Product</label>
+								<select name="Product_Id" asp-for="@Model.Product_Id" asp-items="@(new SelectList(ViewBag.ProductList, "Id", "Name"))" class="form-control dropdown slct2" id="DDLProductId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Service</label>
+								<select name="Service_Id" asp-for="@Model.Service_Id" class="form-control dropdown slct2" id="DDLServiceId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Service_Id"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label id="moduleLabelId">Module</label>
+								<select class="form-control dropdown slct2" id="DDLModuleId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" id="moduleErrMsg" style="font-size : 0.66rem;"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Access Point</label>
+								<select name="Access_Id" asp-for="@Model.Access_Id" class="form-control dropdown slct2" id="DDLAccessId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Access_Id"></span>
+							</div>
+							<div class="col-xl-4 mbc d-none" id="DivAPP">
+								<label class="required">App</label>
+								<select asp-for="@Model.App_Id" class="form-control dropdown slct2" id="DDLAppId">
+									<option value="">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.App_Id"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Page Name</label>
+								<input name="Page_Name" type="text" asp-for="@Model.Page_Name" class="form-control" autocomplete="off" placeholder="Enter Page Name" />
+								<span class="text-danger" asp-validation-for="@Model.Page_Name"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="">Display Order</label>
+								<input name="Display_Order" type="number" asp-for="@Model.Display_Order" class="form-control only-positive-number" autocomplete="off" placeholder="Enter Display Order" min="1" />
+								<span class="text-danger" asp-validation-for="@Model.Display_Order"></span>
+							</div>
+							<div class="col-xl-8 mbc">
+								<label class="required">Page Url</label>
+								<input name="Page_Url" type="text" asp-for="@Model.Page_Url" class="form-control" autocomplete="off" placeholder="Enter Page Url" />
+								<span class="text-danger" asp-validation-for="@Model.Page_Url"></span>
+							</div>
+							<div></div>
+							<div class="col-xl-4 mbc">
+								<label>Is Parent</label>
+								<div class="switch">
+									<label>
+										<input type="checkbox" name="Is_Parent" asp-for="@Model.Is_Parent" id="Is_Parent">
+										<span class="lever">
+											<span class="unckeckS">No</span>
+											<span class="ckeckS">Yes</span>
+										</span>
+									</label>
+								</div>
+							</div>
+							<div class="col-xl-4 mbc" id="divparentId">
+								@* <label class="required">Parent Page</label> *@
+								<label>Parent Page</label>
+								<select asp-for="@Model.Parent_Id" class="form-control dropdown" id="DDLPrarentId">
+									<option value="">Root Page (No Parent)</option>
+								</select>
+								<span class="text-danger" id="SpnParentErr" asp-validation-for="@Model.Parent_Id"></span>
+							</div>
+							<div></div>
+							<div class="col-xl-8 mbc">
+								<label>Description</label>
+								<textarea name="Page_Desc" asp-for="@Model.Page_Desc" class="form-control" autocomplete="off" placeholder="Enter Description" maxlength="200" rows="3"></textarea>
+								<span class="text-danger" asp-validation-for="@Model.Page_Desc"></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-3 d-flex justify-content-center align-items-center">
+						<div class="pubox">
+							<img alt="upload photo" class="uploadpic" src="@(!string.IsNullOrEmpty(Model.Page_Logo) ? Url.Content(Model.Page_Logo) : "/images/default-user.svg")" id="viewImage">
+							<div class="puboxfile">
+								<span class="flabel">Upload Logo</span>
+								<input type="file" name="POSTED_FILE" id="fileUpload" class="uploadfile" accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.tiff,.ico" />
+								<input type="hidden" name="Page_Logo" asp-for="@Model.Page_Logo" id="hdlPage_Logo" class="uploadfile" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-1 mbc me-2">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+					<div class="col-xl-1 mbc me-2">
+						<label>Activity Log</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Activity_Log" asp-for="@Model.Activity_Log" id="Activity_Log">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+	<script src="@Url.Content("~/scripts/iam/page/page.js").ToLower()"></script>
+	<script src="@Url.Content("~/scripts/common/common.js").ToLower()"></script>
+	<script>
+		$(document).ready(function () {
+			var isEdit = @((Model.Page_Id > 0).ToString().ToLower());
+			var productId = @Model.Product_Id;
+			var serviceId = @Model.Service_Id;
+			var moduleId = @Model.Module_Id;
+			// var parentId = @Model.Parent_Id;
+			var parentId = '@(Model.Parent_Id.HasValue? Model.Parent_Id.Value.ToString() : "")';
+			var accessId = @Model.Access_Id;
+			var appid = @Model.App_Id;
+
+			// Initial Load
+			if (isEdit) {
+				$('#DDLProductId').val(productId);
+				BindDynamicDropdown($('#DDLServiceId'), 'SERVICE', serviceId, productId);
+				BindDynamicDropdown($('#DDLModuleId'), 'MODULE', moduleId, serviceId);
+				BindDynamicDropdown($('#DDLAccessId'), 'ACCESS', accessId);
+				if(accessId==='1' || accessId===1){
+					$('#DivAPP').removeClass('d-none');
+
+									BindDynamicDropdown_WithSelect($('#DDLAppId'), 'APPBYPRODUCT', '', product_id,'Select');
+				setTimeout(function(){
+					$('#DDLAppId').val('2147483647');
+				},500);
+				}
+				else{
+					$('#DivAPP').addClass('d-none');
+					$('#DDLAppId').val('2147483647');
+
+				}
+				// 👉 Conditionally bind Parent Page based on ModuleId or ServiceId
+				if (moduleId!==null && moduleId!==undefined && moduleId!=="0" && moduleId && parseInt(moduleId) > 0) {
+					setTimeout(function(){
+					// BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', parentId, moduleId,'Select','MODULE');
+					BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', parentId, moduleId, 'Select', 'MODULE', $('#hdnPageId').val());
+					},2000);
+				} else {
+					setTimeout(function(){
+					  // BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', parentId, serviceId,'Select','SERVICE');
+					  BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', parentId, serviceId, 'Select', 'SERVICE', $('#hdnPageId').val());
+					},2000);
+				}
+			} else {
+				BindDynamicDropdown($('#DDLAccessId'), 'ACCESS');
+			}
+			// 🔁 On change of Product => Bind Service
+			$('#DDLAccessId').on('change', function () {
+				let selectedAccess = $(this).val();
+				let product_id=$('#DDLProductId').val();
+				if(selectedAccess==='1'){
+						 $('#DivAPP').removeClass('d-none');
+								 setTimeout(function(){
+										$('#DDLAppId').val('2147483647');
+									},500);
+							$('#DDLAppId').html('<option value="">Select</option>');
+
+						if (selectedAccess) {
+										BindDynamicDropdown_WithSelect($('#DDLAppId'), 'APPBYPRODUCT', '', product_id,'Select');
+										setTimeout(function(){
+												$('#DDLAppId').val('2147483647');
+											},500);
+						}
+				}
+				else{
+					$('#DivAPP').addClass('d-none');
+					$('#DDLAppId').val('2147483647');
+				}
+
+			});
+			// 🔁 On change of Product => Bind Service
+			$('#DDLProductId').on('change', function () {
+				let selectedProductId = $(this).val();
+				$('#DDLServiceId, #DDLModuleId, #DDLPrarentId').html('<option value="">Select</option>');
+
+				if (selectedProductId) {
+					BindDynamicDropdown($('#DDLServiceId'), 'SERVICE', '', selectedProductId);
+				}
+			});
+
+			// 🔁 On change of Service => Bind Module
+			$('#DDLServiceId').on('change', function () {
+				let selectedServiceId = $(this).val();
+				$('#DDLModuleId, #DDLPrarentId').html('<option value="">Select</option>');
+
+				if (selectedServiceId) {
+					BindDynamicDropdown($('#DDLModuleId'), 'MODULE', '', selectedServiceId);
+					// Also bind ParentPage with ServiceId when ModuleId is empty
+					setTimeout(function(){
+						if ($('#DDLModuleId option:eq(1)').length === 0) {
+							BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', '', selectedServiceId,'Select','SERVICE');
+						}
+					},2000)
+				}
+			});
+
+			// 🔁 On change of Module => Bind Parent Page
+			$('#DDLModuleId').on('change', function () {
+				let selectedModuleId = $(this).val();
+				$('#DDLPrarentId').html('<option value="">Select</option>');
+
+				if (selectedModuleId) {
+					// BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', '', selectedModuleId,'Select','MODULE');
+					BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', parentId, selectedModuleId,'Select','MODULE', $('#hdnPageId').val());
+				} else {
+					let selectedServiceId = $('#DDLServiceId').val();
+					if (selectedServiceId) {
+						// BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', '', selectedServiceId,'Select','SERVICE');
+						BindDynamicDropdown_WithSelect($('#DDLPrarentId'), 'PARENTPAGE', parentId, selectedServiceId,'Select','SERVICE', $('#hdnPageId').val());
+					}
+				}
+			});
+		});
+	</script>
+}

@@ -1,0 +1,85 @@
+﻿@model ModelLayer.Models.IAM.DataSyncing.DataSyncRequestModel;
+@{
+	ViewData["Title"] = "Data Syncing";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section styles
+{
+	<link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+	<link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+}
+<div class="main-body">
+	<div class="row align-items-center mbc">
+		<div class="col-9">
+			<div class="pgName">Data Syncing</div>
+		</div>
+	</div>
+	<div class="bd-clearfix mbc-sm"></div>
+	<form asp-area="IAM" asp-controller="DataSync" asp-action="Get" id="DataSyncForm" onsubmit="LoadSyncData(); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+
+		<div class="row gx-2">
+			<div class="col-lg-2 col-sm-4 mbc-sm">
+				<label class="required">Type</label>
+				<select class="form-control form-control-sm dropdown slct2" id="DdlSyncType" asp-for="@Model.Sync_Type_Id" asp-items="@(new SelectList(ViewBag.SyncTypeList,"Id","Name"))">
+					<option value="">Select</option>
+				</select>
+				<span class="text-danger" id="spnSyncType" asp-validation-for="@Model.Sync_Type_Id"></span>
+			</div>
+			<div class="col-lg-2 col-sm-4 mbc-sm">
+				<label class="required">Product</label>
+				<select name="Product_Id" asp-for="@Model.Product_Id" asp-items="@(new SelectList(ViewBag.ProductList,"Id","Name"))" class="form-control form-control-sm dropdown slct2" id="DDLProductId">
+					<option value="">Select</option>
+				</select>
+				<span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+			</div>
+			<div class="col-lg-2 col-sm-4 mbc-sm">
+				<label class="required">Status</label>
+				<select class="form-control form-control-sm dropdown slct2" asp-for="@Model.Status" id="DdlSatus">
+					<option value="" selected>All</option>
+					<option value="true">Synced</option>
+					<option value="false">Not Synced</option>
+				</select>
+				<span class="text-danger" asp-validation-for="@Model.Status"></span>
+			</div>
+
+			<div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end" id="dvbtn">
+				<div class="btn-group">
+					<button type="submit" id="btnsearch" class="btn btn-sm btn-outline-filter">
+						<i class="ugo-icons">search</i>
+					</button>
+					
+				</div>
+				<button type="button" id="sync" class="btn btn-sm btn-success ms-2" onclick="SyncData();">Sync Data</button>
+			</div>
+
+		</div>
+	</form>
+	<div class="cardbox">
+		<div class="emptydiv text-center" id="imgchooseflt">
+			<img class="fltr-img" src="/images/no_data.svg" height="135">
+			<div class="fltr-desc">
+				No records to display at the moment.,<br>
+				Please select a Type and Product, then click the Search button to view the available records.
+			</div>
+		</div>
+		<table class="table table-dtc thwsnw" id="tblSyncDatalist">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Status</th>
+					<th>Synced On</th>
+					<th>Message</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+	<script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+	<script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+	<script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+	<script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+	<script src="@Url.Content("~/scripts/iam/datasyncing/datasync.js")"></script>
+}

@@ -1,0 +1,181 @@
+﻿@model List<ModelLayer.Models.IAM.User.UserPagePermissionModel>;
+
+<input type="hidden" id="landingPageUrl" value="@Model.FirstOrDefault(x => x.Is_Landing_Page == true)?.Page_Url" />
+
+@if (Model != null && Model.Count > 0)
+{
+	@foreach (var item in Model)
+	{
+		@if (item.Is_Parent == true)
+		{
+			<li class="nav-item">
+				@if (item.Is_Parent == true && item.Has_Child == false)
+				{
+					<a class="nav-link menulink" href="@item.Page_Url">
+						<img src="@(!string.IsNullOrEmpty(item.Page_Logo) ? item.Page_Logo :  "/images//configuration.svg")" alt="@item.Page_Name" class="smicon" height="17" width="17">
+						<span class="mnunme">@item.Page_Name</span>
+					</a>
+				}
+				else
+				{
+					<a class="nav-link collapsed" data-bs-target="#@item.Page_Name.Replace(" ", "_")" data-bs-toggle="collapse" href="javascript:;">
+						<img src="@(!string.IsNullOrEmpty(item.Page_Logo) ? item.Page_Logo :  "/images//configuration.svg")" alt="@item.Page_Name" class="smicon" height="17" width="17">
+						<span class="mnunme">@item.Page_Name</span>
+						<i class="ugo-icons ms-auto">keyboard_arrow_down</i>
+					</a>
+					<ul id="@item.Page_Name.Replace(" ","_")" class="nav-content collapse">
+						@foreach (var subPages in item?.subMenus)
+						{
+							@if (item.Page_Id == subPages.Parent_Id)
+							{
+								<li>
+									<a href="@subPages.Page_Url" class="menulink @(Model.FirstOrDefault(x => x.Is_Landing_Page == true)?.Page_Name == subPages.Page_Name ? "active" : "")">
+										<i class="bi bi-circle-fill"></i><span>@subPages.Page_Name</span>
+									</a>
+								</li>
+							}
+						}
+					</ul>
+				}
+			</li>
+		}
+	}
+}
+
+
+<script>
+
+	$(document).ready(function () {
+		if (!$('#sidemenu').children().length) {
+			var storedSidebar = localStorage.getItem("sidebarHtml");
+			if (storedSidebar) {
+				$('#sidemenu').html(storedSidebar);
+				// sessionStorage.removeItem("sidebarHtml"); // optional
+			}
+		}
+	});
+	$(function () {
+		setNavigation();
+	});
+
+	function removeUrlSlashes(url) {
+		return url.replace(/^\/|\/$/g, '');
+	}
+	function setNavigation() {
+		var path = removeUrlSlashes(window.location.pathname);
+		path = decodeURIComponent(path);
+
+		var activeHref = localStorage.getItem('activeHref');
+		if (!IsNull(activeHref)) {
+			activeHref = removeUrlSlashes(activeHref);
+		}
+
+		var menuactive = false;
+
+		// ✅ Clear previous active states
+		$('#sidemenu .nav-item .nav-link').removeClass('active');
+		$('#sidemenu .nav-item ul li a').removeClass('active');
+		$('#sidemenu .nav-content').removeClass('show');
+
+		if (!menuactive) {
+			$("#sidemenu .nav-item .nav-link").each(function () {
+				var href = removeUrlSlashes($(this).attr('href'));
+				if (!menuactive && path === href) {
+					$(this).addClass('active');
+					localStorage.setItem('activeHref', href);
+					menuactive = true;
+				}
+				if (!menuactive && activeHref === href) {
+					$(this).addClass('active');
+					localStorage.setItem('activeHref', href);
+					menuactive = true;
+				}
+			});
+		}
+
+		if (!menuactive) {
+			$("#sidemenu .nav-item ul li a").each(function () {
+				var href = removeUrlSlashes($(this).attr('href'));
+				if (!menuactive && path === href) {
+					$(this).addClass('active');
+					$(this).closest('.nav-content').addClass('show');
+					$(this).closest('.nav-item').find('.nav-link.collapsed').addClass('active');
+
+					localStorage.setItem('activeHref', href);
+					menuactive = true;
+				}
+
+				if (!menuactive && activeHref === href) {
+					$(this).addClass('active');
+					$(this).closest('.nav-content').addClass('show');
+					$(this).closest('.nav-item').find('.nav-link.collapsed').addClass('active');
+
+					localStorage.setItem('activeHref', href);
+					menuactive = true;
+				}
+			});
+		}
+
+		// ✅ Landing page fallback if no other matched
+		if (!menuactive) {
+			const landingPage = removeUrlSlashes($('#landingPageUrl').val() || '');
+			if (landingPage) {
+				$("#sidemenu .menulink").each(function () {
+					var href = removeUrlSlashes($(this).attr('href'));
+					if (href === landingPage) {
+						$(this).addClass('active');
+						$(this).closest('.nav-content').addClass('show');
+						$(this).closest('.nav-item').find('.nav-link.collapsed').addClass('active');
+
+						localStorage.setItem('activeHref', href);
+						menuactive = true;
+						return false; // stop each loop
+					}
+				});
+			}
+		}
+	}
+
+
+	$("#sidemenu").on("mousedown", "a.menulink", function (e) {
+		// Store href on both left-click (1) and right-click (3)
+		if (e.which === 1 || e.which === 3) {
+			var activeHref = $(this).attr("href");
+			localStorage.setItem('activeHref', activeHref);
+		}
+	});
+
+</script>
+
+<!-- store permission data and user info in sessionStorage for client-side PermissionHelper -->
+<script>
+	(function () {
+		try {
+			var perms = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model ?? new List<ModelLayer.Models.IAM.User.UserPagePermissionModel>()));
+			sessionStorage.setItem('PermissionData', JSON.stringify(perms));
+
+			// Store user info if available in server context
+			try {
+				var userInfo = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Context.Items["UserInfo"] ?? new {}));
+				sessionStorage.setItem('UserInfo', JSON.stringify(userInfo));
+			} catch (uex) {
+				// ignore
+			}
+
+
+			// If Permission helper is available on client, refresh and apply immediately
+			if (typeof window.Permission !== 'undefined' && window.Permission.refresh) {
+				try {
+					window.Permission.refresh();
+					window.Permission.apply();
+					// console.log('PermissionHelper: Refreshed and applied after storing permissions');
+				} catch (perr) {
+					console.error('PermissionHelper: Error applying permissions after store', perr);
+				}
+			}
+		} catch (ex) {
+			console.error('PermissionHelper: Failed to store permission data', ex);
+		}
+	})();
+</script>
+

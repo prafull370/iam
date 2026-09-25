@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/flatpickr.css")" />
+    <link href="@Url.Content("~/lib/select2/select2.min.css")" rel="stylesheet" />
+
+    <style>
+        /* Container for the empty state */
+        .empty-state-container {
+            display: none;
+            width: 100%;
+            padding: 48px 16px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+            .empty-state-container .empty-state-img {
+                max-width: 220px;
+                width: 100%;
+                height: auto;
+                margin-bottom: 24px;
+            }
+
+            .empty-state-container .empty-state-title {
+                font-size: 1.15rem;
+                font-weight: 600;
+                color: #24292f; /* GitHub-like heading color */
+                margin-bottom: 8px;
+            }
+
+            .empty-state-container .empty-state-desc {
+                font-size: 0.9rem;
+                color: #6e7781; /* muted subtitle color */
+                margin-bottom: 24px;
+            }
+
+            .empty-state-container .empty-state-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+        /* Responsive tweaks for smaller screens */
+        @@media (max-width: 576px) {
+            .empty-state-container {
+                padding: 32px 12px;
+            }
+
+                .empty-state-container .empty-state-img {
+                    max-width: 160px;
+                }
+        }
+    </style>
+}
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">Level Hierarchy List</div>
+        </div>
+        <div class="col-3 text-end">
+            <a href="@Url.Content("~/IAM/LevelHierarchy/Add")" class="afBtn"><i class="ugo-icons">add</i></a>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc-sm"></div>
+    <div class="row gx-2">
+        <div class="col-lg-2 col-sm-4 mbc-sm">
+            <label class="required">Level Type</label>
+            <select asp-items="@(new SelectList(ViewBag.Level, "Name", "Name"))" class="form-control form-control-sm dropdown " id="DDLLevelType">
+                <option value="">Select</option>
+            </select>
+            <span class="text-danger" id="lvlErrMsg" style="font-size : 0.7rem;"></span>
+        </div>
+        <div class="col-lg-3 col-sm-4 mbc-sm fltrBtn" id="dvbtn">
+            <div class="opacity-0">Search</div>
+            <div class="btn-group">
+                <button type="button" id="btnSearch" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">search</i>
+                </button>
+                <button type="button" id="btnReset" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">restart_alt</i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="cardbox">
+        <div class="emptydiv text-center" id="imgchooseflt">
+            <img class="fltr-img" src="/images/no_data.svg" height="135">
+            <div class="fltr-desc">
+                No records to display at the moment.,<br>
+                Please select Level, then click the Search button to view the available records.
+            </div>
+        </div>
+        <div id="dvTableWrapper">
+            <table class="table table-dtc thwsnw" id="tblLevellist">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Created On</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/scripts/iam/levelhierarchy/levelhierarchy.js").ToLower()"></script>
+}

@@ -1,0 +1,80 @@
+﻿@model ModelLayer.Models.IAM.Designation.DesignationRequestModel;
+@{
+	ViewData["Title"] = (Model?.Designation_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+	<link rel="stylesheet" href="@Url.Content("~/lib/select2/select2.min.css")" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Designation_Id ?? 0) > 0 ? "Edit" : "Add") Designation</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Designation/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Designation" asp-action="Save" id="DesignationForm" onsubmit="SubmitForm('DesignationForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Designation_Id" id="hdnDesignationId" />
+				<div class="row gx-2 mb-1">
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Designation</label>
+								<input name="Designation_Name" type="text" asp-for="@Model.Designation_Name" class="form-control" autocomplete="off" placeholder="Enter Designation Name" maxlength="60"/>
+								<span class="text-danger" asp-validation-for="@Model.Designation_Name"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Short Code</label>
+								<input name="Designation_Code" type="text" asp-for="@Model.Designation_Code" class="form-control" autocomplete="off" placeholder="Enter Designation Code" maxlength="20" />
+								<span class="text-danger" asp-validation-for="@Model.Designation_Code"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Department</label>
+								<select name="Department_Id" asp-for="@Model.Department_Id" asp-items="@(new SelectList(ViewBag.DepartmentList,"Id","Name"))" class="form-control dropdown">
+									<option value="0">Select</option>
+								</select>
+								<span class="text-danger" asp-validation-for="@Model.Department_Id"></span>
+							</div>
+							<div class="col-xl-8 mbc">
+								<label>Description</label>
+								<textarea name="Designation_Desc" asp-for="@Model.Designation_Desc" class="form-control" autocomplete="off" placeholder="Enter Description" maxlength="200" rows="3"></textarea>
+								<span class="text-danger" asp-validation-for="@Model.Designation_Desc"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc me-2">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/lib/select2/select2.min.js").ToLower()" asp-append-version="true"></script>
+	<script src="@Url.Content("~/scripts/iam/designation/designation.js").ToLower()"></script>
+}

@@ -1,0 +1,35 @@
+﻿@model ModelLayer.Models.IAM.Page.PageResponseModel;
+@{
+	if (Model != null)
+	{
+		<table id="tbllist" class="table tbl-view">
+			<tbody>
+				<tr>
+					<th>Parent Page</th>
+					<td>@Model.Parent_Page_Name</td>
+					<th>Page</th>
+					<td>@Model.Page_Name</td>
+				</tr>
+				<tr>
+					<th>Page Url</th>
+					<td>@Model.Page_Url</td>
+					<th>Logo</th>
+					<td>
+						<a href="@(!string.IsNullOrEmpty(Model.Page_Logo) ? Model.Page_Logo : "/images/default-user.svg")" alt="Page_logo" target="_blank" class="ms-2">
+							<img src="@(!string.IsNullOrEmpty(Model.Page_Logo) ? Model.Page_Logo : "/images/default-user.svg")" alt="Page Logo" style="height:40px;width:auto;" />
+						</a>
+					</td>
+				</tr>
+				<tr>
+					<th>Description</th>
+					<td colspan="3">@Model.Page_Desc</td>
+				</tr>
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<div class="mdlstl">No Data Found</div>
+
+	}
+}

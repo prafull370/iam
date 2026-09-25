@@ -1,0 +1,126 @@
+/*
+
+Real-Time Length Validation Styles
+
+Unified styling to match application's standard error message format
+
+Styles for:
+
+- Minimum length warning messages
+- Maximum length error messages
+- Visual feedback during validation
+
+*/
+
+/* Minimum Length Warning Message */
+.min-length-message {
+    display: none;
+    color: #d32f2f; /* Red - consistent with error styling */
+    font-size: 0.85em;
+    font-weight: 500;
+    margin-top: 4px;
+    margin-left: 0;
+    padding: 0;
+    background-color: transparent;
+    border-left: none;
+    border-radius: 0;
+}
+
+.min-length-message.active {
+    display: block;
+}
+
+/* Maximum Length Error Message */
+.max-length-message {
+    display: none;
+    color: #d32f2f; /* Red - consistent with error styling */
+    font-size: 0.85em;
+    font-weight: 500;
+    margin-top: 4px;
+    margin-left: 0;
+    padding: 0;
+    background-color: transparent;
+    border-left: none;
+    border-radius: 0;
+}
+
+.max-length-message.active {
+    display: block;
+}
+
+/* Input Field State During Validation */
+input[type="text"].input-validation-error,
+input[type="email"].input-validation-error,
+input[type="password"].input-validation-error,
+input[type="number"].input-validation-error,
+input[type="tel"].input-validation-error,
+input[type="url"].input-validation-error,
+textarea.input-validation-error {
+    border-color: #d32f2f !important;
+    background-color: #ffebee;
+}
+
+/* Validation Success State */
+input[type="text"].input-validation-valid,
+input[type="email"].input-validation-valid,
+input[type="password"].input-validation-valid,
+input[type="number"].input-validation-valid,
+input[type="tel"].input-validation-valid,
+input[type="url"].input-validation-valid,
+textarea.input-validation-valid {
+    border-color: #4caf50 !important;
+}
+
+/* Focus state for fields with validation */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+textarea:focus {
+    box-shadow: 0 0 0 0.2rem rgba(63, 81, 181, 0.15);
+}
+
+/* Error state focus */
+input[type="text"].input-validation-error:focus,
+input[type="email"].input-validation-error:focus,
+input[type="password"].input-validation-error:focus,
+input[type="number"].input-validation-error:focus,
+input[type="tel"].input-validation-error:focus,
+input[type="url"].input-validation-error:focus,
+textarea.input-validation-error:focus {
+    box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.15);
+}
+
+/* Container for grouped validation messages */
+.validation-message-group {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* Media query for small screens */
+@media (max-width: 576px) {
+    .min-length-message,
+    .max-length-message {
+        font-size: 0.80em;
+        margin-top: 4px;
+    }
+}
+
+/* Animation for message appearance */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.min-length-message.active,
+.max-length-message.active {
+    animation: slideInLeft 0.3s ease-out;
+}

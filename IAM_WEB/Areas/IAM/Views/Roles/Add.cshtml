@@ -1,0 +1,61 @@
+﻿@model ModelLayer.Models.IAM.Role.RoleRequestModel;
+@{
+	ViewData["Title"] = (Model?.Role_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Role_Id ?? 0) > 0 ? "Edit" : "Add") Role</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Roles/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Role" asp-action="Save" id="RoleForm" onsubmit="SubmitForm('RoleForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Role_Id" id="hdnRoleId" />
+				<div class="row gx-2">
+					<div class="col-xl-3 mbc">
+						<label class="required">Name</label>
+						<input name="Role_Name" type="text" asp-for="@Model.Role_Name" class="form-control" autocomplete="off" placeholder="Role Name"/>
+						<span class="text-danger" asp-validation-for="@Model.Role_Name"></span>
+					</div>
+					<div></div>
+					<div class="col-xl-7 mbc">
+						<label>Description</label>
+						<textarea name="Role_Desc" type="text" asp-for="@Model.Role_Desc" class="form-control" autocomplete="off" rows="3" maxlength="200" placeholder="Enter Description Here"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Role_Desc"></span>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/scripts/iam/role/role.js"></script>
+}

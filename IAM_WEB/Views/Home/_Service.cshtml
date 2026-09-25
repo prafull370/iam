@@ -1,0 +1,23 @@
+﻿@model List<ModelLayer.Models.IAM.User.UserServicePermissionModel>;
+@{
+	ViewData["Title"] = "Service";
+	var i = 1;
+}
+
+@if (Model != null)
+{
+	@foreach (var item in Model)
+	{
+		<div class="col-xl-2 col-sm-3 col-xs-4 col-6 mbcs service-item" data-id="@item.Service_Id" data-url="@item.Service_Url" onclick="bindModule(@item.Service_Id,@item.Service_Url);">
+			<div class="srcsBox d-flex flex-column text-center">
+				<a href="@item.Service_Url" class="srvcIcon">
+					<div class="sIconIn">
+						<img src="@(!string.IsNullOrEmpty(item.Service_Logo) ? item.Service_Logo :  "/images//configuration.svg")" height="40" width="40">
+					</div>
+				</a>
+				<a href="javascript:void(0)" class="srvcName">@item.Service_Name</a>
+			</div>
+		</div>
+		i++;
+	}
+}

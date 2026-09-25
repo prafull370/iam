@@ -1,0 +1,73 @@
+@model ModelLayer.Models.IAM.RolePageAction.RolePageActionRequestModel;
+@{
+    ViewData["Title"] = "Role Page Action";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section Styles {
+    <link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/lib/select2/css/select2.min.css")" rel="stylesheet" />
+}
+
+<div class="main-body">
+    @Html.AntiForgeryToken()
+    <div class="row align-items-start mbc">
+        <div class="col-sm-7">
+            <div class="pgName">Role Page Action</div>
+            @* <p class="permSubTitle">Pick which actions each role — may perform on every page. Choose a module on the left; set access per page on the right.</p> *@
+        </div>
+
+        <div class="col-sm-5 text-sm-end">
+            <button type="button" id="btnExportGrants" class="btn btn-success">
+                <i class="ugo-icons">download</i> Export Grants
+            </button>
+            <button type="button" id="btnSavePermissions" class="btn btn-primary ms-1">
+                <i class="ugo-icons">check</i> Save Permissions
+            </button>
+        </div>
+    </div>
+    <!-- Start Row Product Dropdown-->
+    <div class="row gx-2 align-items-end">
+        <div class="col-lg-3 col-sm-4 mbc">
+            <label class="required">Product Name</label>
+            <select name="Product_Id" asp-for="@Model.Product_Id" asp-items="@(new SelectList(ViewBag.ProductList, "Id", "Name"))"
+                    class="form-control dropdown slct2" id="DDLProductId">
+                <option value="">Select</option>
+            </select>
+            <span class="text-danger" asp-validation-for="@Model.Product_Id"></span>
+        </div>
+        <div class="col-auto mbc">
+            <button type="button" id="btnReset" class="btn btn-outline-dark">
+                Reset
+            </button>
+        </div>
+    </div>
+    <!-- Empty State -->
+    <div class="emptydiv text-center" id="imgchooseflt">
+        <img class="fltr-img" src="/images/no_data.svg" height="135" />
+        <div class="fltr-desc">
+            No records to display at the moment.<br />
+            Please select a Product to view the available Role And Page With Action Mapped.
+        </div>
+    </div>
+    <!-- End Row -->
+    <div class="ctvbx d-none" id="dvMatrix">
+        <div class="permMatrixWrap">
+            <table class="table tblbdr permMatrix mb-0" id="permMatrixTable">
+                <thead id="permMatrixHead">
+                </thead>
+                <tbody id="permMatrixBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="dvProcessing" class="d-none">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/scripts/iam/rolepageaction/rolepageaction.js").ToLower()" asp-append-version="true"></script>
+}

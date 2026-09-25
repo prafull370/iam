@@ -1,0 +1,43 @@
+﻿@model ModelLayer.Models.IAM.Vendor.VendorResponseModel;
+@{
+	if (Model != null)
+	{
+		<table id="tbllist" class="table tbl-view">
+			<tbody>
+				<tr>
+					<th>Vendor Name</th>
+					<td>@Model.Vendor_Name</td>
+					<th>Description</th>
+					<td>@Model.Vendor_Desc</td>
+				</tr>
+				<tr>
+					<th>Country</th>
+					<td>@Model.Country_Name</td>
+					<th>State</th>
+					<td>@Model.State_Name</td>
+				</tr>
+				<tr>
+					<th>District</th>
+					<td>@Model.District_Name</td>
+					<th>City</th>
+					<td>@Model.City_Name</td>
+				</tr>
+				<tr>
+					<th>Pincode</th>
+					<td>@Model.Pin_Code</td>
+					<th>Address 1</th>
+					<td>@Model.Address1</td>
+				</tr>
+				<tr>
+					<th>Address 2</th>
+					<td colspan="3">@Model.Address2</td>
+				</tr>
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<div class="mdlstl">No Data Found</div>
+
+	}
+}

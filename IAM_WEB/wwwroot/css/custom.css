@@ -1,0 +1,850 @@
+﻿.select2-container--default .select2-selection--multiple,
+.select2-container--default .select2-selection--single {
+    -moz-appearance: none !important;
+    font-size: 0.725rem;
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3e %3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e %3c/svg%3e") right 0.615rem center/14px 14px no-repeat;
+}
+
+.SumoSelect > .CaptionCont > label > i,
+.select2-container--default .select2-selection--multiple,
+.select2-container--default .select2-selection--single {
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3e %3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e %3c/svg%3e") right 0.615rem center/14px 14px no-repeat;
+}
+
+.select2-container {
+    width: auto !important;
+    display: block;
+    max-width: 100%;
+}
+
+.select2-container--default .select2-selection--multiple {
+    -webkit-appearance: none;
+    -webkit-appearance: none !important;
+    padding-right: 30px !important;
+    padding: 0.175rem 0.675rem 0.475rem 0.5rem;
+    border: 1px solid #dbe4e4;
+    border-radius: 0.25rem;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: rgba(var(--lg-brand-rgb), 0.35);
+    outline: 0;
+    box-shadow: 0 0 10px rgba(var(--lg-brand-rgb), 0.1);
+}
+
+.SumoSelect > .CaptionCont,
+.select2-container--default .select2-search--dropdown .select2-search__field,
+.select2-dropdown {
+    border: 1px solid #dbe4e4;
+}
+
+.select2-container--default .select2-selection--single {
+    -webkit-appearance: none;
+    -webkit-appearance: none !important;
+    padding-right: 30px !important;
+    padding: 0.475rem 0.675rem;
+    border: 1px solid #dbe4e4;
+    min-height: calc(2.037rem + 2px);
+    background-color: #fff;
+}
+.mbc-sm .select2-container--default .select2-selection--multiple,
+.mbc-sm .select2-container--default .select2-selection--single {
+    font-size: 0.7rem;
+    background-size: 12px 12px;
+    background-position: right 0.45rem center;
+}
+.mbc-sm .select2-container--default .select2-selection--single {
+    padding-right: 24px !important;
+    padding: .289rem .5rem;
+    min-height: calc(1.6rem + 2px);
+}
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        display: none;
+    }
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding: 0;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: inherit;
+    line-height: 1.5;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+    outline: 0;
+}
+
+.select2-container.select2-container--focus .select2-selection,
+.select2-container.select2-container--open .select2-selection {
+    outline: 0;
+    border-color: rgba(var(--lg-brand-rgb), 0.35) !important;
+    box-shadow: 0 0 10px rgba(var(--lg-brand-rgb), 0.1);
+    background-color: #fff;
+}
+
+.select2-container .select2-dropdown {
+    border-color: rgba(var(--lg-brand-rgb), 0.35) !important;
+    box-shadow: 0 0 10px rgba(var(--lg-brand-rgb), 0.1);
+    overflow-x: hidden;
+}
+
+.select2-results__option {
+    font-size: 0.725rem;
+}
+
+.SumoSelect .select-all.partial > span i,
+.SumoSelect .select-all.selected > span i,
+.SumoSelect > .optWrapper.multiple > .options li.opt.selected span i,
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    /*background-color: #0052cc;*/
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #efeeee;
+    border: 1px solid #dbd9d9;
+    border-radius: 3px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    border-right: 1px solid #dbd9d9;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    color: #dc3534;
+}
+
+.select2-container--default.select2-container--disabled .select2-selection__choice {
+    padding-left: 3px;
+}
+
+.SumoSelect {
+    display: block;
+    width: 100%;
+}
+
+select.form-control[multiple],
+select.form-control[size] {
+    /*height: -webkit-fill-available;*/
+}
+
+.SumoSelect.open > .CaptionCont,
+.SumoSelect:focus > .CaptionCont,
+.SumoSelect:hover > .CaptionCont {
+    box-shadow: none !important;
+    border-color: #dbe4e4 !important;
+}
+
+.SumoSelect > .CaptionCont {
+    position: relative;
+    min-height: calc(2.037rem + 2px);
+    background-color: #fff;
+    border-radius: 0.25rem !important;
+    margin: 0;
+}
+
+.SelectBox {
+    font-size: 0.725rem;
+    padding: 0.475rem 0.675rem;
+    border: 1px solid #dbe4e4;
+    min-height: calc(2.037rem + 2px);
+}
+
+.SumoSelect > .optWrapper {
+    border: 0.02rem solid #dbe4e4;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.11);
+}
+
+.SumoSelect .select-all {
+    border-bottom: 1px solid #edf0f3;
+    height: 34px;
+}
+
+.SumoSelect > .CaptionCont > span {
+    color: #212529 !important;
+    font-size: 0.725rem !important;
+}
+
+    .SumoSelect > .CaptionCont > span.placeholder {
+        background: 0 0;
+        opacity: 1;
+        font-style: normal;
+    }
+
+.SumoSelect > .CaptionCont > label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+    margin-bottom: 0;
+}
+
+    .SumoSelect > .CaptionCont > label > i {
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+    }
+.mbc-sm .SumoSelect > .CaptionCont, .smoslctsm .SumoSelect > .CaptionCont {
+    border-radius: 0.3rem !important;
+}
+.mbc-sm .SelectBox, .smoslctsm .SelectBox {
+    font-size: .7rem;
+    height: calc(1.6rem + 2px);
+    padding: 0.25rem 0.5rem;
+    line-height: 1.5;
+    min-height: auto;
+}
+.mbc-sm .SumoSelect > .CaptionCont > label, .smoslctsm .SumoSelect > .CaptionCont > label {
+    height: 26px;
+    width: 28px;
+}
+    .mbc-sm .SumoSelect > .CaptionCont > label > i, .smoslctsm .SumoSelect > .CaptionCont > label > i {
+        background-size: 11px 11px;
+    }
+.mbc-sm .SumoSelect.open > .optWrapper {
+    top: 28px;
+}
+.custom-file-input.input-validation-error ~ .custom-file-label,
+.form-control.input-validation-error,
+.form-control.input-validation-error ~ .select2 .select2-selection--single {
+    border: 1px solid #fbc6d3;
+    box-shadow: 0 0 10px rgba(251, 198, 211, 0.1);
+}
+
+.schldBtn {
+    position: relative;
+    width: 100%;
+    text-transform: capitalize;
+    padding: 0.6rem 1rem;
+    background-image: linear-gradient(to right, #f9c4a2, #f8b797, #f7aa8d, #f69d86, #f48f80);
+    color: #340d05;
+    border-radius: 0.35rem;
+    border: 1px solid #e77361;
+}
+
+    .schldBtn .bi {
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        margin-right: 0.7rem;
+    }
+
+.light.shortcut-buttons-flatpickr-wrapper {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    background-color: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.shortcut-buttons-flatpickr-buttons > .shortcut-buttons-flatpickr-button {
+    display: inline-block;
+    margin: 0 2px;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.2rem;
+    font-size: 0.725rem;
+    line-height: 1.5;
+    font-weight: 500;
+    background: #fff;
+    border: 1px solid #dbe4e4;
+    color: #000;
+}
+
+    .shortcut-buttons-flatpickr-buttons > .shortcut-buttons-flatpickr-button:hover {
+        background: #e3e9ec;
+        border: 1px solid #d1dadc;
+    }
+.flex-auto{flex:auto;}
+.btn .bi-paperclip{
+    display:inline-block;
+    transform:rotate(45deg);
+}
+
+.form-control.disabled {
+    background-color: #ecf1f1;
+    opacity: 1;
+    cursor: not-allowed;
+}
+.tscDash-header {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: .75rem 1rem;
+    color: #183958;
+}
+.mxh590{
+    max-height:590px;
+    overflow:auto;
+}
+/*.select2-container {
+    z-index: 9999;
+}*/
+.mb5 {
+    margin-bottom: 2.5rem;
+}
+.border-validation {
+    border-color: #e72d5259;
+}
+
+/* ==========================================================================
+   Role Page Action — Permission Matrix
+   Append to  wwwroot/css/customized.css
+   ========================================================================== */
+
+.permSubTitle {
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 620px;
+    margin: 4px 0 0;
+}
+
+/* ---- Card / scroll shell ------------------------------------------------ */
+.permMatrixWrap {
+    background: #fff;
+    border: 1px solid #e6e9ef;
+    border-radius: 14px;
+    overflow: auto;
+    max-height: 68vh;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    scrollbar-width: thin;
+    scrollbar-color: #c7cdd8 transparent;
+}
+
+    .permMatrixWrap::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    .permMatrixWrap::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .permMatrixWrap::-webkit-scrollbar-thumb {
+        background-color: #c7cdd8;
+        border-radius: 20px;
+        border: 2px solid #fff;
+    }
+
+        .permMatrixWrap::-webkit-scrollbar-thumb:hover {
+            background-color: #a4acba;
+        }
+
+.permMatrix {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+}
+
+    /* ---- Header ------------------------------------------------------------- */
+    .permMatrix thead th {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: #fff;
+        border-bottom: 2px solid #e6e9ef;
+        padding: .5rem .75rem;
+        font-weight: 700;
+        color: #111827;
+        white-space: nowrap;
+    }
+.table.tblbdr.permMatrix thead th {
+    padding: .5rem .75rem;
+}
+.permMatrix thead th.permHeadCol {
+    left: 0;
+    z-index: 5;
+    min-width: 300px;
+    width: 300px;
+    box-shadow: 2px 0 4px -2px rgba(16, 24, 40, .08);
+}
+
+        .permMatrix thead th.roleCol {
+            text-align: center;
+            letter-spacing: .025em;
+            text-transform: uppercase;
+            color: #4b5563;
+            border-left: 1px solid #eef1f5;
+            min-width: 230px;
+        }
+
+.roleDot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* ---- Group (master / parent page) row ----------------------------------- */
+.table.tblbdr .permGroupRow > td {
+    background: #f2f4f7;
+    border-bottom: 1px solid #e6e9ef;
+    border-top: 1px solid #e6e9ef;
+    padding: 0;
+}
+
+/* the <td> spans the full row (colspan), so position:sticky on the cell
+   itself would be a no-op — instead the inner wrapper is what stays
+   pinned to the left edge while the cell's background scrolls normally */
+.permGroupSticky {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 300px;
+    max-width: 100%;
+    padding: .5rem .75rem;
+    box-sizing: border-box;
+    background: #f2f4f7 !important;
+    box-shadow: 2px 0 4px -2px rgba(16, 24, 40, .08);
+}
+
+.permGroupTitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: #111827;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+    .permGroupTitle .ugo-icons {
+        font-size: 18px;
+        color: #6b7280;
+    }
+
+.permGroupCount {
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ---- Body rows ---------------------------------------------------------- */
+.permMatrix tbody td {
+    border-bottom: 1px solid #f0f2f5;
+    padding: 11px 20px;
+    vertical-align: middle;
+}
+    .permMatrix tbody td.permPageCell{
+        padding-left:2.5rem;
+    }
+    .permMatrix tbody tr:nth-of-type(even):not(.permGroupRow) > td {
+        background: #fbfbfc;
+    }
+
+    .permMatrix tbody tr:nth-of-type(even):not(.permGroupRow) > .permPageCell {
+        background: #fbfbfc !important;
+    }
+
+.permMatrix tbody tr:hover > td {
+    background: #eef2fb;
+}
+
+    .permMatrix tbody tr:hover > .permPageCell {
+        background: #eef2fb !important;
+    }
+
+.permMatrix tbody tr.permGroupRow:hover > td {
+    background: #f2f4f7;
+}
+
+    .permMatrix tbody tr.permGroupRow:hover .permGroupSticky {
+        background: #f2f4f7 !important;
+    }
+
+.permPageCell {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: #fff !important;
+    color: #374151;
+    font-weight: 500;
+    min-width: 300px;
+    width: 300px;
+    box-shadow: 2px 0 4px -2px rgba(16, 24, 40, .08);
+}
+
+.permCell {
+    border-left: 1px solid #f0f2f5;
+    background: #fff;
+}
+
+@media (max-width: 991.98px) {
+    .permMatrixWrap {
+        max-height: 60vh;
+    }
+
+    .permMatrix thead th.permHeadCol,
+    .permPageCell {
+        min-width: 220px;
+        width: 220px;
+    }
+
+    .permMatrix thead th.roleCol {
+        min-width: 190px;
+    }
+
+    .permMatrix thead th,
+    .permMatrix tbody td {
+        padding: 12px 14px;
+    }
+}
+
+/* ---- The cell "select" pill --------------------------------------------- */
+.permMultiSelect {
+    position: static;
+}
+
+.permSelectBtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-width: 195px;
+    background: #fff;
+    border: 1px solid #e2e5eb;
+    border-radius: .375rem;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: #374151;
+    font-size: .725rem;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+    .permSelectBtn:hover {
+        border-color: #cbd2dc;
+    }
+
+    .permSelectBtn:focus,
+    .permSelectBtn[aria-expanded="true"] {
+        outline: none;
+        border-color: #3b6fe0;
+        box-shadow: 0 0 0 3px rgba(59, 111, 224, .12);
+    }
+
+.permSelectLabel {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    flex: 1;
+}
+
+.permSelectMeta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+    .permSelectMeta .ugo-icons {
+        font-size: 16px;
+        color: #9ca3af;
+    }
+
+.permSelectCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 20px;
+    background: #eef2fb;
+    color: #3b6fe0;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+    /* full access = green pill, as in the reference */
+    .permSelectCount.isFull {
+        background: #e7f6ee;
+        color: #0e9f6e;
+    }
+
+/* ---- Dropdown ----------------------------------------------------------- */
+.permDropdownMenu {
+    border: 1px solid #e6e9ef;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(16, 24, 40, .12);
+    padding: 12px;
+    min-width: 268px;
+    z-index: 1050;
+}
+
+.permDropdownActions {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.permMiniBtn {
+    flex: 1;
+    border: 1px solid #e2e5eb;
+    background: #f9fafb;
+    border-radius: 7px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #374151;
+    cursor: pointer;
+}
+
+    .permMiniBtn:hover {
+        background: #f3f4f6;
+    }
+
+.permOptionList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.permOption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 6px;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #111827;
+}
+
+    .permOption:hover {
+        background: #f7f8fa;
+    }
+
+    .permOption input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #3b6fe0; /* blue ticks */
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    /* risky actions get red ticks + a RISK tag */
+    .permOption.isRisky input[type="checkbox"] {
+        accent-color: #dc2626;
+    }
+
+.permOptionName {
+    flex: 1;
+}
+
+.permRiskTag {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+/* ---- Spinner ------------------------------------------------------------ */
+#dvProcessing {
+    text-align: center;
+    padding: 24px 0;
+}
+
+/* ==========================================================================
+   App-wide theme — primary brand color #1E5AA5
+   This section retints the shared Bootstrap build (bscss.min.css) so the
+   whole application — header, sidebar, buttons, links, forms, tabs,
+   pagination, dropdowns, cards — shares one consistent blue brand color.
+   Loaded after bscss.min.css, so these rules win the cascade without
+   needing !important.
+   wwwroot/css/custom.css
+   ========================================================================== */
+
+:root {
+    /* ---- Core brand scale (tints/shades of #1E5AA5) ---- */
+    --lg-brand: #1e5aa5;
+    --lg-brand-light: #2e6fb8;
+    /* lighter accent / gradient start, icon highlights */
+    --lg-brand-dark: #1a4d8c;
+    /* hover state */
+    --lg-brand-darker: #123b6b;
+    /* active state / gradient end */
+    --lg-brand-soft: #eaf1fa;
+    /* very light tint for subtle backgrounds, hover rows */
+    --lg-brand-border-subtle: #a8c3e0;
+    /* light-medium border / focus ring border */
+    --lg-brand-rgb: 30, 90, 165;
+
+    /* ---- Neutrals ---- */
+    --lg-ink: #0b0b0f;
+    /* headings / primary text */
+    --lg-muted: #6b7280;
+    /* secondary text */
+    --lg-border: #e2e5eb;
+    --lg-surface: #ffffff;
+    /* card / panel background */
+    --lg-page-bg: #f7f9fc;
+    /* app background behind cards */
+
+    /* ---- Conventional aliases (kept in sync with the tokens above) ---- */
+    --primary: var(--lg-brand);
+    --primary-hover: var(--lg-brand-dark);
+    --primary-active: var(--lg-brand-darker);
+    --primary-light: var(--lg-brand-light);
+    --primary-soft: var(--lg-brand-soft);
+    --primary-dark: var(--lg-brand-darker);
+    --page-background: var(--lg-page-bg);
+    --surface: var(--lg-surface);
+    --text-primary: var(--lg-ink);
+    --text-secondary: var(--lg-muted);
+    --border: var(--lg-border);
+
+    /* ---- Semantic status colors (unchanged — already accessible green/amber/red;
+       exposed here as named tokens for anything that wants to reference them) ---- */
+    --lg-ok: #34a853;
+    --lg-warn: #ffc107;
+    --lg-err: #e72d52;
+    --lg-info: var(--lg-brand-light);
+
+    /* Retint Bootstrap's own primary tokens so every var(--bs-primary...)
+       driven utility (bg-primary, text-primary, border-primary, link-primary,
+       alert-primary, list-group-primary, focus rings, …) follows for free. */
+    --bs-primary: var(--lg-brand);
+    --bs-primary-rgb: var(--lg-brand-rgb);
+    --bs-primary-text-emphasis: var(--lg-brand-darker);
+    --bs-primary-bg-subtle: var(--lg-brand-soft);
+    --bs-primary-border-subtle: var(--lg-brand-border-subtle);
+    --bs-link-color: var(--lg-brand);
+    --bs-link-hover-color: var(--lg-brand-dark);
+}
+
+/* ---- Gradient utilities (use sparingly — hero/banner, CTA, featured cards) --- */
+.theme-gradient-primary {
+    background: linear-gradient(135deg, var(--lg-brand-light) 0%, var(--lg-brand) 55%, var(--lg-brand-darker) 100%);
+}
+
+.theme-gradient-soft {
+    background: linear-gradient(180deg, var(--lg-brand-soft) 0%, #ffffff 100%);
+}
+
+/* ---- Page background -------------------------------------------------------- */
+#main {
+    background: var(--lg-page-bg);
+}
+
+/* ---- Cards ------------------------------------------------------------------- */
+.card {
+    --bs-card-border-color: var(--lg-border);
+    border-radius: .6rem;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 1px 3px rgba(16, 24, 40, .06);
+}
+
+/* ---- Buttons -------------------------------------------------------------- */
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--lg-brand);
+    --bs-btn-border-color: var(--lg-brand);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--lg-brand-dark);
+    --bs-btn-hover-border-color: var(--lg-brand-dark);
+    --bs-btn-focus-shadow-rgb: var(--lg-brand-rgb);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--lg-brand-darker);
+    --bs-btn-active-border-color: var(--lg-brand-darker);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--lg-brand);
+    --bs-btn-disabled-border-color: var(--lg-brand);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--lg-brand);
+    --bs-btn-border-color: var(--lg-brand);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--lg-brand);
+    --bs-btn-hover-border-color: var(--lg-brand);
+    --bs-btn-focus-shadow-rgb: var(--lg-brand-rgb);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--lg-brand);
+    --bs-btn-active-border-color: var(--lg-brand);
+    --bs-btn-disabled-color: var(--lg-brand);
+    --bs-btn-disabled-border-color: var(--lg-brand);
+}
+
+/* ---- Header / sidebar ------------------------------------------------------ */
+#header.header {
+    background: var(--lg-brand);
+}
+
+.sidebar-nav .nav-link {
+    color: var(--lg-ink);
+}
+
+    .sidebar-nav .nav-link:hover,
+    .sidebar-nav .nav-link.active,
+    .sidebar-nav .nav-link[aria-expanded="true"] {
+        color: var(--lg-brand);
+        background: rgba(var(--lg-brand-rgb), .08);
+    }
+
+        .sidebar-nav .nav-link:hover i,
+        .sidebar-nav .nav-link.active i,
+        .sidebar-nav .nav-link[aria-expanded="true"] i {
+            color: var(--lg-brand);
+        }
+
+/* ---- Titles / headings ----------------------------------------------------- */
+.ctitle,
+.arwbck {
+    color: var(--lg-ink);
+}
+
+/* ---- Form focus states ------------------------------------------------------ */
+.form-select:focus,
+.form-control:focus {
+    border-color: var(--lg-brand-border-subtle);
+    outline: 0;
+    box-shadow: 0 0 10px rgba(var(--lg-brand-rgb), .12);
+}
+
+.form-check-input:checked {
+    background-color: var(--lg-brand);
+    border-color: var(--lg-brand);
+}
+
+.form-check-input:focus {
+    border-color: var(--lg-brand-border-subtle);
+    box-shadow: 0 0 0 .2rem rgba(var(--lg-brand-rgb), .18);
+}
+
+/* ---- Dropdowns / pills / pagination / tabs ---------------------------------- */
+.dropdown-menu {
+    --bs-dropdown-link-active-bg: var(--lg-brand);
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--lg-brand);
+}
+
+.pagination {
+    --bs-pagination-active-bg: var(--lg-brand);
+    --bs-pagination-active-border-color: var(--lg-brand);
+}
+
+.page-link:hover {
+    color: var(--lg-brand);
+}
+
+.jbdnavm .nav-tabs .nav-link.active,
+.jbdnavm .nav-tabs .nav-link.show {
+    background: var(--lg-ink);
+}

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
+  </ItemGroup>
+	<ItemGroup>
+		<!-- Add InternalsVisibleTo Attribute -->
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>DataLayer</_Parameter1>
+			<!-- Specify the name of the target assembly -->
+		</AssemblyAttribute>
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModelLayer\ModelLayer.csproj" />
+  </ItemGroup>
+	<PropertyGroup>
+		<AssemblyName>RepositoryLayer</AssemblyName>
+		<!-- this must match -->
+	</PropertyGroup>
+
+</Project>

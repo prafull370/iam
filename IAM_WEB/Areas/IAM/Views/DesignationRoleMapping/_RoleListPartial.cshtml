@@ -1,0 +1,57 @@
+﻿@model List<ModelLayer.Models.IAM.DesignationRoleMapping.DesignationRoleMappingResponseModel>
+
+@{
+    var roleList = Model
+    .Where(x => x != null)
+    .GroupBy(x => new { Id = x.Role_Id, Value = x.Role_Name })
+    .Select(g => new SelectListItem
+    {
+        Value = g.Key.Id.ToString(),
+        Text = g.Key.Value
+    })
+    .ToList();
+    var roleListJson = System.Text.Json.JsonSerializer.Serialize(roleList);
+    // Ensure at least one empty row if no model data
+    var rows = Model != null && Model.Any() ? Model : new List<ModelLayer.Models.IAM.DesignationRoleMapping.DesignationRoleMappingResponseModel> { new ModelLayer.Models.IAM.DesignationRoleMapping.DesignationRoleMappingResponseModel() };
+}
+<input type="hidden" id="rolesId" value='@Html.Raw(roleListJson)' />
+<div class="tblbox" id="designationRolesContainer">
+    <div class="cbheader">Role List</div>
+    <div class="tblwrp">
+        <table class="table tblbx">
+            <thead>
+                <tr>
+                    <th class="text-center">ROLE NAME</th>
+                    <th class="text-center">ACTION</th>
+                </tr>
+            </thead>
+            <tbody id="rolesTableBody">
+                @for (int i = 0; i < rows.Count; i++)
+                {
+                    <tr>
+                        @if (rows[i].Is_Mapped == true)
+                        {
+                            <td>
+                                <select name="DesignationRoles[@i].RoleId"
+                                        class="form-control role-select slct2 dropdown"
+                                        data-index="@i"
+                                        data-roleid="@rows[i].Role_Id">
+                                    <option value="">Select</option>
+                                    @foreach (var item in roleList)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                                <span class="text-danger"></span>
+                            </td>
+                            <td class="text-center">
+                                <a class="btn btn-outlin-danger text-danger deleteRow"><i class="ugo-icons">delete</i></a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-outline-primary btn-sm addRow" id="addRowBtn"><i class="ugo-icons">add</i> Add Row</button>
+</div>

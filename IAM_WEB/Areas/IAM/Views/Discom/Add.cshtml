@@ -1,0 +1,88 @@
+﻿@model ModelLayer.Models.IAM.Discom.DiscomRequestModel;
+@{
+	ViewData["Title"] = (Model?.Discom_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+	<link href="@Url.Content("~/css/customized.css")" rel="stylesheet" />
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Discom_Id ?? 0) > 0 ? "Edit" : "Add") Discom</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Discom/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Discom" asp-action="Save" id="DiscomForm" onsubmit="SubmitForm('DiscomForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Discom_Id" id="hdnDiscomId" />
+				<div class="row gx-2 mb-1">
+					<div class="col-9">
+						<div class="row gx-2">
+							<div class="col-xl-4 mbc">
+								<label class="required">Name</label>
+								<input name="Discom_Name" type="text" asp-for="@Model.Discom_Name" class="form-control" autocomplete="off" placeholder="Enter Discom Name" />
+								<span class="text-danger" asp-validation-for="@Model.Discom_Name"></span>
+							</div>
+							<div class="col-xl-4 mbc">
+								<label class="required">Short Code</label>
+								<input name="Discom_Short_Code" type="text" asp-for="@Model.Discom_Short_Code" class="form-control" autocomplete="off" placeholder="Enter Discom Short Code" />
+								<span class="text-danger" asp-validation-for="@Model.Discom_Short_Code"></span>
+							</div>
+							<div class="col-xl-8 mbc">
+								<label>Regional Name</label>
+								<input name="Discom_Name_Regional" type="text" asp-for="@Model.Discom_Name_Regional" class="form-control" autocomplete="off" placeholder="Enter Discom Regional Name" />
+								<span class="text-danger" asp-validation-for="@Model.Discom_Name_Regional"></span>
+							</div>
+							<div class="col-xl-8 mbc">
+								<label>Description</label>
+								<textarea name="Remarks" asp-for="@Model.Remarks" class="form-control" autocomplete="off" placeholder="Enter Remarks" maxlength="200" rows="3"></textarea>
+								<span class="text-danger" asp-validation-for="@Model.Remarks"></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-3 d-flex justify-content-center align-items-center">
+						<div class="pubox">
+							<img alt="upload photo" class="uploadpic" src="@(!string.IsNullOrEmpty(Model.Discom_Logo) ? Url.Content(Model.Discom_Logo) : "/images/default-user.svg")" id="viewImage">
+							<div class="puboxfile">
+								<span class="flabel">Upload Photo</span>
+								<input type="file" name="POSTED_FILE" id="fileUpload" class="uploadfile" accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.tiff,.ico" />
+								<input type="hidden" name="Discom_Logo" asp-for="@Model.Discom_Logo" id="hdlDiscom_Logo" class="uploadfile" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc me-2">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active">
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="bd-clearfix mb-3"></div>
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="@Url.Content("~/scripts/iam/discom/discom.js").ToLower()"></script>
+}

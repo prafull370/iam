@@ -1,0 +1,162 @@
+@model ModelLayer.Models.IAM.User.UserLoginModel;
+@using System.Text.Json;
+@inject IConfiguration Configuration;
+
+@{
+    var loginError = TempData["LoginError"]?.ToString();
+    var enableMicrosoftLogin = Configuration.GetValue<bool>("AzureAd:EnableMicrosoftLogin");
+}
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-control" content="public">
+    <meta name="theme-color" content="#1dacb4" />
+    <meta name="robots" content="noindex">
+    <title>@ViewData["Title"]</title>
+    <base href='@Url.Content("~/")' />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")" />
+    <!-- PNG Icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/favicon-16x16.png")">
+    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/favicon-32x32.png")">
+    <link rel="icon" type="image/png" sizes="192x192" href="@Url.Content("~/android-chrome-192x192.png")">
+    <link rel="icon" type="image/png" sizes="512x512" href="@Url.Content("~/android-chrome-512x512.png")">
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="@Url.Content("~/apple-touch-icon.png")">
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="@Url.Content("~/site.webmanifest")">
+    <link href="@Url.Content("~/css/ugo-icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/font-family.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/bscss.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/custom.css")" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/account.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="lg-page">
+        <div class="lg-card">
+            <!-- LEFT PANEL : BRAND / WELCOME -->
+            <div class="lg-brandpanel" aria-hidden="true">
+                <div class="lg-noise"></div>
+                <svg class="lg-arcs" viewBox="0 0 400 500" fill="none" preserveAspectRatio="xMaxYMin meet">
+                    <circle cx="420" cy="20" r="120" stroke="rgba(255,255,255,.16)" stroke-width="1.5" />
+                    <circle cx="420" cy="20" r="220" stroke="rgba(255,255,255,.12)" stroke-width="1.5" />
+                    <circle cx="420" cy="20" r="320" stroke="rgba(255,255,255,.08)" stroke-width="1.5" />
+                </svg>
+
+                <div class="lg-brand-main">
+                    <div class="login-brand-mark">
+                        <img src="/images/ugo-u.svg" alt="UGO">
+                    </div>
+                    <div class="lg-brand-content">
+                        <h1>Hello,<br />welcome back 👋</h1>
+                        <p class="lg-brand-sub">Sign in to manage identities, access, and permissions — all in one secure place.</p>
+                    </div>
+                </div>
+
+                <div class="lg-brand-foot">© @DateTime.Now.Year &middot; All rights reserved.</div>
+            </div>
+
+            <!-- RIGHT PANEL : LOGIN FORM -->
+            <div class="lg-formpanel">
+                <div class="lg-form-inner">
+                    <img src="@Url.Content("~/images/logo-ugo-one.svg")" alt="Logo" class="lg-logo">
+
+                    <div class="lg-head">
+                        <h2>Sign in to your account</h2>
+                        <p>Enter your username to continue.</p>
+                    </div>
+
+                    <form asp-action="Login" asp-controller="Account" method="post" class="form" id="frmLogin" onsubmit="SubmitForm('frmLogin'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+                        <input type="hidden" id="txtLoginType" asp-for="@Model.Login_Type" />
+
+                        <div class="lg-field">
+                            <label for="username" class="lg-label">Username</label>
+                            <div class="lg-input-wrap">
+                                <input type="text" asp-for="@Model.User_Name" placeholder="Enter your username" class="lg-input" id="username" autocomplete="username" />
+                            </div>
+                            <span class="text-danger lg-val" asp-validation-for="@Model.User_Name"></span>
+                        </div>
+
+                        <div class="lg-field d-none" id="divOTP">
+                            <div class="lg-field-top">
+                                <label for="txtotp" class="lg-label mb-0">One-time password</label>
+                                <span id="txtResendOTP" class="lg-resend d-none" onclick="SendOTP();">Resend OTP</span>
+                            </div>
+                            <div class="lg-input-wrap">
+                                <input type="text" asp-for="@Model.OTP" placeholder="Enter the 6-digit OTP" class="lg-input" id="txtotp" maxlength="6" pattern="\d{6}" autocomplete="one-time-code" />
+                            </div>
+                            <span class="text-danger lg-val" asp-validation-for="@Model.OTP"></span>
+                        </div>
+
+                        <div class="lg-field d-none" id="divPassword">
+                            <label for="pswd" class="lg-label">Password</label>
+                            <div class="lg-input-wrap position-relative">
+                                <input type="password" asp-for="@Model.Password" placeholder="Enter your password" class="lg-input" id="pswd" autocomplete="current-password" />
+                                <span class="show-pass eye" id="visibilityId">
+                                    <i class="ugo-icons vsbltyoff">visibility_off</i>
+                                    <i class="ugo-icons vsblty"> visibility </i>
+                                </span>
+                            </div>
+                            <span class="text-danger lg-val" asp-validation-for="@Model.Password"></span>
+                        </div>
+
+                        <button id="btnSubmit" type="button" class="lg-btn lg-btn-primary" onclick="GetLoginTypeInfo();">Continue</button>
+                        <button id="loginBtn" type="submit" class="lg-btn lg-btn-primary d-none">Login now</button>
+
+                        <!-- Microsoft Sign in  -->
+                        @if (enableMicrosoftLogin)
+                        {
+                            <div class="lg-divider"></div>
+                            <a href="@Url.Action("EntraLogin", "Account", new { returnUrl = Context.Request.Query["returnUrl"] })"
+                               class="lg-btn lg-btn-outline" id="btnMsLogin">
+                                <img src="@Url.Content("~/images/ms-logo.svg")" alt="" style="width:18px;height:18px;margin-right:8px;vertical-align:-3px" />
+                                Sign in with Microsoft
+                            </a>
+                        }
+                        <!-- Forgot Password Link -->
+                        <div class="lg-forgot d-none" id="divForgotPassword">
+                            Forgot your password?
+                            <a href="@Url.Action("ForgotPassword", "Account")" class="lg-link">Reset it</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvProcessing" style="display:none;">
+        <div class="loaderFixed">
+            <img src="@Url.Content("~/images/loader.svg")" alt="Loader" />
+        </div>
+    </div>
+
+    <div id="divPopUpAlert">
+        <alerts></alerts>
+    </div>
+
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js").ToLower()"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/js/showalert.js").ToLower()" asp-append-version="true"></script>
+    <script src="@Url.Content("~/js/custom.js").ToLower()" asp-append-version="true"></script>
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="@Url.Content("~/scripts/account/login.js").ToLower()" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            const loginError = @Html.Raw(JsonSerializer.Serialize(loginError));
+
+            if (loginError) {
+                showAlert(loginError, "Error", "OkCancel");
+            }
+        });
+    </script>
+</body>
+</html>

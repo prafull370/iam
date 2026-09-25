@@ -1,0 +1,205 @@
+﻿@{
+    ViewData["Title"] = "Too Many Requests";
+    Layout = null;
+
+    // Match middleware cooldown
+    int cooldownSeconds = 10;
+
+    // Safe redirect URL
+    string redirectUrl = ViewBag.RedirectUrl != null
+        ? ViewBag.RedirectUrl.ToString()
+        : "/";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-control" content="public">
+    <meta name="theme-color" content="#0599EF" />
+
+    <base href='@Url.Content("~/")' />
+
+    <title>@ViewData["Title"]</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")" />
+
+    <!-- PNG Icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/favicon-16x16.png")">
+    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/favicon-32x32.png")">
+    <link rel="icon" type="image/png" sizes="192x192" href="@Url.Content("~/android-chrome-192x192.png")">
+    <link rel="icon" type="image/png" sizes="512x512" href="@Url.Content("~/android-chrome-512x512.png")">
+
+    <!-- Apple -->
+    <link rel="apple-touch-icon" sizes="180x180" href="@Url.Content("~/apple-touch-icon.png")">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="@Url.Content("~/site.webmanifest")">
+
+    <!-- CSS -->
+    <link href="@Url.Content("~/css/ugo-icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/font-family.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/css/bscss.min.css")" rel="stylesheet" />
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0599EF;
+            margin: 20px 0;
+        }
+
+        .disabled-btn {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="error-body">
+
+    <div class="container">
+        <div class="row gx-5 align-items-center">
+
+            <!-- Left -->
+            <div class="col-lg-5 d-flex flex-column align-items-center">
+
+                <h1 class="error-number fse">429!</h1>
+
+                <h2 class="error-title">
+                    Too Many Requests
+                </h2>
+
+                <p class="error-text">
+                    Please wait
+                    <span id="countdown">@cooldownSeconds</span>
+                    seconds before retrying.
+                </p>
+
+                <!-- Redirect Button -->
+                <a id="redirectBtn"
+                   href="@redirectUrl"
+                   class="btn btn-primary btn-lg disabled-btn">
+
+                    <i class="ugo-icons me-1 fs-4">
+                        arrow_back
+                    </i>
+
+                    Back to Home
+                </a>
+
+                <p class="error-text"
+                   style="margin-top:15px;font-size:14px;">
+
+                    <small>
+                        Auto redirecting in
+                        <span id="autoRedirectCountdown">
+                            @cooldownSeconds
+                        </span>
+                        seconds...
+                    </small>
+
+                </p>
+
+            </div>
+
+            <!-- Right -->
+            <div class="col-8 col-lg-6 mb-5 mb-lg-0">
+
+                <dotlottie-player src="https://lottie.host/45645244-9fbe-4491-a34f-f1b42f77d72c/64kf7QSt9U.lottie"
+                                  background="transparent"
+                                  speed="1"
+                                  class="errImg"
+                                  loop
+                                  autoplay>
+                </dotlottie-player>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js")"></script>
+
+    <script src="@Url.Content("~/lib/lottiefiles/dotlottie-player.mjs")"
+            type="module">
+    </script>
+
+    <script>
+
+        const COOLDOWN_SECONDS = @cooldownSeconds;
+
+        let secondsRemaining = COOLDOWN_SECONDS;
+
+        const redirectBtn =
+            document.getElementById('redirectBtn');
+
+        const redirectUrl =
+            '@Html.Raw(redirectUrl)';
+
+        // Countdown
+        const countdownInterval = setInterval(() => {
+
+            secondsRemaining--;
+
+            document.getElementById('countdown')
+                .innerText = secondsRemaining;
+
+            document.getElementById('autoRedirectCountdown')
+                .innerText = secondsRemaining;
+
+            // Countdown completed
+            if (secondsRemaining <= 0) {
+
+                clearInterval(countdownInterval);
+
+                // Enable Button
+                redirectBtn.classList.remove('disabled-btn');
+
+                document.getElementById('countdown')
+                    .innerText = '0';
+
+                document.getElementById('autoRedirectCountdown')
+                    .innerText = '0';
+
+                // Redirect
+                if (redirectUrl &&
+                    redirectUrl !== '' &&
+                    redirectUrl !== 'null' &&
+                    redirectUrl !== undefined) {
+
+                    window.location.replace(redirectUrl);
+                }
+                else {
+
+                    window.location.replace('/');
+                }
+            }
+
+        }, 1000);
+
+        // Prevent click before cooldown
+        redirectBtn.addEventListener('click', function (e) {
+
+            if (secondsRemaining > 0) {
+
+                e.preventDefault();
+
+                return false;
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

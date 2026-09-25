@@ -1,0 +1,40 @@
+﻿@model List<ModelLayer.Models.IAM.UserDeviceMapping.UserDeviceMappingResponseModel>
+
+@if (Model?.Any() == true)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Application</th>
+                <th>Device</th>
+                <th class="text-center">Approve Device</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var appGroup in Model.GroupBy(x => x.Application_Id))
+            {
+                var appName = appGroup.First().App_Name;
+                <!-- Application Row -->
+                <tr class="table-primary">
+                    <td colspan="3">
+                        <strong>@appName</strong>
+                    </td>
+                </tr>
+
+                <!-- Device Rows -->
+                @foreach (var device in appGroup)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@device.Device_Name</td>
+                        <td class="text-center">
+                            <input type="radio"name="device_@appGroup.Key"value="@device.Device_Id"
+                                   data-mapping-id="@device.Mapping_Id"
+                                   @(device.Status ? "checked" : "") />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}

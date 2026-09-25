@@ -1,0 +1,60 @@
+
+Timestamp : 2026-09-24 11:59:17.388
+Error     : Error in Get_Login_Type method: Parameter Id: prafull Log print Scuccessfully
+                              
+
+
+Timestamp : 2026-09-24 11:59:17.398
+Error     : Error in Get_Login_Type method: Parameter Id: Login/getbyloginid?Id=prafull API URL
+                              
+
+
+Timestamp : 2026-09-24 11:59:17.551
+Error     : Error in Get_Login_Type method: Parameter Id: ModelLayer.Models.Common.ResponseModel`1[ModelLayer.Models.Common.UserOtpModel] 
+                              
+
+
+Timestamp : 2026-09-24 13:16:18.246
+Error     : Error in Get_Login_Type method: Parameter Id: prafull Log print Scuccessfully
+                              
+
+
+Timestamp : 2026-09-24 13:16:18.253
+Error     : Error in Get_Login_Type method: Parameter Id: Login/getbyloginid?Id=prafull API URL
+                              
+
+
+Timestamp : 2026-09-24 13:16:18.939
+Error     : Error in Get_Login_Type method: Parameter Id: ModelLayer.Models.Common.ResponseModel`1[ModelLayer.Models.Common.UserOtpModel] 
+                              
+
+
+Timestamp : 2026-09-24 13:26:56.950
+Error     : Error in Get_Login_Type method: Parameter Id: prafull Log print Scuccessfully
+                              
+
+
+Timestamp : 2026-09-24 13:26:56.956
+Error     : Error in Get_Login_Type method: Parameter Id: Login/getbyloginid?Id=prafull API URL
+                              
+
+
+Timestamp : 2026-09-24 13:26:57.400
+Error     : Error in Get_Login_Type method: Parameter Id: ModelLayer.Models.Common.ResponseModel`1[ModelLayer.Models.Common.UserOtpModel] 
+                              
+
+
+Timestamp : 2026-09-24 17:15:25.834
+Error     : Error in Get_Login_Type method: Parameter Id: prafull Log print Scuccessfully
+                              
+
+
+Timestamp : 2026-09-24 17:15:25.843
+Error     : Error in Get_Login_Type method: Parameter Id: Login/getbyloginid?Id=prafull API URL
+                              
+
+
+Timestamp : 2026-09-24 17:15:27.791
+Error     : Error in Get_Login_Type method: Parameter Id: ModelLayer.Models.Common.ResponseModel`1[ModelLayer.Models.Common.UserOtpModel] 
+                              
+

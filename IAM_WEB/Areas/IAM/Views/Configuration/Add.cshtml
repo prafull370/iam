@@ -1,0 +1,72 @@
+﻿@model ModelLayer.Models.IAM.Configuration.ConfigurationRequestModel
+@{
+	ViewData["Title"] = (Model?.Config_Id ?? 0) > 0 ? "Edit" : "Add";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="main-body">
+	<div class="row mb-4">
+		<div class="col-9">
+			<div class="pgHrchy">Master<i class="bi bi-chevron-right fwd"></i></div>
+			<div class="pgName">@((Model?.Config_Id ?? 0) > 0 ? "Edit" : "Add") Configuration</div>
+		</div>
+		<div class="col-3 text-end">
+			<a href="@Url.Content("~/IAM/Configuration/Index")" class="afBtn"><i class="ugo-icons">arrow_back</i></a>
+		</div>
+	</div>
+
+	<div class="formbox">
+		<div class="fmbdy">
+			<form asp-area="IAM" asp-controller="Configuration" asp-action="Save" id="ConfigurationForm" onsubmit="SubmitForm('ConfigurationForm'); return false;" asp-antiforgery="true" enctype="multipart/form-data" class="frmSubmit">
+				<input type="hidden" asp-for="@Model.Config_Id" id="hdnConfigurationId" />
+				<div class="row gx-2">
+					<div class="col-xl-5 mbc">
+						<label class="required">Name</label>
+						<input name="Config_Name" type="text" asp-for="@Model.Config_Name" class="form-control" placeholder="Enter Configuration Name" readonly="@( (Model?.Config_Id ?? 0) > 0 )" />
+						<span class="text-danger" asp-validation-for="@Model.Config_Name"></span>
+					</div>
+					<div class="col-xl-3 mbc">
+						<label class="required">Value</label>
+						<input name="Config_Value" type="text" asp-for="@Model.Config_Value" class="form-control" placeholder="Enter Configuration Value" />
+						<span class="text-danger" asp-validation-for="@Model.Config_Value"></span>
+					</div>
+					<div class="col-xl-3 mbc">
+						<label class="required">Is Configuration Value</label>
+						<input name="Is_Config_Value" type="text" asp-for="@Model.Is_Config_Value" class="form-control" placeholder="Enter Is Configuration Value" readonly="@( (Model?.Config_Id ?? 0) > 0 )" />
+						<span class="text-danger" asp-validation-for="@Model.Is_Config_Value"></span>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-8 mbc">
+						<label>Description</label>
+						<textarea name="Description" class="form-control" asp-for="@Model.Description" id="txtDescription" rows="3" placeholder="Enter Description Here"></textarea>
+						<span class="text-danger" asp-validation-for="@Model.Description"></span>
+					</div>
+				</div>
+				<div class="row gx-2">
+					<div class="col-xl-2 mbc">
+						<label>Status</label>
+						<div class="switch">
+							<label>
+								<input type="checkbox" name="Is_Active" asp-for="@Model.Is_Active" id="Is_Active"/>
+								<span class="lever">
+									<span class="unckeckS">InActive</span>
+									<span class="ckeckS">Active</span>
+								</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="btn-container mt-2">
+					<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+					<button type="button" id="btnReset" class="btn btn-outline-dark ms-1">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/scripts/iam/configuration/configuration.js"></script>
+}
