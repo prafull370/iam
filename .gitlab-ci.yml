@@ -1,6 +1,23 @@
 stages:
   - build
   - deploy
+  - rollback
+
+variables:
+  WEB_DIR: /home/serveradmin/kanchan/IAM_QC_WEB_V1
+  API_DIR: /home/serveradmin/kanchan/IAM_QC_API_V1
+  BACKUP_ROOT: /home/serveradmin/kanchan/iamqcbackups
+
+# Reusable: restart both services and fail the job if either doesn't stay up
+.restart_and_check:
+  script:
+    - echo "Restarting services..."
+    - sudo -n systemctl restart iamqcweb.service
+    - sudo -n systemctl restart iamqcapi.service
+    - echo "Checking services..."
+    - sleep 15
+    - systemctl is-active iamqcweb.service
+    - systemctl is-active iamqcapi.service
 
 build:
   stage: build
@@ -18,25 +35,79 @@ build:
 
 deploy:
   stage: deploy
+  resource_group: iamqc-server
   script:
-    # Safety check: don't sync an empty/broken build (--delete would wipe the server)
+    # Safety check: never sync an empty/broken build (--delete would wipe the server)
     - test -f ./publish/web/IAM_WEB.dll
     - test -f ./publish/api/IAM_API.dll
 
+    # Back up what's currently live (overwrites the previous backup, so only 1 is kept)
+    - |
+      if [ -f "$WEB_DIR/IAM_WEB.dll" ] && [ -f "$API_DIR/IAM_API.dll" ]; then
+        echo "Backing up current deployment..."
+        mkdir -p "$BACKUP_ROOT/web" "$BACKUP_ROOT/api"
+        rsync -rlt --delete \
+          --exclude 'appsettings*.json' \
+          --exclude '/wwwroot/Assets/' \
+          "$WEB_DIR/" "$BACKUP_ROOT/web/"
+        rsync -rlt --delete \
+          --exclude 'appsettings*.json' \
+          "$API_DIR/" "$BACKUP_ROOT/api/"
+        if [ -f "$BACKUP_ROOT/current_version.txt" ]; then
+          cp "$BACKUP_ROOT/current_version.txt" "$BACKUP_ROOT/backup_version.txt"
+        else
+          echo "unknown (deployed before backups were enabled)" > "$BACKUP_ROOT/backup_version.txt"
+        fi
+        echo "Backup contains: $(cat "$BACKUP_ROOT/backup_version.txt")"
+      else
+        echo "No existing deployment found, skipping backup."
+      fi
+
     - echo "Deploying WEB..."
-    - rsync -a --delete
+    - rsync -rlt --omit-dir-times --delete
         --exclude 'appsettings*.json'
         --exclude '/wwwroot/Assets/'
-        ./publish/web/ /home/serveradmin/kanchan/IAM_QC_WEB_V1/
+        ./publish/web/ "$WEB_DIR/"
 
     - echo "Deploying API..."
-    - rsync -a --delete
+    - rsync -rlt --omit-dir-times --delete
         --exclude 'appsettings*.json'
-        ./publish/api/ /home/serveradmin/kanchan/IAM_QC_API_V1/
+        ./publish/api/ "$API_DIR/"
 
-    - echo "Restarting services..."
-    - sudo systemctl restart iamqcweb.service
-    - sudo systemctl restart iamqcapi.service
+    - echo "$CI_COMMIT_SHORT_SHA | $(date '+%F %T') | pipeline $CI_PIPELINE_ID" > "$BACKUP_ROOT/current_version.txt"
+
+    - !reference [.restart_and_check, script]
     - echo "Deployment completed."
+  only:
+    - main
+
+rollback:
+  stage: rollback
+  when: manual
+  needs: []                # available even if build/deploy failed
+  dependencies: []         # don't download build artifacts
+  resource_group: iamqc-server
+  variables:
+    GIT_STRATEGY: none     # no need to fetch the repo
+  script:
+    - test -f "$BACKUP_ROOT/web/IAM_WEB.dll" || { echo "No WEB backup found"; exit 1; }
+    - test -f "$BACKUP_ROOT/api/IAM_API.dll" || { echo "No API backup found"; exit 1; }
+    - echo "Rolling back to: $(cat "$BACKUP_ROOT/backup_version.txt")"
+
+    - echo "Restoring WEB..."
+    - rsync -rlt --omit-dir-times --delete
+        --exclude 'appsettings*.json'
+        --exclude '/wwwroot/Assets/'
+        "$BACKUP_ROOT/web/" "$WEB_DIR/"
+
+    - echo "Restoring API..."
+    - rsync -rlt --omit-dir-times --delete
+        --exclude 'appsettings*.json'
+        "$BACKUP_ROOT/api/" "$API_DIR/"
+
+    - cp "$BACKUP_ROOT/backup_version.txt" "$BACKUP_ROOT/current_version.txt"
+
+    - !reference [.restart_and_check, script]
+    - echo "Rollback completed."
   only:
     - main
