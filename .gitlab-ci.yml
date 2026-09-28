@@ -8,16 +8,26 @@ build:
     - dotnet restore IAM.sln
     - dotnet publish IAM_WEB/IAM_WEB.csproj -c Release -o ./publish/web
     - dotnet publish IAM_API/IAM_API.csproj -c Release -o ./publish/api
+  artifacts:
+    paths:
+      - publish/web
+      - publish/api
+    expire_in: 1 hour
   only:
     - main
 
 deploy:
   stage: deploy
   script:
+    - echo "Deploying WEB..."
     - rm -rf /home/serveradmin/kanchan/IAM_QC_WEB_V1/*
-    - rm -rf /home/serveradmin/kanchan/IAM_QC_API_V1/*
     - cp -r ./publish/web/. /home/serveradmin/kanchan/IAM_QC_WEB_V1/
+
+    - echo "Deploying API..."
+    - rm -rf /home/serveradmin/kanchan/IAM_QC_API_V1/*
     - cp -r ./publish/api/. /home/serveradmin/kanchan/IAM_QC_API_V1/
-    - echo "Deployment completed successfully."
+
+    - echo "WEB deployment completed."
+    - echo "API deployment completed."
   only:
     - main
