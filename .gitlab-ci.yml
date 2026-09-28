@@ -1,39 +1,23 @@
 stages:
-  - build
-  - deploy
   - test
 
-variables:
-  DOTNET_VERSION: "8.0"
-
-build:
-  stage: build
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+runner_connection_test:
+  stage: test
   script:
-    - dotnet restore IAM.sln
-    - dotnet publish IAM_WEB/IAM_WEB.csproj -c Release -o ./publish/web
-    - dotnet publish IAM_API/IAM_API.csproj -c Release -o ./publish/api
-  artifacts:
-    paths:
-      - publish/web
-      - publish/api
-    expire_in: 1 hour
-  only:
-    - main
-
-deploy:
-  stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache openssh-client rsync
-    - eval $(ssh-agent -s)
-    # - echo "$SSH" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - ssh-keyscan -H $DEPLOY_SERVER_HOST >> ~/.ssh/known_hosts
-  script:
-    - rsync -avz --delete ./publish/web/ $DEPLOY_USER@$DEPLOY_SERVER_HOST:/var/www/iam-web/
-    - rsync -avz --delete ./publish/api/ $DEPLOY_USER@$DEPLOY_SERVER_HOST:/var/www/iam-api/
-    - ssh $DEPLOY_USER@$DEPLOY_SERVER_HOST "sudo systemctl restart iam-web"
-    - ssh $DEPLOY_USER@$DEPLOY_SERVER_HOST "sudo systemctl restart iam-api"
-  only:
-    - main
+    - echo "========================================="
+    - echo "GitLab Runner Connection Test"
+    - echo "========================================="
+    - echo "Runner is connected successfully!"
+    - echo "Hostname:"
+    - hostname
+    - echo "Current User:"
+    - whoami
+    - echo "Operating System:"
+    - uname -a
+    - echo "Dotnet Version:"
+    - dotnet --version
+    - echo "Working Directory:"
+    - pwd
+    - echo "========================================="
+    - echo "Runner test completed successfully!"
+    - echo "========================================="
