@@ -1,23 +1,23 @@
 stages:
-  - test
+  - build
+  - deploy
 
-runner_connection_test:
-  stage: test
+build:
+  stage: build
   script:
-    - echo "========================================="
-    - echo "GitLab Runner Connection Test"
-    - echo "========================================="
-    - echo "Runner is connected successfully!"
-    - echo "Hostname:"
-    - hostname
-    - echo "Current User:"
-    - whoami
-    - echo "Operating System:"
-    - uname -a
-    - echo "Dotnet Version:"
-    - dotnet --version
-    - echo "Working Directory:"
-    - pwd
-    - echo "========================================="
-    - echo "Runner test completed successfully!"
-    - echo "========================================="
+    - dotnet restore IAM.sln
+    - dotnet publish IAM_WEB/IAM_WEB.csproj -c Release -o ./publish/web
+    - dotnet publish IAM_API/IAM_API.csproj -c Release -o ./publish/api
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  script:
+    - rm -rf /home/serveradmin/kanchan/IAM_QC_WEB_V1/*
+    - rm -rf /home/serveradmin/kanchan/IAM_QC_API_V1/*
+    - cp -r ./publish/web/. /home/serveradmin/kanchan/IAM_QC_WEB_V1/
+    - cp -r ./publish/api/. /home/serveradmin/kanchan/IAM_QC_API_V1/
+    - echo "Deployment completed successfully."
+  only:
+    - main
