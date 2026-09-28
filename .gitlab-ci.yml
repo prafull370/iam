@@ -74,7 +74,10 @@ deploy:
         --exclude 'appsettings*.json'
         ./publish/api/ "$API_DIR/"
 
-    - echo "$CI_COMMIT_SHORT_SHA | $(date '+%F %T') | pipeline $CI_PIPELINE_ID" > "$BACKUP_ROOT/current_version.txt"
+    # Record which version is now live
+    - |
+      mkdir -p "$BACKUP_ROOT"
+      echo "$CI_COMMIT_SHORT_SHA | $(date '+%F %T') | pipeline $CI_PIPELINE_ID" > "$BACKUP_ROOT/current_version.txt"
 
     - !reference [.restart_and_check, script]
     - echo "Deployment completed."
@@ -90,9 +93,12 @@ rollback:
   variables:
     GIT_STRATEGY: none     # no need to fetch the repo
   script:
-    - test -f "$BACKUP_ROOT/web/IAM_WEB.dll" || { echo "No WEB backup found"; exit 1; }
-    - test -f "$BACKUP_ROOT/api/IAM_API.dll" || { echo "No API backup found"; exit 1; }
-    - echo "Rolling back to: $(cat "$BACKUP_ROOT/backup_version.txt")"
+    - |
+      if [ ! -f "$BACKUP_ROOT/web/IAM_WEB.dll" ] || [ ! -f "$BACKUP_ROOT/api/IAM_API.dll" ]; then
+        echo "No backup found in $BACKUP_ROOT, nothing to roll back."
+        exit 1
+      fi
+      echo "Rolling back to: $(cat "$BACKUP_ROOT/backup_version.txt")"
 
     - echo "Restoring WEB..."
     - rsync -rlt --omit-dir-times --delete
