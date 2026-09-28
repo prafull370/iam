@@ -8,7 +8,22 @@ variables:
   API_DIR: /home/serveradmin/kanchan/IAM_QC_API_V1
   BACKUP_ROOT: /home/serveradmin/kanchan/iamqcbackups
 
-# Reusable: restart both services and fail the job if either doesn't stay up
+# Files/folders on the server that deploy, backup and rollback must never touch
+.write_excludes:
+  script:
+    - |
+      cat > "$CI_PROJECT_DIR/.rsync-excludes" <<'EOF'
+      appsettings*.json
+      *.swp
+      *.swo
+      *~
+      /Logs/
+      /logs/
+      /wwwroot/Assets/
+      EOF
+      export RSYNC_EXCLUDES="$CI_PROJECT_DIR/.rsync-excludes"
+
+# Restart both services and fail the job if either doesn't stay up
 .restart_and_check:
   script:
     - echo "Restarting services..."
@@ -41,18 +56,15 @@ deploy:
     - test -f ./publish/web/IAM_WEB.dll
     - test -f ./publish/api/IAM_API.dll
 
+    - !reference [.write_excludes, script]
+
     # Back up what's currently live (overwrites the previous backup, so only 1 is kept)
     - |
       if [ -f "$WEB_DIR/IAM_WEB.dll" ] && [ -f "$API_DIR/IAM_API.dll" ]; then
         echo "Backing up current deployment..."
         mkdir -p "$BACKUP_ROOT/web" "$BACKUP_ROOT/api"
-        rsync -rlt --delete \
-          --exclude 'appsettings*.json' \
-          --exclude '/wwwroot/Assets/' \
-          "$WEB_DIR/" "$BACKUP_ROOT/web/"
-        rsync -rlt --delete \
-          --exclude 'appsettings*.json' \
-          "$API_DIR/" "$BACKUP_ROOT/api/"
+        rsync -rlt --delete --exclude-from="$RSYNC_EXCLUDES" "$WEB_DIR/" "$BACKUP_ROOT/web/"
+        rsync -rlt --delete --exclude-from="$RSYNC_EXCLUDES" "$API_DIR/" "$BACKUP_ROOT/api/"
         if [ -f "$BACKUP_ROOT/current_version.txt" ]; then
           cp "$BACKUP_ROOT/current_version.txt" "$BACKUP_ROOT/backup_version.txt"
         else
@@ -64,19 +76,13 @@ deploy:
       fi
 
     - echo "Deploying WEB..."
-    - rsync -rlt --omit-dir-times --delete
-        --exclude 'appsettings*.json'
-        --exclude '/wwwroot/Assets/'
-        ./publish/web/ "$WEB_DIR/"
+    - rsync -rlt --omit-dir-times --delete --exclude-from="$RSYNC_EXCLUDES" ./publish/web/ "$WEB_DIR/"
 
     - echo "Deploying API..."
-    - rsync -rlt --omit-dir-times --delete
-        --exclude 'appsettings*.json'
-        ./publish/api/ "$API_DIR/"
+    - rsync -rlt --omit-dir-times --delete --exclude-from="$RSYNC_EXCLUDES" ./publish/api/ "$API_DIR/"
 
     # Record which version is now live
     - |
-      mkdir -p "$BACKUP_ROOT"
       echo "$CI_COMMIT_SHORT_SHA | $(date '+%F %T') | pipeline $CI_PIPELINE_ID" > "$BACKUP_ROOT/current_version.txt"
 
     - !reference [.restart_and_check, script]
@@ -100,16 +106,13 @@ rollback:
       fi
       echo "Rolling back to: $(cat "$BACKUP_ROOT/backup_version.txt")"
 
+    - !reference [.write_excludes, script]
+
     - echo "Restoring WEB..."
-    - rsync -rlt --omit-dir-times --delete
-        --exclude 'appsettings*.json'
-        --exclude '/wwwroot/Assets/'
-        "$BACKUP_ROOT/web/" "$WEB_DIR/"
+    - rsync -rlt --omit-dir-times --delete --exclude-from="$RSYNC_EXCLUDES" "$BACKUP_ROOT/web/" "$WEB_DIR/"
 
     - echo "Restoring API..."
-    - rsync -rlt --omit-dir-times --delete
-        --exclude 'appsettings*.json'
-        "$BACKUP_ROOT/api/" "$API_DIR/"
+    - rsync -rlt --omit-dir-times --delete --exclude-from="$RSYNC_EXCLUDES" "$BACKUP_ROOT/api/" "$API_DIR/"
 
     - cp "$BACKUP_ROOT/backup_version.txt" "$BACKUP_ROOT/current_version.txt"
 
