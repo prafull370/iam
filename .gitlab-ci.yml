@@ -19,15 +19,24 @@ build:
 deploy:
   stage: deploy
   script:
+    # Safety check: don't sync an empty/broken build (--delete would wipe the server)
+    - test -f ./publish/web/IAM_WEB.dll
+    - test -f ./publish/api/IAM_API.dll
+
     - echo "Deploying WEB..."
-    - rm -rf /home/serveradmin/kanchan/IAM_QC_WEB_V1/*
-    - cp -r ./publish/web/. /home/serveradmin/kanchan/IAM_QC_WEB_V1/
+    - rsync -a --delete
+        --exclude 'appsettings*.json'
+        --exclude '/wwwroot/Assets/'
+        ./publish/web/ /home/serveradmin/kanchan/IAM_QC_WEB_V1/
 
     - echo "Deploying API..."
-    - rm -rf /home/serveradmin/kanchan/IAM_QC_API_V1/*
-    - cp -r ./publish/api/. /home/serveradmin/kanchan/IAM_QC_API_V1/
+    - rsync -a --delete
+        --exclude 'appsettings*.json'
+        ./publish/api/ /home/serveradmin/kanchan/IAM_QC_API_V1/
 
-    - echo "WEB deployment completed."
-    - echo "API deployment completed."
+    - echo "Restarting services..."
+    - sudo systemctl restart iamqcweb.service
+    - sudo systemctl restart iamqcapi.service
+    - echo "Deployment completed."
   only:
     - main
