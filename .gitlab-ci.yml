@@ -242,6 +242,7 @@ build_dev:
 deploy_dev:
   extends: .dev_windows
   stage: deploy
+  when: manual
   needs: [build_dev]
   resource_group: iamdev-server
   script:
