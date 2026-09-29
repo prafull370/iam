@@ -9,7 +9,7 @@ variables:
   BACKUP_ROOT: /home/serveradmin/kanchan/iamqcbackups
 
 # ======================================================================
-#  QC  (Linux server, branch: main)  -- unchanged
+#  QC  (Linux server, branch: main) -- deploys AUTOMATICALLY on every push
 # ======================================================================
 
 # Files/folders on the server that deploy, backup and rollback must never touch
@@ -54,6 +54,7 @@ build:
 
 deploy:
   stage: deploy
+  needs: [build]           # only the Linux build's output
   resource_group: iamqc-server
   script:
     # Safety check: never sync an empty/broken build (--delete would wipe the server)
@@ -126,7 +127,7 @@ rollback:
     - main
 
 # ======================================================================
-#  DEV  (Windows server / IIS, branch: dev)
+#  DEV  (Windows server / IIS, branch: main) -- deploys on MANUAL button click
 #
 #  IIS sites (.in):
 #    iamdev.ugoerp.in     -> F:\CODE\IAM\IAM_WEB      (app pool iamdev.ugoerp.in)
@@ -222,33 +223,34 @@ rollback:
         Test-Site $env:DEV_API_URL
       }
   only:
-    - dev
+    - main
 
-# Runs on the Linux runner (untagged), output targeted at Windows
+# Runs automatically on the Linux runner (untagged), output targeted at Windows.
+# Kept for 7 days so the manual dev deploy can be clicked later.
 build_dev:
   stage: build
   script:
     - dotnet restore IAM.sln
-    - dotnet publish IAM_WEB/IAM_WEB.csproj -c Release -r win-x64 --self-contained false -o ./publish/web
-    - dotnet publish IAM_API/IAM_API.csproj -c Release -r win-x64 --self-contained false -o ./publish/api
+    - dotnet publish IAM_WEB/IAM_WEB.csproj -c Release -r win-x64 --self-contained false -o ./publish-win/web
+    - dotnet publish IAM_API/IAM_API.csproj -c Release -r win-x64 --self-contained false -o ./publish-win/api
   artifacts:
     paths:
-      - publish/web
-      - publish/api
-    expire_in: 1 hour
+      - publish-win/web
+      - publish-win/api
+    expire_in: 7 days
   only:
-    - dev
+    - main
 
 deploy_dev:
   extends: .dev_windows
   stage: deploy
-  when: manual
+  when: manual             # button click; doesn't block the pipeline
   needs: [build_dev]
   resource_group: iamdev-server
   script:
     # Safety check: never mirror an empty/broken build (/MIR would wipe the server)
     - |
-      if (-not (Test-Path .\publish\web\IAM_WEB.dll) -or -not (Test-Path .\publish\api\IAM_API.dll)) {
+      if (-not (Test-Path .\publish-win\web\IAM_WEB.dll) -or -not (Test-Path .\publish-win\api\IAM_API.dll)) {
         throw "Build output missing, aborting deploy."
       }
 
@@ -272,10 +274,10 @@ deploy_dev:
     - Set-Offline
 
     - Write-Host "Deploying WEB..."
-    - Sync-Dir .\publish\web $env:DEV_WEB_DIR
+    - Sync-Dir .\publish-win\web $env:DEV_WEB_DIR
 
     - Write-Host "Deploying API..."
-    - Sync-Dir .\publish\api $env:DEV_API_DIR
+    - Sync-Dir .\publish-win\api $env:DEV_API_DIR
 
     - Set-Online
 
