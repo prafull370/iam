@@ -17,3 +17,203 @@ System.InvalidOperationException: Headers are read-only, response has already st
    at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
    at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context)
    at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-09-29 14:54:54.072 +05:30 [ERR] BackgroundService failed
+Npgsql.NpgsqlException (0x80004005): Exception while writing to stream
+ ---> System.IO.IOException: Unable to write data to the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.NetworkStream.WriteAsync(Byte[] buffer, Int32 offset, Int32 count, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param)
+   at Dapper.SqlMapper.ExecuteAsync(IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 544
+   at Dapper.SqlMapper.ExecuteAsync(IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.Async.cs:line 526
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model)
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.TaskAwaiter.<>c.<OutputWaitEtwEvents>b__12_0(Action innerContinuation, Task innerTask)
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(Action action, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task.TrySetResult()
+   at System.Threading.Tasks.Task.DelayPromise.CompleteTimedOut()
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 662
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2026-09-29 14:54:54.122 +05:30 [FTL] The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Npgsql.NpgsqlException (0x80004005): Exception while writing to stream
+ ---> System.IO.IOException: Unable to write data to the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.NetworkStream.WriteAsync(Byte[] buffer, Int32 offset, Int32 count, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param)
+   at Dapper.SqlMapper.ExecuteAsync(IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 544
+   at Dapper.SqlMapper.ExecuteAsync(IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.Async.cs:line 526
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model)
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.TaskAwaiter.<>c.<OutputWaitEtwEvents>b__12_0(Action innerContinuation, Task innerTask)
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(Action action, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task.TrySetResult()
+   at System.Threading.Tasks.Task.DelayPromise.CompleteTimedOut()
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 662
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2026-09-29 17:15:19.928 +05:30 [ERR] BackgroundService failed
+Npgsql.NpgsqlException (0x80004005): Exception while writing to stream
+ ---> System.IO.IOException: Unable to write data to the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.NetworkStream.WriteAsync(Byte[] buffer, Int32 offset, Int32 count, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteAsync(IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.Async.cs:line 526
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model)
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.TaskAwaiter.<>c.<OutputWaitEtwEvents>b__12_0(Action innerContinuation, Task innerTask)
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(Action action, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task.TrySetResult()
+   at System.Threading.Tasks.Task.DelayPromise.CompleteTimedOut()
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 662
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2026-09-29 17:15:19.986 +05:30 [FTL] The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Npgsql.NpgsqlException (0x80004005): Exception while writing to stream
+ ---> System.IO.IOException: Unable to write data to the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.NetworkStream.WriteAsync(Byte[] buffer, Int32 offset, Int32 count, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at Dapper.SqlMapper.ExecuteAsync(IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable`1 commandTimeout, Nullable`1 commandType) in /_/Dapper/SqlMapper.Async.cs:line 526
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model)
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.AsyncStateMachineBox`1.MoveNext(Thread threadPoolThread)
+   at System.Runtime.CompilerServices.TaskAwaiter.<>c.<OutputWaitEtwEvents>b__12_0(Action innerContinuation, Task innerTask)
+   at System.Threading.Tasks.AwaitTaskContinuation.RunOrScheduleAction(Action action, Boolean allowInlining)
+   at System.Threading.Tasks.Task.RunContinuations(Object continuationObject)
+   at System.Threading.Tasks.Task.TrySetResult()
+   at System.Threading.Tasks.Task.DelayPromise.CompleteTimedOut()
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlWriteBuffer.Flush(Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteImplAsync(IDbConnection cnn, CommandDefinition command, Object param) in /_/Dapper/SqlMapper.Async.cs:line 662
+   at DataAccessLayer.DBManager.Execute_SP_Select_List[T](String SPName, DynamicParameters objparams, LoggedUserDataModel LoggedUserData) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataAccessLayer\DBManager.cs:line 95
+   at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
+   at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)

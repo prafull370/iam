@@ -1,0 +1,321 @@
+/* Role Page Mapping - 5 level tree (Product > Service > Module > Page L1 - L5).
+   Builds on the shared .tree-table styles in bscss.scss; scoped to #rolePagePartial. */
+
+/* ---------- Toolbar ---------- */
+.rpm-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .75rem;
+}
+
+.rpm-search {
+    position: relative;
+    flex: 1 1 260px;
+    max-width: 380px;
+}
+
+    .rpm-search .ugo-icons {
+        position: absolute;
+        left: .6rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.125rem;
+        color: #98a2b3;
+        pointer-events: none;
+    }
+
+    .rpm-search .form-control {
+        padding-left: 2rem;
+    }
+
+.rpm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.rpm-summary {
+    font-size: .75rem;
+    color: #667085;
+    margin-right: .25rem;
+}
+
+/* ---------- Table layout ---------- */
+#rolePagePartial {
+    table-layout: fixed;
+    width: 100%;
+    min-width: 640px;
+}
+
+    #rolePagePartial col.col-active {
+        width: 110px;
+    }
+
+    #rolePagePartial col.col-landing {
+        width: 130px;
+    }
+
+    #rolePagePartial th,
+    #rolePagePartial td {
+        padding: .5rem .75rem;
+    }
+
+    /* Reset the generic level-N row colours for every depth (levels 0 - 7) */
+    #rolePagePartial tbody tr td {
+        background-color: transparent;
+        font-weight: normal;
+        color: inherit;
+    }
+
+    #rolePagePartial tbody tr.node-product td {
+        background-color: #f5f7fa;
+    }
+
+    #rolePagePartial tbody tr.node-service td {
+        background-color: #fafbfc;
+    }
+
+    #rolePagePartial tbody tr:hover td {
+        background-color: #f0f4fa;
+    }
+
+    #rolePagePartial td.toggle-parent:focus-visible {
+        outline: 2px solid #0052cc;
+        outline-offset: -2px;
+    }
+
+    /* ---------- Tree node ---------- */
+    #rolePagePartial td.hierarchy-col {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    #rolePagePartial .tree-node {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        min-height: 1.5rem;
+    }
+
+    #rolePagePartial .tree-rails {
+        display: flex;
+        flex: 0 0 auto;
+        align-self: stretch;
+    }
+
+    #rolePagePartial .rail {
+        position: relative;
+        flex: 0 0 1.5rem;
+        width: 1.5rem;
+        height: auto;
+    }
+
+    /* Continuous guide lines so parent-child links stay readable at depth 5 */
+    #rolePagePartial .rail-line::before,
+    #rolePagePartial .rail-own::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: calc(-.5rem - 1px);
+        bottom: calc(-.5rem - 1px);
+        height: auto;
+        border-left: 1px solid #d0d5dd;
+    }
+
+    /* Last child: the branch stops at the elbow */
+    #rolePagePartial .rail-own:not(.rail-more)::before {
+        bottom: 50%;
+    }
+
+    /* Elbow into the node */
+    #rolePagePartial .rail-own::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        right: -.25rem;
+        top: 50%;
+        border-top: 1px solid #d0d5dd;
+    }
+
+    #rolePagePartial .toggle-icon,
+    #rolePagePartial .toggle-icon-spacer {
+        flex: 0 0 1rem;
+        width: 1rem;
+        margin-left: .25rem;
+    }
+
+    #rolePagePartial td[data-level="0"] .toggle-icon,
+    #rolePagePartial td[data-level="0"] .toggle-icon-spacer {
+        margin-left: 0;
+    }
+
+    #rolePagePartial .tree-label {
+        flex: 0 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-left: .375rem;
+        padding: 0 .125rem;
+        border-radius: 3px;
+        color: #475467;
+        font-weight: 400;
+    }
+
+    #rolePagePartial tr.node-product .tree-label {
+        color: #101828;
+        font-weight: 700;
+    }
+
+    #rolePagePartial tr.node-service .tree-label {
+        color: #101828;
+        font-weight: 600;
+    }
+
+    #rolePagePartial tr.node-module .tree-label {
+        color: #344054;
+        font-weight: 600;
+    }
+
+    #rolePagePartial tr.parentpage .tree-label {
+        color: #344054;
+        font-weight: 600;
+    }
+
+    #rolePagePartial tr.page-lvl-4 .tree-label,
+    #rolePagePartial tr.page-lvl-5 .tree-label {
+        color: #667085;
+    }
+
+    #rolePagePartial tr.search-match .tree-label {
+        background-color: #fff3c4;
+    }
+
+    #rolePagePartial .node-type {
+        flex: 0 0 auto;
+        margin-left: .5rem;
+        font-size: .625rem;
+        font-weight: 600;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        color: #98a2b3;
+    }
+
+    /* Active / total sub pages */
+    #rolePagePartial .node-count {
+        flex: 0 0 auto;
+        margin-left: auto;
+        padding: 0 .5rem;
+        font-size: .6875rem;
+        line-height: 1.125rem;
+        font-weight: 600;
+        color: #475467;
+        background-color: #eaecf0;
+        border-radius: 999px;
+    }
+
+        #rolePagePartial .node-count:empty {
+            display: none;
+        }
+
+        #rolePagePartial .node-count.all-active {
+            color: #067647;
+            background-color: #dcfae6;
+        }
+
+        #rolePagePartial .node-count.none-active {
+            color: #98a2b3;
+            background-color: #f2f4f7;
+        }
+
+    #rolePagePartial .tree-label + .node-count,
+    #rolePagePartial .node-type + .node-count {
+        margin-left: auto;
+    }
+
+    #rolePagePartial tr.rpm-no-match td {
+        padding: 1.5rem .75rem;
+        color: #667085;
+    }
+
+/* ---------- Page level chips (L1 - L5) ---------- */
+.rpm-tree .lvl-chip {
+    display: inline-block;
+    flex: 0 0 auto;
+    margin-left: .375rem;
+    padding: 0 .3rem;
+    font-size: .625rem;
+    font-weight: 700;
+    line-height: 1rem;
+    border-radius: 4px;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.rpm-tree .lvl-1 {
+    color: #0052cc;
+    background-color: #e5eefc;
+}
+
+.rpm-tree .lvl-2 {
+    color: #0e7c86;
+    background-color: #e3f5f6;
+}
+
+.rpm-tree .lvl-3 {
+    color: #6941c6;
+    background-color: #f1ecfd;
+}
+
+.rpm-tree .lvl-4 {
+    color: #b54708;
+    background-color: #fdf0e1;
+}
+
+.rpm-tree .lvl-5 {
+    color: #c01048;
+    background-color: #fdebf1;
+}
+
+.rpm-tree .lvl-legend {
+    display: inline-flex;
+    gap: .2rem;
+    margin-left: .5rem;
+}
+
+    .rpm-tree .lvl-legend .lvl-chip {
+        margin-left: 0;
+    }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 575.98px) {
+    .rpm-search {
+        max-width: none;
+        flex-basis: 100%;
+    }
+
+    #rolePagePartial {
+        min-width: 520px;
+    }
+
+        #rolePagePartial col.col-active {
+            width: 72px;
+        }
+
+        #rolePagePartial col.col-landing {
+            width: 90px;
+        }
+
+        #rolePagePartial .rail {
+            flex-basis: .75rem;
+            width: .75rem;
+        }
+
+        #rolePagePartial .node-type {
+            display: none;
+        }
+}

@@ -87,31 +87,7 @@ namespace IAM_WEB.Areas.IAM.Controllers.RolePageMapping
 						Service_Name = serviceGroup.Key.Service_Name,
 						Service_Logo = serviceGroup.Key.Service_Logo,
 
-						ParentPages = serviceGroup
-							.Where(p => p.Is_Parent && p.Module_Id == 0)
-							.Select(parent => new PageViewModel
-							{
-								Page_Id = parent.Page_Id,
-								Page_Name = parent.Page_Name,
-								Page_Logo = parent.Page_Logo,
-								Is_Parent = parent.Is_Parent,
-								Is_Landing_Page = parent.Is_Landing_Page,
-								Is_Page_Mapped = parent.Is_Page_Mapped,
-
-								ChildPages = serviceGroup
-									.Where(child => !child.Is_Parent &&
-													child.Module_Id == 0 &&
-													child.Parent_Page_Id == parent.Page_Id)
-									.Select(child => new PageViewModel
-									{
-										Page_Id = child.Page_Id,
-										Page_Name = child.Page_Name,
-										Page_Logo = child.Page_Logo,
-										Is_Parent = child.Is_Parent,
-										Is_Landing_Page = child.Is_Landing_Page,
-										Is_Page_Mapped = child.Is_Page_Mapped
-									}).ToList()
-							}).ToList(),
+						ParentPages = BuildPageTree(serviceGroup.Where(p => p.Module_Id == 0)),
 
 						Modules = serviceGroup
 							.Where(p => p.Module_Id != 0)
@@ -122,30 +98,7 @@ namespace IAM_WEB.Areas.IAM.Controllers.RolePageMapping
 								Module_Name = moduleGroup.Key.Module_Name,
 								Module_Logo = moduleGroup.Key.Module_Logo,
 
-								ParentPages = moduleGroup
-									.Where(p => p.Is_Parent)
-									.Select(parent => new PageViewModel
-									{
-										Page_Id = parent.Page_Id,
-										Page_Name = parent.Page_Name,
-										Page_Logo = parent.Page_Logo,
-										Is_Parent = parent.Is_Parent,
-										Is_Landing_Page = parent.Is_Landing_Page,
-										Is_Page_Mapped = parent.Is_Page_Mapped,
-
-										ChildPages = moduleGroup
-											.Where(child => !child.Is_Parent &&
-															child.Parent_Page_Id == parent.Page_Id)
-											.Select(child => new PageViewModel
-											{
-												Page_Id = child.Page_Id,
-												Page_Name = child.Page_Name,
-												Page_Logo = child.Page_Logo,
-												Is_Parent = child.Is_Parent,
-												Is_Landing_Page = child.Is_Landing_Page,
-												Is_Page_Mapped = child.Is_Page_Mapped
-											}).ToList()
-									}).ToList()
+								ParentPages = BuildPageTree(moduleGroup)
 							}).ToList()
 					}).ToList()
 			}).ToList();
@@ -156,6 +109,46 @@ namespace IAM_WEB.Areas.IAM.Controllers.RolePageMapping
 				return PartialView("_RolePagePartial", result);
 			}
 			return Json(data);
+		}
+
+		// Deepest page level the mapping screen supports (Level 1 = root page).
+		private const int MaxPageLevel = 5;
+
+		// Builds the page hierarchy (up to MaxPageLevel levels) from the flat SP rows by
+		// Parent_Page_Id, the same way the side menu builds it. Is_Parent is not used for
+		// structure because an intermediate page can be a parent and have a parent itself.
+		// A page whose parent is not in the same service/module (e.g. legacy 2147483647
+		// sentinel) is shown as a root page instead of being dropped.
+		private static List<PageViewModel> BuildPageTree(IEnumerable<RolePageMappingResponseModel> rows)
+		{
+			var pages = rows
+				.Where(p => p.Page_Id != 0)
+				.GroupBy(p => p.Page_Id)
+				.Select(g => g.First())
+				.ToList();
+
+			var pageIds = pages.Select(p => p.Page_Id).ToHashSet();
+			bool HasParentInSet(RolePageMappingResponseModel p) =>
+				p.Parent_Page_Id != p.Page_Id && pageIds.Contains(p.Parent_Page_Id);
+
+			var childrenByParent = pages.Where(HasParentInSet).ToLookup(p => p.Parent_Page_Id);
+
+			List<PageViewModel> Build(IEnumerable<RolePageMappingResponseModel> level, int depth) =>
+				level.Select(p => new PageViewModel
+				{
+					Page_Id = p.Page_Id,
+					Page_Name = p.Page_Name,
+					Page_Logo = p.Page_Logo,
+					Is_Parent = p.Is_Parent,
+					Is_Landing_Page = p.Is_Landing_Page,
+					Is_Page_Mapped = p.Is_Page_Mapped,
+					Page_Level = depth,
+					ChildPages = depth < MaxPageLevel
+						? Build(childrenByParent[p.Page_Id], depth + 1)
+						: new List<PageViewModel>()
+				}).ToList();
+
+			return Build(pages.Where(p => !HasParentInSet(p)), 1);
 		}
         [HttpPost]
         public async Task<IActionResult> AppGet(int Role_Id)

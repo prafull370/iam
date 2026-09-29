@@ -55,6 +55,7 @@ namespace ModelLayer.Models.IAM.RolePageMapping
         public bool Is_Parent { get; set; }
         public bool Is_Landing_Page { get; set; }
         public bool Is_Page_Mapped { get; set; }
+        public int Page_Level { get; set; } = 1; // 1 = root page, up to 5
         public List<PageViewModel> ChildPages { get; set; } = new();
     }
 

@@ -38,13 +38,25 @@ function Reset() {
     location.reload();
 }
 
-// Check Uncheck Logic
-$(document).on("change", ".parent-checkbox", function () {
-    var group = $(this).data("group");
+// Check Uncheck Logic (any page level, L1 - L5)
+// Activating a page activates all its sub pages and its parent pages (a sub page is only
+// reachable from the menu when its parents are mapped). Deactivating a page deactivates
+// all its sub pages and clears their landing page selection.
+$(document).on("change", "#rolePagePartial .page-checkbox", function () {
+    var $row = $(this).closest("tr");
     var isChecked = $(this).is(":checked");
+    var $descendants = getDescendantRows($row);
 
-    // Check/uncheck all child checkboxes with the same group
-    $(`tr#child-row[data-group='${group}'] .child-checkbox`).prop("checked", isChecked);
+    $descendants.find(".page-checkbox").prop("checked", isChecked);
+
+    if (isChecked) {
+        getAncestorPageRows($row).find(".page-checkbox").prop("checked", true);
+    }
+    else {
+        $row.add($descendants).find("input[type='radio']").prop("checked", false);
+    }
+
+    refreshCounts();
 });
 
 
@@ -55,15 +67,52 @@ $(document).on("click", ".toggle-parent", function () {
     const level = getRowLevel($row);
     const isExpanded = $row.hasClass('expanded');
 
-    $row.toggleClass('expanded', !isExpanded);
+    setExpanded($row, !isExpanded);
     toggleChildren($row, level, !isExpanded);
+});
+
+// Keyboard support for expand / collapse
+$(document).on("keydown", ".toggle-parent", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        $(this).trigger("click");
+    }
+});
+
+$(document).on("click", "#btnExpandAll", function () {
+    clearSearch();
+    var $rows = getTreeRows();
+    $rows.removeClass('d-none');
+    setExpanded($rows.filter(function () { return $(this).children('.toggle-parent').length > 0; }), true);
+});
+
+$(document).on("click", "#btnCollapseAll", function () {
+    clearSearch();
+    collapseAll();
+});
+
+// Search: show matching rows with their full parent path, hide everything else
+var treeSearchTimer;
+$(document).on("input", "#txtTreeSearch", function () {
+    var term = $(this).val();
+    clearTimeout(treeSearchTimer);
+    treeSearchTimer = setTimeout(function () { filterTree(term); }, 200);
 });
 
 // Utility functions
 function getRowLevel($tr) {
-    const className = $tr.attr('class');
+    const className = $tr.attr('class') || '';
     const match = className.match(/level-(\d+)/);
     return match ? parseInt(match[1]) : -1;
+}
+
+function getTreeRows() {
+    return $("#rolePagePartial tbody tr").not(".rpm-no-match");
+}
+
+function setExpanded($rows, expanded) {
+    $rows.toggleClass('expanded', expanded);
+    $rows.children('.toggle-parent').attr('aria-expanded', expanded ? 'true' : 'false');
 }
 
 function toggleChildren($row, parentLevel, show) {
@@ -77,7 +126,7 @@ function toggleChildren($row, parentLevel, show) {
             next.removeClass('d-none');
         } else {
             next.addClass('d-none');
-            next.removeClass('expanded');
+            setExpanded(next, false);
         }
 
         if (!show) {
@@ -86,6 +135,129 @@ function toggleChildren($row, parentLevel, show) {
 
         next = next.next();
     }
+}
+
+function collapseAll() {
+    var $rows = getTreeRows();
+    setExpanded($rows, false);
+    $rows.not(".level-0").addClass('d-none');
+    $rows.filter(".level-0").removeClass('d-none');
+}
+
+// All rows nested under $row (rows are rendered depth-first)
+function getDescendantRows($row) {
+    var level = getRowLevel($row);
+    var rows = [];
+    var next = $row.next();
+    while (next.length && getRowLevel(next) > level) {
+        rows.push(next[0]);
+        next = next.next();
+    }
+    return $(rows);
+}
+
+// Parent pages of a page row, nearest first
+function getAncestorPageRows($row) {
+    var rows = [];
+    var parentKey = $row.data("parent-node");
+    while (parentKey) {
+        var $parent = $("#rolePagePartial tr[data-node='" + parentKey + "']");
+        if (!$parent.length) break;
+        rows.push($parent[0]);
+        parentKey = $parent.data("parent-node");
+    }
+    return $(rows);
+}
+
+// Active / total page counts on every collapsible row and in the toolbar
+function refreshCounts() {
+    var stack = [];
+    var totalPages = 0;
+    var activePages = 0;
+
+    function close(entry) {
+        entry.$count.text(entry.active + "/" + entry.total)
+            .toggleClass("all-active", entry.total > 0 && entry.active === entry.total)
+            .toggleClass("none-active", entry.active === 0);
+    }
+
+    getTreeRows().each(function () {
+        var $tr = $(this);
+        var level = getRowLevel($tr);
+
+        while (stack.length && stack[stack.length - 1].level >= level) {
+            close(stack.pop());
+        }
+
+        if ($tr.hasClass("page")) {
+            var isActive = $tr.find(".page-checkbox").is(":checked");
+            totalPages++;
+            if (isActive) activePages++;
+            stack.forEach(function (entry) {
+                entry.total++;
+                if (isActive) entry.active++;
+            });
+        }
+
+        var $count = $tr.find(".node-count");
+        if ($count.length) {
+            stack.push({ level: level, $count: $count, total: 0, active: 0 });
+        }
+    });
+
+    while (stack.length) {
+        close(stack.pop());
+    }
+
+    $("#rpmSummary").text(totalPages > 0 ? activePages + " of " + totalPages + " pages active" : "");
+}
+
+function filterTree(term) {
+    term = $.trim(term || "").toLowerCase();
+    var $rows = getTreeRows();
+    var $noMatch = $("#rolePagePartial .rpm-no-match");
+
+    $rows.removeClass("search-match");
+
+    if (!term) {
+        $noMatch.addClass("d-none");
+        collapseAll();
+        return;
+    }
+
+    var stack = [];
+    var matches = 0;
+
+    $rows.each(function () {
+        var $tr = $(this);
+        var level = getRowLevel($tr);
+
+        while (stack.length && getRowLevel(stack[stack.length - 1]) >= level) {
+            stack.pop();
+        }
+
+        $tr.addClass("d-none");
+        setExpanded($tr, false);
+
+        if ($tr.find(".tree-label").text().toLowerCase().indexOf(term) > -1) {
+            matches++;
+            $tr.addClass("search-match").removeClass("d-none");
+            stack.forEach(function ($ancestor) {
+                $ancestor.removeClass("d-none");
+                setExpanded($ancestor, true);
+            });
+        }
+
+        stack.push($tr);
+    });
+
+    $noMatch.toggleClass("d-none", matches > 0);
+}
+
+function clearSearch() {
+    $("#txtTreeSearch").val("");
+    getTreeRows().removeClass("search-match");
+    $("#rolePagePartial .rpm-no-match").addClass("d-none");
 }
 
 // Check Validation
@@ -140,6 +312,8 @@ function BindList(Role_Id) {
                 $("#imgchooseflt").hide();
                 $('#btn').removeClass('d-none');
                 $('#rolePagePartial').html(data);
+                $("#txtTreeSearch").val("");
+                refreshCounts();
             }
             else {
                 $("#imgchooseflt").show();
