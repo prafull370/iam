@@ -8,6 +8,10 @@ variables:
   API_DIR: /home/serveradmin/kanchan/IAM_QC_API_V1
   BACKUP_ROOT: /home/serveradmin/kanchan/iamqcbackups
 
+# ======================================================================
+#  QC  (Linux server, branch: main)  -- unchanged
+# ======================================================================
+
 # Files/folders on the server that deploy, backup and rollback must never touch
 .write_excludes:
   script:
@@ -120,3 +124,195 @@ rollback:
     - echo "Rollback completed."
   only:
     - main
+
+# ======================================================================
+#  DEV  (Windows server / IIS, branch: dev)
+#
+#  IIS sites (.in):
+#    iamdev.ugoerp.in     -> F:\CODE\IAM\IAM_WEB      (app pool iamdev.ugoerp.in)
+#    iamdevapi.ugoerp.in  -> F:\CODE\IAM\IAM_WEB_API  (app pool iamdevapi.ugoerp.in)
+#
+#  NOTE: iamweb.ugoone.com / iamwebapi.ugoone.com point to the SAME folders.
+#  The pipeline never touches their IIS config, but because the files are
+#  shared, they will serve whatever is deployed here.
+# ======================================================================
+
+# Shared settings/helpers for jobs that run ON the Windows dev server
+.dev_windows:
+  tags:
+    - windows-dev
+  variables:
+    DEV_WEB_DIR: 'F:\CODE\IAM\IAM_WEB'
+    DEV_API_DIR: 'F:\CODE\IAM\IAM_WEB_API'
+    DEV_BACKUP_ROOT: 'F:\CODE\IAM\Backups'
+    DEV_WEB_POOL: 'iamdev.ugoerp.in'
+    DEV_API_POOL: 'iamdevapi.ugoerp.in'
+    DEV_WEB_URL: 'https://iamdev.ugoerp.in'
+    DEV_API_URL: 'https://iamdevapi.ugoerp.in'
+  before_script:
+    - |
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+      # Mirror $src -> $dst. Never touches appsettings, editor temp files,
+      # Logs, wwwroot\Assets or app_offline.htm (excluded items are also
+      # protected from /MIR's delete).
+      function Sync-Dir([string]$src, [string]$dst) {
+        if (-not (Test-Path $dst)) { New-Item -ItemType Directory -Force -Path $dst | Out-Null }
+        robocopy $src $dst /MIR /R:5 /W:5 /NP /NFL /NDL `
+          /XF appsettings*.json *.swp *.swo *~ app_offline.htm `
+          /XD "$src\Logs" "$dst\Logs" "$src\wwwroot\Assets" "$dst\wwwroot\Assets"
+        # robocopy: 0-7 = success, 8+ = failure
+        if ($LASTEXITCODE -ge 8) { throw "robocopy failed ($LASTEXITCODE): $src -> $dst" }
+        $global:LASTEXITCODE = 0
+      }
+
+      # app_offline.htm makes IIS/ASP.NET Core shut the app down and release
+      # file locks for EVERY site using that folder (.in and .com alike).
+      function Set-Offline {
+        foreach ($d in @($env:DEV_WEB_DIR, $env:DEV_API_DIR)) {
+          Set-Content -Path "$d\app_offline.htm" -Value "<html><body><h2>Deployment in progress, back in a minute.</h2></body></html>"
+        }
+        Write-Host "Sites taken offline, waiting for apps to shut down..."
+        Start-Sleep -Seconds 10
+      }
+
+      function Set-Online {
+        foreach ($d in @($env:DEV_WEB_DIR, $env:DEV_API_DIR)) {
+          Remove-Item -Path "$d\app_offline.htm" -Force -ErrorAction SilentlyContinue
+        }
+        Write-Host "Sites back online."
+      }
+
+      # Make sure the .in app pools and sites are running
+      function Start-DevIis {
+        Import-Module WebAdministration
+        foreach ($p in @($env:DEV_WEB_POOL, $env:DEV_API_POOL)) {
+          if ((Get-WebAppPoolState -Name $p).Value -ne 'Started') {
+            Write-Host "Starting app pool $p"
+            Start-WebAppPool -Name $p
+          }
+          if ((Get-Website -Name $p).State -ne 'Started') {
+            Write-Host "Starting site $p"
+            Start-Website -Name $p
+          }
+        }
+      }
+
+      # Up = any response below 500 (a 404 on the API root still means it started)
+      function Test-Site([string]$url) {
+        for ($i = 1; $i -le 6; $i++) {
+          try {
+            $r = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 30
+            Write-Host "$url -> $($r.StatusCode) OK"
+            return
+          } catch {
+            $code = $null
+            if ($_.Exception.Response) { $code = [int]$_.Exception.Response.StatusCode }
+            if ($code -and $code -lt 500) { Write-Host "$url -> $code (app is up)"; return }
+            Write-Host "Attempt $i/6: $url not ready ($($_.Exception.Message))"
+            Start-Sleep -Seconds 10
+          }
+        }
+        throw "Health check failed: $url"
+      }
+
+      function Test-DevSites {
+        Start-DevIis
+        Test-Site $env:DEV_WEB_URL
+        Test-Site $env:DEV_API_URL
+      }
+  only:
+    - dev
+
+# Runs on the Linux runner (untagged), output targeted at Windows
+build_dev:
+  stage: build
+  script:
+    - dotnet restore IAM.sln
+    - dotnet publish IAM_WEB/IAM_WEB.csproj -c Release -r win-x64 --self-contained false -o ./publish/web
+    - dotnet publish IAM_API/IAM_API.csproj -c Release -r win-x64 --self-contained false -o ./publish/api
+  artifacts:
+    paths:
+      - publish/web
+      - publish/api
+    expire_in: 1 hour
+  only:
+    - dev
+
+deploy_dev:
+  extends: .dev_windows
+  stage: deploy
+  needs: [build_dev]
+  resource_group: iamdev-server
+  script:
+    # Safety check: never mirror an empty/broken build (/MIR would wipe the server)
+    - |
+      if (-not (Test-Path .\publish\web\IAM_WEB.dll) -or -not (Test-Path .\publish\api\IAM_API.dll)) {
+        throw "Build output missing, aborting deploy."
+      }
+
+    # Back up what's currently live (while running, keeps downtime short).
+    # Overwrites the previous backup, so only 1 is kept.
+    - |
+      if ((Test-Path "$env:DEV_WEB_DIR\IAM_WEB.dll") -and (Test-Path "$env:DEV_API_DIR\IAM_API.dll")) {
+        Write-Host "Backing up current deployment..."
+        Sync-Dir $env:DEV_WEB_DIR "$env:DEV_BACKUP_ROOT\web"
+        Sync-Dir $env:DEV_API_DIR "$env:DEV_BACKUP_ROOT\api"
+        if (Test-Path "$env:DEV_BACKUP_ROOT\current_version.txt") {
+          Copy-Item "$env:DEV_BACKUP_ROOT\current_version.txt" "$env:DEV_BACKUP_ROOT\backup_version.txt" -Force
+        } else {
+          Set-Content "$env:DEV_BACKUP_ROOT\backup_version.txt" "unknown (deployed before backups were enabled)"
+        }
+        Write-Host "Backup contains: $(Get-Content "$env:DEV_BACKUP_ROOT\backup_version.txt")"
+      } else {
+        Write-Host "No existing deployment found, skipping backup."
+      }
+
+    - Set-Offline
+
+    - Write-Host "Deploying WEB..."
+    - Sync-Dir .\publish\web $env:DEV_WEB_DIR
+
+    - Write-Host "Deploying API..."
+    - Sync-Dir .\publish\api $env:DEV_API_DIR
+
+    - Set-Online
+
+    # Record which version is now live
+    - |
+      New-Item -ItemType Directory -Force -Path $env:DEV_BACKUP_ROOT | Out-Null
+      Set-Content "$env:DEV_BACKUP_ROOT\current_version.txt" "$env:CI_COMMIT_SHORT_SHA | $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | pipeline $env:CI_PIPELINE_ID"
+
+    - Test-DevSites
+    - Write-Host "DEV deployment completed. WEB $env:DEV_WEB_URL | API $env:DEV_API_URL"
+
+rollback_dev:
+  extends: .dev_windows
+  stage: rollback
+  when: manual
+  needs: []
+  dependencies: []
+  resource_group: iamdev-server
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - |
+      if (-not (Test-Path "$env:DEV_BACKUP_ROOT\web\IAM_WEB.dll") -or -not (Test-Path "$env:DEV_BACKUP_ROOT\api\IAM_API.dll")) {
+        throw "No backup found in $env:DEV_BACKUP_ROOT, nothing to roll back."
+      }
+      Write-Host "Rolling back to: $(Get-Content "$env:DEV_BACKUP_ROOT\backup_version.txt")"
+
+    - Set-Offline
+
+    - Write-Host "Restoring WEB..."
+    - Sync-Dir "$env:DEV_BACKUP_ROOT\web" $env:DEV_WEB_DIR
+
+    - Write-Host "Restoring API..."
+    - Sync-Dir "$env:DEV_BACKUP_ROOT\api" $env:DEV_API_DIR
+
+    - Set-Online
+
+    - Copy-Item "$env:DEV_BACKUP_ROOT\backup_version.txt" "$env:DEV_BACKUP_ROOT\current_version.txt" -Force
+
+    - Test-DevSites
+    - Write-Host "DEV rollback completed."
