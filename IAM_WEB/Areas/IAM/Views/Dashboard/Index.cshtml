@@ -1,12 +1,186 @@
 ﻿@{
-	ViewData["Title"] = "Dashboard";
-	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="no-dashboard d-flex align-items-center justify-content-center">
-	<div class="text-center">
-		<i class="ugo-icons ndimg">rocket_launch</i>
-		<h2 class="nd-title">Hello, nice to see you!</h2>
-		<div class="nd-desc"> You are now minutes away from creativity than ever before. Enjoy! </div>
-	</div>
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-12">
+            <div class="pgName">IAM Dashboard</div>
+            <div class="text-muted small">Overview of users, access and system activity</div>
+        </div>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-5 g-3 mbc" id="dvKpiCards">
+        <div class="col">
+            <div class="ccbx h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary text-white p-2"><i class="ugo-icons">group</i></span>
+                    <span class="text-muted">Total Users</span>
+                </div>
+                <div class="fs-3 fw-bold" id="kpiTotalUsers">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                </div>
+
+                <div class="text-muted small" id="kpiTotalUsersSub">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ccbx h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success text-white p-2"><i class="ugo-icons">how_to_reg</i></span>
+                    <span class="text-muted">Active Users</span>
+                </div>
+                <div class="fs-3 fw-bold" id="kpiActiveUsers">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                </div>
+                <div class="text-muted small" id="kpiActiveUsersSub">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ccbx h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-info text-white p-2"><i class="ugo-icons">apartment</i></span>
+                    <span class="text-muted">DISCOMs</span>
+                </div>
+                <div class="fs-3 fw-bold" id="kpiDiscoms">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                </div>
+                <div class="text-muted small" id="kpiDiscomsSub">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ccbx h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-warning text-white p-2"><i class="ugo-icons">inventory_2</i></span>
+                    <span class="text-muted">Products</span>
+                </div>
+                <div class="fs-3 fw-bold" id="kpiProducts">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                </div>
+                <div class="text-muted small" id="kpiProductsSub">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="ccbx h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-secondary text-white p-2"><i class="ugo-icons">admin_panel_settings</i></span>
+                    <span class="text-muted">Roles</span>
+                </div>
+                <div class="fs-3 fw-bold" id="kpiRoles">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                </div>
+                <div class="text-muted small" id="kpiRolesSub">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mbc">
+
+    <!--  (Login Trend) -->
+        
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="ccbx h-100">
+
+                <div class="fw-semibold mb-3">
+                    Login Trend (last 7 days)
+                </div>
+
+                <div class="login-trend-chart">
+
+                    <!-- Login Trend Loader -->
+                    <div id="loginTrendLoader"
+                         class="d-flex justify-content-center align-items-center">
+                        <div class="spinner-border spinner-border-sm text-primary"
+                             role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <!-- Login Trend Chart -->
+                    <canvas id="loginTrendChart" class="d-none"></canvas>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Role Distribution -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="ccbx h-100">
+                <div class="fw-semibold mb-3">Role Distribution</div>
+                <div class="d-flex align-items-center gap-3" id="dvRoleDistribution">
+                    <div class="spinner-border spinner-border-sm text-secondary" role="status"><span class="visually-hidden">Loading...</span></div>
+                </div>
+            </div>
+        </div>
+        <!-- Security Overview -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="ccbx h-100">
+                <div class="fw-semibold mb-3">Security Overview</div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span><i class="ugo-icons text-danger me-2">error</i>Users with failed attempts</span>
+                    <span class="fw-bold text-danger" id="secFailedAttempts">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span><i class="ugo-icons text-warning me-2">lock</i>Locked accounts</span>
+                    <span class="fw-bold" id="secLocked">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span><i class="ugo-icons text-success me-2">phone_android</i>New devices today</span>
+                    <span class="fw-bold" id="secNewDevices">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center py-2">
+                    <span><i class="ugo-icons text-primary me-2">groups</i>Active sessions</span>
+                    <span class="fw-bold text-primary" id="secSessions">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+
+        <div class="col-12 ">
+            <div class="ccbx h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-semibold">Recent Activity</span>
+                    @* <a href="@Url.Action("Index", "AuditLog", new { area = "IAM" })" class="small">View all</a> *@
+                </div>
+                <div class="table-responsive">
+                    <table class="table thwsnw mb-0">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>User Name</th>
+                                <th>Activity</th>
+                                <th>Page / Module</th>
+                                <th>Description</th>
+                                <th>IP Address</th>
+                                <th>Created On</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRecentActivity">
+                            <tr><td colspan="8" class="text-center"><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+
+@section Scripts {
+    <script src="@Url.Content("~/scripts/iam/dashboard/dashboard.js").ToLower()"></script>
+}

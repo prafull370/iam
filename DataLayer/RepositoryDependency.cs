@@ -8,6 +8,7 @@ using RepositoryLayer.IAM.ICompany;
 using RepositoryLayer.IAM.ICompanyOwner;
 using RepositoryLayer.IAM.ICompanyProductMapping;
 using RepositoryLayer.IAM.IConfiguration;
+using RepositoryLayer.IAM.IDashboard;
 using RepositoryLayer.IAM.IDataSyncing;
 using RepositoryLayer.IAM.IDepartment;
 using RepositoryLayer.IAM.IDesignation;
@@ -73,7 +74,7 @@ public class RepositoryDependencyService
     public IVersionControlService versioncontrol { get; }
     public IPageActionMappingService pageactionmapping { get; }
     //public IAuditLogService auditLogService { get; }
-
+    public IDashboardService dashboard { get; }
     public RepositoryDependencyService(
         ILogService Log,
         ICompanyService Company,
@@ -110,7 +111,8 @@ public class RepositoryDependencyService
         IRolePageActionService RolePageAction,
         IForgotPasswordService ForgotPasswordService,
         IVersionControlService VersionControl,
-        IPageActionMappingService PageActionMappingService
+        IPageActionMappingService PageActionMappingService,
+        IDashboardService Dashboard
         //IAuditLogService AuditLogService
         )
     {
@@ -151,5 +153,6 @@ public class RepositoryDependencyService
         versioncontrol = VersionControl;
         pageactionmapping = PageActionMappingService;
         //auditLogService = AuditLogService;
+        dashboard = Dashboard;
     }
 }

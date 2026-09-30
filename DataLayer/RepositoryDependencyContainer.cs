@@ -8,6 +8,7 @@ using DataLayer.IAM.Company;
 using DataLayer.IAM.CompanyOwner;
 using DataLayer.IAM.CompanyProductMapping;
 using DataLayer.IAM.Configuration;
+using DataLayer.IAM.Dashboard;
 using DataLayer.IAM.DataSyncing;
 using DataLayer.IAM.Department;
 using DataLayer.IAM.Designation;
@@ -43,6 +44,7 @@ using RepositoryLayer.IAM.ICompany;
 using RepositoryLayer.IAM.ICompanyOwner;
 using RepositoryLayer.IAM.ICompanyProductMapping;
 using RepositoryLayer.IAM.IConfiguration;
+using RepositoryLayer.IAM.IDashboard;
 using RepositoryLayer.IAM.IDataSyncing;
 using RepositoryLayer.IAM.IDepartment;
 using RepositoryLayer.IAM.IDesignation;
@@ -120,6 +122,8 @@ namespace DataLayer
             services.AddTransient<IVersionControlService, VersionControlService>();
             services.AddTransient<IPageActionMappingService, PageActionMappingService>();
             //services.AddTransient<IAuditLogService, AuditLogService>();
+            services.AddTransient<IDashboardService, DashboardService>();
+
         }
     }
 }
