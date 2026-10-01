@@ -160,11 +160,11 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
-if(app.Configuration.GetValue<bool>("EnableSwagger"))
-{
+//if(app.Configuration.GetValue<bool>("EnableSwagger"))
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAnyOrigin");
