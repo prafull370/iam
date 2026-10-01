@@ -8107,3 +8107,329 @@ ul.dsb-list {
         min-height: 970px;
     }
 }
+
+
+/* ---------------------------------------- IAM Dashboard ---------------------------------------- */
+@mixin dbkpi-tone($tone, $ink) {
+    border-color: mix($tone, #fff, 28%);
+
+    .dbkpi-dot {
+        background: $tone;
+    }
+
+    .dbkpi-lbl, .dbkpi-val {
+        color: $ink;
+    }
+
+    .dbkpi-icon {
+        background: mix($tone, #fff, 14%);
+        color: $ink;
+    }
+}
+
+.iam-dashboard {
+    .dbkpi {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: .75rem;
+        padding: 1rem 1.25rem;
+        border: 1px solid rgba(0,0,0,0.075);
+        border-radius: .75rem;
+        background: #fff;
+        box-shadow: 0 0px 10px rgba(0,0,0,.075);
+        transition: box-shadow .2s ease;
+
+        &:hover {
+            box-shadow: 0 4px 14px rgba(0,0,0,.12);
+        }
+
+        &.dbkpi-blue {
+            @include dbkpi-tone($primary, $primary);
+        }
+
+        &.dbkpi-green {
+            @include dbkpi-tone($success, shade-color($success, 30%));
+        }
+
+        &.dbkpi-violet {
+            @include dbkpi-tone($purple, $purple);
+        }
+
+        &.dbkpi-amber {
+            @include dbkpi-tone($orange, shade-color($orange, 40%));
+        }
+
+        &.dbkpi-teal {
+            @include dbkpi-tone($teal, shade-color($teal, 50%));
+        }
+    }
+
+    .dbkpi-body {
+        min-width: 0;
+    }
+
+    .dbkpi-lbl {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: .85rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .dbkpi-dot {
+        width: .55rem;
+        height: .55rem;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .dbkpi-val {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-top: .35rem;
+        font-variant-numeric: tabular-nums slashed-zero;
+        min-height: 1.8rem;
+    }
+
+    .dbkpi-sub {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0 .25rem;
+        font-size: .715rem;
+        color: $gray-600;
+        margin-top: .25rem;
+    }
+
+    .dbkpi-active {
+        color: shade-color($success, 30%);
+        font-weight: 600;
+    }
+
+    .dbkpi-sep {
+        margin: 0 .1rem;
+        opacity: .5;
+    }
+
+    .dbkpi-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: .5rem;
+        flex-shrink: 0;
+
+        .ugo-icons {
+            font-size: 1.25rem;
+        }
+    }
+
+    .dbtrend {
+        display: inline-flex;
+        align-items: center;
+        gap: .15rem;
+        font-weight: 600;
+
+        .ugo-icons {
+            font-size: .95rem;
+        }
+
+        &.dbtrend-up {
+            color: shade-color($success, 20%);
+        }
+
+        &.dbtrend-down {
+            color: $danger;
+        }
+    }
+
+    .dbcard-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: .75rem;
+    }
+
+    .dbcard-ttl {
+        font-size: .9rem;
+        font-weight: bold;
+        color: $primary2;
+        line-height: 1.3;
+    }
+
+    .dbcard-sub {
+        font-size: .715rem;
+        color: $secondary-color;
+    }
+
+    .dbchart {
+        position: relative;
+        min-height: 260px;
+    }
+
+    .dbchart-state {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .775rem;
+        text-align: center;
+    }
+
+    .dbrole {
+        position: relative;
+        min-height: 260px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem 1.25rem;
+    }
+
+    .dbrole-chart {
+        flex: 0 0 200px;
+        max-width: 200px;
+    }
+
+    .dbrole-legend {
+        flex: 1 1 180px;
+        min-width: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .4rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.075);
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+
+    .dbrole-dot {
+        width: .6rem;
+        height: .6rem;
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    .dbrole-name {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dbrole-val {
+        font-weight: 600;
+        color: $primary2;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+
+        small {
+            font-weight: 400;
+            color: $secondary-color;
+            margin-left: .4rem;
+            display: inline-block;
+            min-width: 2.25rem;
+            text-align: right;
+        }
+    }
+
+    .dbsec {
+        li {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+    }
+
+    .dbsec-lbl {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .dbsec-val {
+        font-size: 1.1rem;
+        font-weight: bold;
+        font-variant-numeric: tabular-nums;
+        color: $primary2;
+    }
+
+    .dbico {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.1rem;
+        height: 2.1rem;
+        border-radius: .5rem;
+        flex-shrink: 0;
+
+        .ugo-icons {
+            font-size: 1.1rem;
+        }
+
+        &.dbico-primary {
+            background: mix($primary, #fff, 12%);
+            color: $primary;
+        }
+
+        &.dbico-success {
+            background: mix($success, #fff, 12%);
+            color: shade-color($success, 30%);
+        }
+
+        &.dbico-warning {
+            background: mix($warning, #fff, 18%);
+            color: shade-color($orange, 40%);
+        }
+
+        &.dbico-danger {
+            background: mix($danger, #fff, 12%);
+            color: $danger;
+        }
+    }
+
+    .dbtbl {
+        th {
+            white-space: nowrap;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+    }
+
+    .dbtbl-desc {
+        max-width: 320px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    .apexcharts-tooltip {
+        font-family: $font-family-base;
+    }
+}
+
+@media (max-width: 575px) {
+    .iam-dashboard {
+        .dbrole-chart {
+            flex-basis: 100%;
+            max-width: 220px;
+        }
+    }
+}

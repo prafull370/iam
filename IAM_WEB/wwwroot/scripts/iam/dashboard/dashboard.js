@@ -1,4 +1,11 @@
-﻿var pendingRequests = 0;
+﻿// Brand-led categorical order (validated for colour-vision deficiency); grey is reserved for the folded "Other" slice
+var RoleChartColors = ['#0052cc', '#1D9E75', '#EF9F27', '#7F77DD', '#D85A30'];
+var RoleOtherColor = '#9CA3AF';
+var ChartFont = "'Inter', sans-serif";
+var ChartTextColor = '#6c757d';
+
+var loginTrendChart = null;
+var roleChart = null;
 
 $(document).ready(function () {
     LoadKpi();
@@ -8,6 +15,19 @@ $(document).ready(function () {
     LoadRecentActivity();
 });
 
+// Prevents HTML injection from server values
+function escapeHtml(value) {
+    return $('<div/>').text(value ?? '').html();
+}
+
+function FormatNumber(value) {
+    return (Number(value) || 0).toLocaleString();
+}
+
+function StateHtml(message, cls) {
+    return '<div class="dbchart-state ' + (cls || 'text-muted') + '">' + escapeHtml(message) + '</div>';
+}
+
 // ------------------------------------- 1. KPI Cards ------------------------------------------------//
 function LoadKpi() {
     $.ajax({
@@ -16,16 +36,16 @@ function LoadKpi() {
         dataType: 'json',
         success: function (result) {
             var d = result.ResponseData;
-            if (!d) { return; }
+            if (!d) { SetKpiUnavailable(); return; }
 
             // Total users + growth vs last month
-            $('#kpiTotalUsers').text(d.Total_Users.toLocaleString());
+            $('#kpiTotalUsers').text(FormatNumber(d.Total_Users));
             $('#kpiTotalUsersSub').html(GrowthText(d.Users_This_Month, d.Users_Last_Month));
 
             // Active users + % of total
             var pct = d.Total_Users > 0 ? Math.round((d.Active_Users / d.Total_Users) * 100) : 0;
-            $('#kpiActiveUsers').text(d.Active_Users.toLocaleString());
-            $('#kpiActiveUsersSub').text(pct + '% of total');
+            $('#kpiActiveUsers').text(FormatNumber(d.Active_Users));
+            $('#kpiActiveUsersSub').text(pct + '% of total users');
 
             // DISCOMs / Products / Roles: total + active | inactive
             SetKpi('#kpiDiscoms', d.Total_Discoms, d.Active_Discoms);
@@ -33,29 +53,126 @@ function LoadKpi() {
             SetKpi('#kpiRoles', d.Total_Roles, d.Active_Roles);
         },
         error: function () {
+            SetKpiUnavailable();
             showAlert("Unable to load dashboard KPIs.", "Error", "OkCancel");
         }
     });
 }
 
 function SetKpi(selector, total, active) {
-    $(selector).text(total.toLocaleString());
-    $(selector + 'Sub').text(active + ' Active | ' + (total - active) + ' Inactive');
+    $(selector).text(FormatNumber(total));
+    $(selector + 'Sub').html(
+        '<span class="dbkpi-active">' + FormatNumber(active) + ' Active</span>' +
+        '<span class="dbkpi-sep">|</span>' +
+        '<span>' + FormatNumber(total - active) + ' Inactive</span>');
+}
+
+function SetKpiUnavailable() {
+    $('#kpiTotalUsers, #kpiActiveUsers, #kpiDiscoms, #kpiProducts, #kpiRoles').text('–');
 }
 
 function GrowthText(thisMonth, lastMonth) {
-    if (lastMonth === 0) {
-        return thisMonth + ' new this month';
+    if (!lastMonth) {
+        return FormatNumber(thisMonth) + ' new this month';
     }
     var change = Math.round(((thisMonth - lastMonth) / lastMonth) * 100);
-    var cls = change >= 0 ? 'text-success' : 'text-danger';
-    var arrow = change >= 0 ? '&uarr;' : '&darr;';
-    return '<span class="' + cls + '">' + arrow + ' ' + Math.abs(change) + '%</span> new users vs last month';
+    var up = change >= 0;
+    return '<span class="dbtrend ' + (up ? 'dbtrend-up' : 'dbtrend-down') + '">' +
+        '<i class="ugo-icons">' + (up ? 'trending_up' : 'trending_down') + '</i>' + Math.abs(change) + '%</span>' +
+        ' vs last month';
 }
 
-// ------------------------------------- 2. Role Distribution ------------------------------------------------//
-var RoleChartColors = ['#7F77DD', '#1D9E75', '#EF9F27', '#378ADD', '#D85A30', '#9CA3AF'];
+// ------------------------------------- 2. Login Trend ------------------------------------------------//
+function LoadLoginTrend() {
+    $('#loginTrendLoader').removeClass('d-none').html(
+        '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>');
 
+    $.ajax({
+        url: '/IAM/Dashboard/GetLoginTrend',
+        type: 'GET',
+        dataType: 'json',
+        success: function (result) {
+            var rows = result.ResponseData || [];
+
+            if (rows.length === 0) {
+                $('#loginTrendTotal').text('0');
+                $('#loginTrendLoader').html('<span class="text-muted">No login data available</span>');
+                return;
+            }
+
+            $('#loginTrendLoader').addClass('d-none');
+            DrawLoginTrend(rows);
+        },
+        error: function (xhr, status, error) {
+            console.error('Login Trend Error:', status, error);
+            $('#loginTrendLoader').html('<span class="text-danger">Unable to load login trend</span>');
+        }
+    });
+}
+
+function DrawLoginTrend(rows) {
+    var labels = rows.map(function (r) { return r.Day_Label || ''; });
+    var values = rows.map(function (r) { return Number(r.Login_Count) || 0; });
+    var total = values.reduce(function (sum, v) { return sum + v; }, 0);
+
+    $('#loginTrendTotal').text(FormatNumber(total));
+
+    var options = {
+        chart: {
+            type: 'bar',
+            height: 260,
+            fontFamily: ChartFont,
+            toolbar: { show: false },
+            zoom: { enabled: false },
+            animations: { speed: 400 }
+        },
+        series: [{ name: 'Logins', data: values }],
+        colors: ['#0052cc'],
+        plotOptions: {
+            bar: {
+                columnWidth: '45%',
+                borderRadius: 4,
+                borderRadiusApplication: 'end'
+            }
+        },
+        dataLabels: { enabled: false },
+        states: {
+            hover: { filter: { type: 'darken', value: 0.85 } }
+        },
+        grid: {
+            borderColor: '#eef0f3',
+            strokeDashArray: 3,
+            padding: { left: 4, right: 4, top: -10 },
+            xaxis: { lines: { show: false } }
+        },
+        xaxis: {
+            categories: labels,
+            axisBorder: { show: false },
+            axisTicks: { show: false },
+            labels: { style: { colors: ChartTextColor, fontSize: '11px' } },
+            tooltip: { enabled: false }
+        },
+        yaxis: {
+            min: 0,
+            forceNiceScale: true,
+            decimalsInFloat: 0,
+            labels: {
+                style: { colors: ChartTextColor, fontSize: '11px' },
+                formatter: function (v) { return FormatNumber(Math.round(v)); }
+            }
+        },
+        tooltip: {
+            y: { formatter: function (v) { return FormatNumber(v); } }
+        },
+        noData: { text: 'No login data available' }
+    };
+
+    if (loginTrendChart) { loginTrendChart.destroy(); }
+    loginTrendChart = new ApexCharts(document.querySelector('#loginTrendChart'), options);
+    loginTrendChart.render();
+}
+
+// ------------------------------------- 3. Role Distribution ------------------------------------------------//
 function LoadRoleDistribution() {
     $.ajax({
         url: '/IAM/Dashboard/GetRoleDistribution',
@@ -63,59 +180,104 @@ function LoadRoleDistribution() {
         dataType: 'json',
         success: function (result) {
             var rows = result.ResponseData || [];
-            var $box = $('#dvRoleDistribution');
 
             if (rows.length === 0) {
-                $box.html('<div class="text-muted small">No role assignments found</div>');
+                $('#dvRoleDistribution').html(StateHtml('No role assignments found'));
                 return;
             }
 
-            var totalUsers = rows.reduce(function (sum, r) { return sum + r.User_Count; }, 0);
-            var totalRoles = rows[0].Total_Roles;
-
-            var radius = 38;
-            var circumference = 2 * Math.PI * radius;
-            var offset = 0;
-            var circles = '';
-            var legend = '';
-
-            rows.forEach(function (r, i) {
-                var color = RoleChartColors[i % RoleChartColors.length];
-                var share = totalUsers > 0 ? r.User_Count / totalUsers : 0;
-                var dash = share * circumference;
-
-                circles += '<circle cx="52" cy="52" r="' + radius + '" stroke="' + color + '" ' +
-                    'stroke-dasharray="' + dash + ' ' + (circumference - dash) + '" ' +
-                    'stroke-dashoffset="' + (-offset) + '"></circle>';
-                offset += dash;
-
-                legend += '<div class="d-flex justify-content-between small mb-1">' +
-                    '<span><span class="d-inline-block rounded-circle me-2" style="width:8px;height:8px;background:' + color + '"></span>' +
-                    escapeHtml(r.Role_Name) + '</span>' +
-                    '<span class="text-muted">' + Math.round(share * 100) + '% (' + r.User_Count + ')</span></div>';
-            });
-
-            var svg =
-                '<svg width="120" height="120" viewBox="0 0 104 104" role="img" aria-label="Users by role">' +
-                '<g transform="rotate(-90 52 52)" fill="none" stroke-width="16">' + circles + '</g>' +
-                '<text x="52" y="50" text-anchor="middle" font-size="16" font-weight="600" fill="currentColor">' + totalRoles + '</text>' +
-                '<text x="52" y="64" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.6">Total Roles</text>' +
-                '</svg>';
-
-            $box.html('<div class="flex-shrink-0">' + svg + '</div><div class="flex-grow-1">' + legend + '</div>');
+            DrawRoleDistribution(rows);
         },
         error: function () {
-            $('#dvRoleDistribution').html('<div class="text-danger small">Unable to load role distribution</div>');
+            $('#dvRoleDistribution').html(StateHtml('Unable to load role distribution', 'text-danger'));
         }
     });
 }
 
-// Prevents HTML injection from role names
-function escapeHtml(value) {
-    return $('<div/>').text(value ?? '').html();
+function DrawRoleDistribution(rows) {
+    var totalRoles = rows[0].Total_Roles;
+
+    // Largest roles first; anything beyond the palette folds into a single "Other" slice
+    var sorted = rows.slice().sort(function (a, b) { return b.User_Count - a.User_Count; });
+    var slices = sorted.slice(0, RoleChartColors.length).map(function (r, i) {
+        return { name: r.Role_Name || '—', count: r.User_Count, color: RoleChartColors[i] };
+    });
+    var rest = sorted.slice(RoleChartColors.length);
+    if (rest.length > 0) {
+        slices.push({
+            name: 'Other (' + rest.length + ' roles)',
+            count: rest.reduce(function (sum, r) { return sum + r.User_Count; }, 0),
+            color: RoleOtherColor
+        });
+    }
+
+    var totalUsers = slices.reduce(function (sum, s) { return sum + s.count; }, 0);
+
+    var legend = slices.map(function (s) {
+        var pct = totalUsers > 0 ? Math.round((s.count / totalUsers) * 100) : 0;
+        return '<li>' +
+            '<span class="dbrole-dot" style="background:' + s.color + '"></span>' +
+            '<span class="dbrole-name" title="' + escapeHtml(s.name) + '">' + escapeHtml(s.name) + '</span>' +
+            '<span class="dbrole-val">' + FormatNumber(s.count) + '<small>' + pct + '%</small></span>' +
+            '</li>';
+    }).join('');
+
+    $('#dvRoleDistribution').html(
+        '<div class="dbrole-chart" id="roleDistributionChart" role="img" aria-label="Users by role"></div>' +
+        '<ul class="dbrole-legend">' + legend + '</ul>');
+
+    var options = {
+        chart: {
+            type: 'donut',
+            height: 160,
+            fontFamily: ChartFont,
+            animations: { speed: 400 }
+        },
+        series: slices.map(function (s) { return s.count; }),
+        labels: slices.map(function (s) { return s.name; }),
+        colors: slices.map(function (s) { return s.color; }),
+        stroke: { width: 2, colors: ['#fff'] },
+        legend: { show: false },
+        dataLabels: { enabled: false },
+        states: {
+            hover: { filter: { type: 'darken', value: 0.9 } }
+        },
+        plotOptions: {
+            pie: {
+                expandOnClick: false,
+                donut: {
+                    size: '75%',
+                    labels: {
+                        show: true,
+                        name: { offsetY: 18, fontSize: '11px', color: ChartTextColor },
+                        value: {
+                            offsetY: -14, fontSize: '22px', fontWeight: 700, color: '#112E51',
+                            formatter: function (v) { return FormatNumber(v); }
+                        },
+                        total: {
+                            show: true,
+                            showAlways: true,
+                            label: 'Assigned Users',
+                            fontSize: '11px',
+                            fontWeight: 400,
+                            color: ChartTextColor,
+                            formatter: function () { return FormatNumber(totalUsers); }
+                        }
+                    }
+                }
+            }
+        },
+        tooltip: {
+            y: { formatter: function (v) { return FormatNumber(v) + ' users'; } }
+        }
+    };
+
+    if (roleChart) { roleChart.destroy(); }
+    roleChart = new ApexCharts(document.querySelector('#roleDistributionChart'), options);
+    roleChart.render();
 }
 
-// ------------------------------------- 3. Security Overview ------------------------------------------------//
+// ------------------------------------- 4. Security Overview ------------------------------------------------//
 function LoadSecurity() {
     $.ajax({
         url: '/IAM/Dashboard/GetSecurity',
@@ -123,21 +285,26 @@ function LoadSecurity() {
         dataType: 'json',
         success: function (result) {
             var d = result.ResponseData;
-            if (!d) { return; }
+            if (!d) { SetSecurityUnavailable(); return; }
 
-            $('#secFailedAttempts').text(d.Failed_Attempt_Users.toLocaleString());
-            $('#secLocked').text(d.Locked_Accounts.toLocaleString());
-            $('#secNewDevices').text(d.New_Devices_Today.toLocaleString());
+            $('#secFailedAttempts').text(FormatNumber(d.Failed_Attempt_Users));
+            $('#secLocked').text(FormatNumber(d.Locked_Accounts));
+            $('#secNewDevices').text(FormatNumber(d.New_Devices_Today));
             // $('#secErrors').text(d.Errors_Today.toLocaleString());
-            $('#secSessions').text(d.Active_Sessions.toLocaleString());
+            $('#secSessions').text(FormatNumber(d.Active_Sessions));
         },
         error: function () {
+            SetSecurityUnavailable();
             showAlert("Unable to load security overview.", "Error", "OkCancel");
         }
     });
 }
 
-// ------------------------------------- 4. Recent Activity ------------------------------------------------//
+function SetSecurityUnavailable() {
+    $('#secFailedAttempts, #secLocked, #secNewDevices, #secSessions').text('–');
+}
+
+// ------------------------------------- 5. Recent Activity ------------------------------------------------//
 function LoadRecentActivity() {
     $.ajax({
         url: '/IAM/Dashboard/GetRecentActivity',
@@ -148,242 +315,34 @@ function LoadRecentActivity() {
             var $body = $('#tbodyRecentActivity');
 
             if (rows.length === 0) {
-                $body.html('<tr><td colspan="8" class="text-center text-muted">No recent activity</td></tr>');
+                $body.html('<tr><td colspan="8" class="text-center text-muted py-4">No recent activity</td></tr>');
                 return;
             }
+
+            $('#recentActivityCount').text('Latest ' + rows.length + ' user actions across modules');
 
             var html = '';
             rows.forEach(function (r) {
                 var isOk = (r.Status || '').toUpperCase() === 'OK';
                 var statusHtml = isOk
-                    ? '<span class="text-success">&#9679; Success</span>'
-                    : '<span class="text-danger">&#9679; ' + escapeHtml(r.Status) + '</span>';
+                    ? '<span class="badge badge-success">Success</span>'
+                    : '<span class="badge badge-danger">' + escapeHtml(r.Status || 'Failed') + '</span>';
 
                 html += '<tr>' +
-                    '<td>' + r.User_Id + '</td>' +
-                    '<td>' + escapeHtml(r.User_Name) + '</td>' +
-                    '<td>' + escapeHtml(r.Activity_Type) + '</td>' +
-                    '<td>' + escapeHtml(r.Page_Name) + '</td>' +
-                    '<td>' + escapeHtml(r.Description) + '</td>' +
-                    '<td>' + escapeHtml(r.Ip_Address) + '</td>' +
-                    '<td>' + escapeHtml(r.Created_On) + '</td>' +
-                    '<td>' + statusHtml + '</td>' +
+                    '<td>' + escapeHtml(r.User_Id) + '</td>' +
+                    '<td class="fw-semibold text-nowrap">' + escapeHtml(r.User_Name) + '</td>' +
+                    '<td class="text-nowrap">' + escapeHtml(r.Activity_Type) + '</td>' +
+                    '<td class="text-nowrap">' + escapeHtml(r.Page_Name) + '</td>' +
+                    '<td><div class="dbtbl-desc" title="' + escapeHtml(r.Description) + '">' + escapeHtml(r.Description) + '</div></td>' +
+                    '<td class="text-nowrap">' + escapeHtml(r.Ip_Address) + '</td>' +
+                    '<td class="text-nowrap">' + escapeHtml(r.Created_On) + '</td>' +
+                    '<td class="text-nowrap">' + statusHtml + '</td>' +
                     '</tr>';
             });
             $body.html(html);
-            console.log("recent activity Response:", result);
         },
         error: function () {
-            $('#tbodyRecentActivity').html('<tr><td colspan="8" class="text-center text-danger">Unable to load recent activity</td></tr>');
+            $('#tbodyRecentActivity').html('<tr><td colspan="8" class="text-center text-danger py-4">Unable to load recent activity</td></tr>');
         }
     });
-}
-
-// ------------------------------------- Login Trend ------------------------------------------------//
-
-function LoadLoginTrend() {
-
-    // Show loader
-    $("#loginTrendLoader").removeClass("d-none");
-    $("#loginTrendChart").addClass("d-none");
-
-    $.ajax({
-        url: '/IAM/Dashboard/GetLoginTrend',
-        type: 'GET',
-        dataType: 'json',
-
-        success: function (result) {
-
-            var rows = result.ResponseData || [];
-
-            DrawLoginTrend(rows);
-
-            // Hide loader
-            $("#loginTrendLoader").addClass("d-none");
-
-            // Show chart
-            $("#loginTrendChart").removeClass("d-none");
-        },
-
-        error: function (xhr, status, error) {
-
-            console.error("Login Trend Error:", status, error);
-            console.error("Response:", xhr.responseText);
-
-            // Hide loader
-            $("#loginTrendLoader").addClass("d-none");
-
-            // Show message
-            $("#loginTrendChart").removeClass("d-none");
-
-            DrawLoginTrendMessage("Unable to load login trend");
-        }
-    });
-}
-
-function DrawLoginTrend(rows) {
-
-    var canvas = document.getElementById('loginTrendChart');
-
-    if (!canvas) {
-        console.error("loginTrendChart canvas not found");
-        return;
-    }
-
-    var ctx = canvas.getContext('2d');
-
-    if (!ctx) {
-        console.error("Unable to get canvas context");
-        return;
-    }
-
-    // Get actual canvas/container width
-    var width = canvas.parentElement
-        ? canvas.parentElement.clientWidth
-        : canvas.clientWidth;
-
-    if (!width || width < 100) {
-        width = 500;
-    }
-
-    var height = 160;
-
-    canvas.width = width;
-    canvas.height = height;
-
-    ctx.clearRect(0, 0, width, height);
-
-    // No data
-    if (!Array.isArray(rows) || rows.length === 0) {
-
-        DrawLoginTrendMessage("No login data available");
-        return;
-    }
-
-    console.log("Rows received for chart:", rows);
-
-    // Convert Login_Count to number
-    var values = rows.map(function (item) {
-        return Number(item.Login_Count) || 0;
-    });
-
-    var maxCount = Math.max.apply(null, values);
-
-    if (maxCount <= 0) {
-        maxCount = 1;
-    }
-
-    var chartTop = 15;
-    var chartBottom = 115;
-    var chartHeight = chartBottom - chartTop;
-
-    var gap = 12;
-
-    var barWidth =
-        (width - (gap * (rows.length + 1))) / rows.length;
-
-    // Prevent invalid bar width
-    if (barWidth < 5) {
-        barWidth = 5;
-    }
-
-    rows.forEach(function (item, index) {
-
-        var count = Number(item.Login_Count) || 0;
-
-        var barHeight =
-            (count / maxCount) * chartHeight;
-
-        var x =
-            gap + index * (barWidth + gap);
-
-        var y =
-            chartBottom - barHeight;
-
-        // ---------------- Bar ---------------- //
-
-        ctx.fillStyle =
-            index === rows.length - 1
-                ? '#1769aa'
-                : '#378ADD';
-
-        // Use fillRect instead of roundRect
-        // for better browser compatibility
-        ctx.fillRect(
-            x,
-            y,
-            barWidth,
-            barHeight
-        );
-
-        // ---------------- Count ---------------- //
-
-        ctx.font = '11px Arial';
-        ctx.fillStyle = '#495057';
-
-        var countText = String(count);
-
-        var countWidth =
-            ctx.measureText(countText).width;
-
-        ctx.fillText(
-            countText,
-            x + (barWidth - countWidth) / 2,
-            y - 5
-        );
-
-        // ---------------- Day Label ---------------- //
-
-        ctx.font = '11px Arial';
-        ctx.fillStyle = '#6c757d';
-
-        var label =
-            item.Day_Label ||
-            item.day_label ||
-            item.Date_Label ||
-            '';
-
-        var labelWidth =
-            ctx.measureText(label).width;
-
-        ctx.fillText(
-            label,
-            x + (barWidth - labelWidth) / 2,
-            140
-        );
-    });
-}
-
-
-function DrawLoginTrendMessage(message) {
-
-    var canvas = document.getElementById('loginTrendChart');
-
-    if (!canvas) {
-        return;
-    }
-
-    var ctx = canvas.getContext('2d');
-
-    var width = canvas.parentElement
-        ? canvas.parentElement.clientWidth
-        : 500;
-
-    if (!width || width < 100) {
-        width = 500;
-    }
-
-    canvas.width = width;
-    canvas.height = 160;
-
-    ctx.clearRect(0, 0, width, 160);
-
-    ctx.font = '12px Arial';
-    ctx.fillStyle = '#6c757d';
-
-    ctx.fillText(
-        message,
-        10,
-        30
-    );
 }
