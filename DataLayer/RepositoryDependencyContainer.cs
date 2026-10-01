@@ -3,6 +3,7 @@ using DataLayer.Common.Dropdown;
 using DataLayer.Common.Log;
 using DataLayer.IAM.Action;
 using DataLayer.IAM.App;
+using DataLayer.IAM.AppAuditLog;
 using DataLayer.IAM.BulkUpload;
 using DataLayer.IAM.Company;
 using DataLayer.IAM.CompanyOwner;
@@ -40,6 +41,7 @@ using RepositoryLayer.Common.ILog;
 using RepositoryLayer.IAM.BulkUpload;
 using RepositoryLayer.IAM.IAction;
 using RepositoryLayer.IAM.IApp;
+using RepositoryLayer.IAM.IAppAuditLog;
 using RepositoryLayer.IAM.ICompany;
 using RepositoryLayer.IAM.ICompanyOwner;
 using RepositoryLayer.IAM.ICompanyProductMapping;
@@ -123,6 +125,7 @@ namespace DataLayer
             services.AddTransient<IPageActionMappingService, PageActionMappingService>();
             //services.AddTransient<IAuditLogService, AuditLogService>();
             services.AddTransient<IDashboardService, DashboardService>();
+            services.AddTransient<IAppAuditLogService, AppAuditLogService>();
 
         }
     }

@@ -4,6 +4,7 @@ using RepositoryLayer.Common.ILog;
 using RepositoryLayer.IAM.BulkUpload;
 using RepositoryLayer.IAM.IAction;
 using RepositoryLayer.IAM.IApp;
+using RepositoryLayer.IAM.IAppAuditLog;
 using RepositoryLayer.IAM.ICompany;
 using RepositoryLayer.IAM.ICompanyOwner;
 using RepositoryLayer.IAM.ICompanyProductMapping;
@@ -20,6 +21,7 @@ using RepositoryLayer.IAM.IErrorLog;
 using RepositoryLayer.IAM.ILevelHierarchy;
 using RepositoryLayer.IAM.IModule;
 using RepositoryLayer.IAM.IPage;
+using RepositoryLayer.IAM.IPageActionMapping;
 using RepositoryLayer.IAM.IProduct;
 using RepositoryLayer.IAM.IProductServiceMapping;
 using RepositoryLayer.IAM.IRole;
@@ -33,7 +35,6 @@ using RepositoryLayer.IAM.IUserDeviceMapping;
 using RepositoryLayer.IAM.IVendor;
 using RepositoryLayer.IAM.IVersionControl;
 using RepositoryLayer.Login;
-using RepositoryLayer.IAM.IPageActionMapping;
 
 public class RepositoryDependencyService
 {
@@ -75,6 +76,9 @@ public class RepositoryDependencyService
     public IPageActionMappingService pageactionmapping { get; }
     //public IAuditLogService auditLogService { get; }
     public IDashboardService dashboard { get; }
+
+    public IAppAuditLogService appauditlog { get; }
+
     public RepositoryDependencyService(
         ILogService Log,
         ICompanyService Company,
@@ -112,7 +116,8 @@ public class RepositoryDependencyService
         IForgotPasswordService ForgotPasswordService,
         IVersionControlService VersionControl,
         IPageActionMappingService PageActionMappingService,
-        IDashboardService Dashboard
+        IDashboardService Dashboard,
+        IAppAuditLogService AppAuditLog
         //IAuditLogService AuditLogService
         )
     {
@@ -154,5 +159,6 @@ public class RepositoryDependencyService
         pageactionmapping = PageActionMappingService;
         //auditLogService = AuditLogService;
         dashboard = Dashboard;
+        appauditlog = AppAuditLog;
     }
 }
