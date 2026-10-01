@@ -3,8 +3,10 @@ obj/
 *.user
 .vs/
 .svn/
-.appsettings.json
+*.pubxml
+*.pubxml.user
+appsettings.json
 appsettings.Development.json
 appsettings.Production.json
 Logs
-ApiLogs
+ApiLogstest
