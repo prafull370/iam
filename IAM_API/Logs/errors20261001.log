@@ -1,0 +1,272 @@
+2026-10-01 13:07:30.924 +05:30 [ERR] Authentication required.
+2026-10-01 13:07:30.933 +05:30 [ERR] Authentication required.
+2026-10-01 13:07:31.096 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:07:31.096 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:07:31.129 +05:30 [ERR] Connection id "0HNOVHHJVPEE6", Request id "0HNOVHHJVPEE6:00000008": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:07:31.129 +05:30 [ERR] Connection id "0HNOVHHJVPEE9", Request id "0HNOVHHJVPEE9:0000000B": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:07:56.214 +05:30 [ERR] Authentication required.
+2026-10-01 13:07:56.267 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:07:56.240 +05:30 [ERR] Authentication required.
+2026-10-01 13:07:56.357 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:07:56.357 +05:30 [ERR] Connection id "0HNOVHHJVPEE7", Request id "0HNOVHHJVPEE7:00000011": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:07:56.437 +05:30 [ERR] Connection id "0HNOVHHJVPEE6", Request id "0HNOVHHJVPEE6:0000000D": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:17:20.229 +05:30 [ERR] Authentication required.
+2026-10-01 13:17:20.250 +05:30 [ERR] Authentication required.
+2026-10-01 13:17:20.261 +05:30 [ERR] Authentication required.
+2026-10-01 13:17:20.268 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:17:20.292 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:17:20.307 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:17:20.321 +05:30 [ERR] Connection id "0HNOVHHJVPEEI", Request id "0HNOVHHJVPEEI:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:17:20.328 +05:30 [ERR] Connection id "0HNOVHHJVPEEJ", Request id "0HNOVHHJVPEEJ:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:17:20.330 +05:30 [ERR] Authentication required.
+2026-10-01 13:17:20.342 +05:30 [ERR] Connection id "0HNOVHHJVPEEK", Request id "0HNOVHHJVPEEK:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:17:20.392 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:17:20.420 +05:30 [ERR] Connection id "0HNOVHHJVPEEH", Request id "0HNOVHHJVPEEH:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:19:17.166 +05:30 [ERR] Authentication required.
+2026-10-01 13:19:17.175 +05:30 [ERR] Authentication required.
+2026-10-01 13:19:17.201 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:19:17.233 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:19:17.244 +05:30 [ERR] Connection id "0HNOVHHJVPEEI", Request id "0HNOVHHJVPEEI:0000000D": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:19:17.256 +05:30 [ERR] Connection id "0HNOVHHJVPEEH", Request id "0HNOVHHJVPEEH:0000000C": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:19:26.389 +05:30 [ERR] Authentication required.
+2026-10-01 13:19:26.432 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:19:26.456 +05:30 [ERR] Authentication required.
+2026-10-01 13:19:26.501 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:19:26.465 +05:30 [ERR] Connection id "0HNOVHHJVPEEK", Request id "0HNOVHHJVPEEK:0000000E": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:19:26.537 +05:30 [ERR] Connection id "0HNOVHHJVPEEI", Request id "0HNOVHHJVPEEI:0000000F": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:19:35.223 +05:30 [ERR] Authentication required.
+2026-10-01 13:19:35.269 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:19:35.279 +05:30 [ERR] Authentication required.
+2026-10-01 13:19:35.285 +05:30 [ERR] Connection id "0HNOVHHJVPEEK", Request id "0HNOVHHJVPEEK:00000012": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 13:19:35.327 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 13:19:35.372 +05:30 [ERR] Connection id "0HNOVHHJVPEEI", Request id "0HNOVHHJVPEEI:00000012": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 15:55:21.335 +05:30 [ERR] Authentication required.
+2026-10-01 15:55:21.338 +05:30 [ERR] Authentication required.
+2026-10-01 15:55:21.442 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 15:55:21.502 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-10-01 15:55:21.516 +05:30 [ERR] Connection id "0HNOVHHJVPEG0", Request id "0HNOVHHJVPEG0:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-10-01 15:55:21.522 +05:30 [ERR] Connection id "0HNOVHHJVPEFT", Request id "0HNOVHHJVPEFT:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)

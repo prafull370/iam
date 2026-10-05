@@ -12406,6 +12406,45 @@ body.cnsrbdy {
   border-top-right-radius: 1rem;
 }
 
+.sidebar-nav .nested-sub-item {
+  position: relative;
+}
+
+.sidebar-nav .nav-sub-toggle {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #012970;
+  padding: 8px 10px 8px 38px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.sidebar-nav .nav-sub-toggle:hover,
+.sidebar-nav .nav-sub-toggle.active {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.sidebar-nav .nav-sub-toggle i.bi-circle-fill {
+  font-size: 6px;
+  margin-right: 8px;
+}
+
+.sidebar-nav .nav-sub-toggle .sub-chevron {
+  font-size: 16px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.sidebar-nav .nav-sub-toggle:not(.collapsed) .sub-chevron {
+  transform: rotate(180deg);
+}
+
+.sidebar-nav .nested-nav-content {
+  margin-left: 42px !important;
+}
+
 .dropdown-menu {
   border: 1px solid #eff3f6;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
@@ -13910,7 +13949,7 @@ table.dataTable.table-dtc {
 }
 .table-dtc tr td {
   padding: 0.375rem 0.725rem;
-  font-size: 0.72rem;
+  font-size: 0.725rem;
   border-color: #F3F4F4;
 }
 .table-dtc tr td .bi-x-circle-fill, .table-dtc tr td .bi-check-circle-fill {
@@ -14423,6 +14462,7 @@ table.dataTable.table-dtc {
   width: 32px;
   border-radius: 0.5rem;
   vertical-align: middle;
+  box-shadow: 0 2px 12px rgba(22, 74, 133, 0.1);
 }
 .afBtn i {
   font-weight: 500;
@@ -15395,7 +15435,7 @@ ul.dsb-list li {
   top: 0;
   left: 0;
   border: 1px solid rgba(0, 0, 0, 0.075);
-  border-radius: 0.35rem;
+  border-radius: 0.5rem;
 }
 .switch label.pdclbl:has(input[type=checkbox]:checked) .prdnme::before {
   background: rgba(0, 82, 204, 0.1);

@@ -864,3 +864,37 @@ Npgsql.NpgsqlException (0x80004005): Exception while writing to stream
    at DataLayer.Common.Dropdown.DropdownService.Get(DDLRequestModel model) in D:\Git Project\IAM\iam_v1\DataLayer\Common\Dropdown\DropdownService.cs:line 32
    at IAM_API.Common.BackGroundService.ScheduledDataSyncService.ExecuteAsync(CancellationToken stoppingToken) in D:\Git Project\IAM\iam_v1\IAM_API\Common\BackGroundService\DataSyncBackgroundService.cs:line 39
    at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+2026-09-30 16:03:54.957 +05:30 [ERR] Authentication required.
+2026-09-30 16:03:54.959 +05:30 [ERR] Authentication required.
+2026-09-30 16:03:55.228 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-30 16:03:55.229 +05:30 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-09-30 16:03:55.282 +05:30 [ERR] Connection id "0HNOUQPUCOQA1", Request id "0HNOUQPUCOQA1:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+2026-09-30 16:03:55.282 +05:30 [ERR] Connection id "0HNOUQPUCOQ9U", Request id "0HNOUQPUCOQ9U:00000001": An unhandled exception was thrown by the application.
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_ContentType(String value)
+   at IAM_API.Common.Middleware.GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\Inventia-Confidential\SVN-PROJECTS\iam_v1\IAM_API\Common\Middleware\GlobalExceptionMiddleware.cs:line 50
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context) in /_3/BrowserRefreshMiddleware.cs:line 84
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)

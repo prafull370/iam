@@ -1,0 +1,106 @@
+/* ---------------------------------------- App Audit Log ---------------------------------------- */
+
+/* --- user information (single compact row) --- */
+
+.aal-user {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1.5rem;
+}
+
+.aal-user-id {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex: 1 1 14rem;
+    min-width: 0;
+}
+
+.aal-user-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.5rem;
+}
+
+.aal-user-stat {
+    padding-left: 1.5rem;
+    border-left: 1px solid rgba(0,0,0,0.075);
+}
+
+.aal-user-val {
+    font-size: .9rem;
+    font-weight: bold;
+    color: #112E51;
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+}
+
+/* --- activity history (one block per action) --- */
+
+.aal-act {
+    border: 1px solid rgba(0,0,0,0.075);
+    border-radius: .75rem;
+    background: #fff;
+    overflow: hidden;
+    margin-bottom: .75rem;
+}
+
+.aal-act-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .75rem;
+    background: #f8f9fb;
+}
+
+/* Label -> Value | Label -> Value. The 1px gap over the tinted background draws the dividers. */
+.aal-kv {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: rgba(0,0,0,0.075);
+    border-top: 1px solid rgba(0,0,0,0.075);
+}
+
+.aal-kv-item {
+    display: flex;
+    align-items: baseline;
+    gap: .75rem;
+    padding: .45rem .75rem;
+    background: #fff;
+    min-width: 0;
+}
+
+.aal-kv-lbl {
+    flex: 0 0 38%;
+    font-size: .715rem;
+    color: #8b9090;
+}
+
+.aal-kv-val {
+    flex: 1;
+    min-width: 0;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #112E51;
+    word-break: break-word;
+}
+
+@media (max-width: 1199px) {
+    .aal-kv {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    #appAuditDetailDrawer {
+        width: 100% !important;
+    }
+
+    .aal-user-stat:first-child {
+        padding-left: 0;
+        border-left: none;
+    }
+}
