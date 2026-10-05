@@ -179,11 +179,5 @@ if (emailSmtp != null)
 {
     SendEmailHelper.Configure(emailSmtp);
 }
-// 
-app.MapGet("/debug-config", (IConfiguration config, IWebHostEnvironment env) => new
-{
-    Environment = env.EnvironmentName,
-    EnableSwagger = config["EnableSwagger"]
-});
 app.MapControllers();
 app.Run();
