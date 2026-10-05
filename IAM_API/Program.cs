@@ -159,8 +159,8 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
-//if (app.Configuration.GetValue<bool>("EnableSwagger") || app.Environment.IsStaging())
+//if (app.Environment.IsDevelopment())
+if (app.Configuration.GetValue<bool>("EnableSwagger"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
