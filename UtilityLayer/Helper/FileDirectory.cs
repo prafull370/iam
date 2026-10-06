@@ -15,7 +15,7 @@ namespace UtilityLayer.Helper
 			{
 				Directory.CreateDirectory(path);
 			}
-		}
+        }
 		#endregion
 
 		#region Generate File Path
@@ -35,7 +35,8 @@ namespace UtilityLayer.Helper
 			if (!string.IsNullOrWhiteSpace(FolderPath))
 				absoluteFolderPath = (GlobalPath + "/" + FolderPath).Replace("\\", "/");
 
-			string fullFolderPath = (destFilePath + absoluteFolderPath).Replace("\\", "/");
+			string fullFolderPath1 = (destFilePath + absoluteFolderPath).Replace("\\", "/");
+			string fullFolderPath = (fullFolderPath1).Replace("//", "/");
 
 
 			CreateDirectory(fullFolderPath);

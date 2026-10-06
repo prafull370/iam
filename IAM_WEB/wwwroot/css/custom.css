@@ -3,6 +3,7 @@
     -moz-appearance: none !important;
     font-size: 0.725rem;
     background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3e %3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e %3c/svg%3e") right 0.615rem center/14px 14px no-repeat;
+    border-radius: .5rem;
 }
 
 .SumoSelect > .CaptionCont > label > i,
@@ -47,20 +48,23 @@
     min-height: calc(2.037rem + 2px);
     background-color: #fff;
 }
+
 .mbc-sm .select2-container--default .select2-selection--multiple,
 .mbc-sm .select2-container--default .select2-selection--single {
     font-size: 0.7rem;
     background-size: 12px 12px;
     background-position: right 0.45rem center;
 }
+
 .mbc-sm .select2-container--default .select2-selection--single {
     padding-right: 24px !important;
     padding: .289rem .5rem;
     min-height: calc(1.6rem + 2px);
 }
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        display: none;
-    }
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: none;
+}
 
 .select2-container .select2-selection--single .select2-selection__rendered {
     padding: 0;
@@ -184,9 +188,11 @@ select.form-control[size] {
         height: 100%;
         opacity: 1;
     }
+
 .mbc-sm .SumoSelect > .CaptionCont, .smoslctsm .SumoSelect > .CaptionCont {
     border-radius: 0.3rem !important;
 }
+
 .mbc-sm .SelectBox, .smoslctsm .SelectBox {
     font-size: .7rem;
     height: calc(1.6rem + 2px);
@@ -194,16 +200,20 @@ select.form-control[size] {
     line-height: 1.5;
     min-height: auto;
 }
+
 .mbc-sm .SumoSelect > .CaptionCont > label, .smoslctsm .SumoSelect > .CaptionCont > label {
     height: 26px;
     width: 28px;
 }
+
     .mbc-sm .SumoSelect > .CaptionCont > label > i, .smoslctsm .SumoSelect > .CaptionCont > label > i {
         background-size: 11px 11px;
     }
+
 .mbc-sm .SumoSelect.open > .optWrapper {
     top: 28px;
 }
+
 .custom-file-input.input-validation-error ~ .custom-file-label,
 .form-control.input-validation-error,
 .form-control.input-validation-error ~ .select2 .select2-selection--single {
@@ -256,10 +266,14 @@ select.form-control[size] {
         background: #e3e9ec;
         border: 1px solid #d1dadc;
     }
-.flex-auto{flex:auto;}
-.btn .bi-paperclip{
-    display:inline-block;
-    transform:rotate(45deg);
+
+.flex-auto {
+    flex: auto;
+}
+
+.btn .bi-paperclip {
+    display: inline-block;
+    transform: rotate(45deg);
 }
 
 .form-control.disabled {
@@ -267,15 +281,17 @@ select.form-control[size] {
     opacity: 1;
     cursor: not-allowed;
 }
+
 .tscDash-header {
     font-size: 1rem;
     font-weight: bold;
     padding: .75rem 1rem;
     color: #183958;
 }
-.mxh590{
-    max-height:590px;
-    overflow:auto;
+
+.mxh590 {
+    max-height: 590px;
+    overflow: auto;
 }
 /*.select2-container {
     z-index: 9999;
@@ -283,6 +299,7 @@ select.form-control[size] {
 .mb5 {
     margin-bottom: 2.5rem;
 }
+
 .border-validation {
     border-color: #e72d5259;
 }
@@ -350,9 +367,11 @@ select.form-control[size] {
         color: #111827;
         white-space: nowrap;
     }
+
 .table.tblbdr.permMatrix thead th {
     padding: .5rem .75rem;
 }
+
 .permMatrix thead th.permHeadCol {
     left: 0;
     z-index: 5;
@@ -361,14 +380,14 @@ select.form-control[size] {
     box-shadow: 2px 0 4px -2px rgba(16, 24, 40, .08);
 }
 
-        .permMatrix thead th.roleCol {
-            text-align: center;
-            letter-spacing: .025em;
-            text-transform: uppercase;
-            color: #4b5563;
-            border-left: 1px solid #eef1f5;
-            min-width: 230px;
-        }
+.permMatrix thead th.roleCol {
+    text-align: center;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+    color: #4b5563;
+    border-left: 1px solid #eef1f5;
+    min-width: 230px;
+}
 
 .roleDot {
     display: inline-block;
@@ -434,32 +453,34 @@ select.form-control[size] {
     padding: 11px 20px;
     vertical-align: middle;
 }
-    .permMatrix tbody td.permPageCell{
-        padding-left:2.5rem;
-    }
-    .permMatrix tbody tr:nth-of-type(even):not(.permGroupRow) > td {
-        background: #fbfbfc;
+
+    .permMatrix tbody td.permPageCell {
+        padding-left: 2.5rem;
     }
 
-    .permMatrix tbody tr:nth-of-type(even):not(.permGroupRow) > .permPageCell {
-        background: #fbfbfc !important;
-    }
+.permMatrix tbody tr:nth-of-type(even):not(.permGroupRow) > td {
+    background: #fbfbfc;
+}
+
+.permMatrix tbody tr:nth-of-type(even):not(.permGroupRow) > .permPageCell {
+    background: #fbfbfc !important;
+}
 
 .permMatrix tbody tr:hover > td {
     background: #eef2fb;
 }
 
-    .permMatrix tbody tr:hover > .permPageCell {
-        background: #eef2fb !important;
-    }
+.permMatrix tbody tr:hover > .permPageCell {
+    background: #eef2fb !important;
+}
 
 .permMatrix tbody tr.permGroupRow:hover > td {
     background: #f2f4f7;
 }
 
-    .permMatrix tbody tr.permGroupRow:hover .permGroupSticky {
-        background: #f2f4f7 !important;
-    }
+.permMatrix tbody tr.permGroupRow:hover .permGroupSticky {
+    background: #f2f4f7 !important;
+}
 
 .permPageCell {
     position: sticky;
@@ -684,7 +705,6 @@ select.form-control[size] {
     --lg-brand-border-subtle: #a8c3e0;
     /* light-medium border / focus ring border */
     --lg-brand-rgb: 30, 90, 165;
-
     /* ---- Neutrals ---- */
     --lg-ink: #0b0b0f;
     /* headings / primary text */
@@ -695,7 +715,6 @@ select.form-control[size] {
     /* card / panel background */
     --lg-page-bg: #f7f9fc;
     /* app background behind cards */
-
     /* ---- Conventional aliases (kept in sync with the tokens above) ---- */
     --primary: var(--lg-brand);
     --primary-hover: var(--lg-brand-dark);
@@ -708,14 +727,12 @@ select.form-control[size] {
     --text-primary: var(--lg-ink);
     --text-secondary: var(--lg-muted);
     --border: var(--lg-border);
-
     /* ---- Semantic status colors (unchanged — already accessible green/amber/red;
        exposed here as named tokens for anything that wants to reference them) ---- */
     --lg-ok: #34a853;
     --lg-warn: #ffc107;
     --lg-err: #e72d52;
     --lg-info: var(--lg-brand-light);
-
     /* Retint Bootstrap's own primary tokens so every var(--bs-primary...)
        driven utility (bg-primary, text-primary, border-primary, link-primary,
        alert-primary, list-group-primary, focus rings, …) follows for free. */

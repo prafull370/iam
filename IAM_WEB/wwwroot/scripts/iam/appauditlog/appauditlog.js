@@ -135,13 +135,13 @@ function LoadAppAuditData() {
             {
                 data: "Total_Actions", name: "total_actions", responsivePriority: 3, orderable: true,
                 render: function (data) {
-                    return '<span class="badge rounded-pill bg-primary">' + escapeHtml(data != null ? data : 0) + '</span>';
+                    return '<span class="text-primary fw-bold">' + escapeHtml(data != null ? data : 0) + '</span>';
                 }
             },//index 6
             {
                 data: "Login_Id", name: "login_id", width: "70px", responsivePriority: 1, orderable: false,
                 render: function () {
-                    return '<a class="tblBtn ms-3 btn-view-audit" href="javascript:;" data-toggle="tooltip" aria-label="View" data-bs-original-title="View"><i class="ugo-icons">info</i></a>';
+                    return '<a class="tblBtn ms-3 btn-view-audit" href="javascript:;" data-toggle="tooltip" aria-label="View" data-bs-original-title="View"><i class="ugo-icons">history</i></a>';
                 }
             }//index 7
         ],
@@ -173,7 +173,10 @@ function ShowAppAuditDetail(row) {
     $("#dtlTotalActions").text(row.Total_Actions != null ? row.Total_Actions : 0);
 
     // section 2: all actions of this user
-    $("#dtlActivityList").html('<div class="text-center text-muted py-3">Loading...</div>');
+    $("#dtlActivityCount").text('Latest actions first');
+    $("#dtlActivityList").html('<div class="ccbx text-center py-4">' +
+        '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>' +
+        '</div>');
 
     var reqId = ++detailReqId;
     $.get('/IAM/AppAuditLog/Details', { Login_Id: row.Login_Id }, function (result) {
@@ -181,24 +184,26 @@ function ShowAppAuditDetail(row) {
         RenderActivity((result && result.Status) ? (result.ResponseData || []) : []);
     }).fail(function () {
         if (reqId !== detailReqId) return;
-        $("#dtlActivityList").html('<div class="text-center text-danger py-3">Failed to load activity.</div>');
+        $("#dtlActivityList").html('<div class="ccbx text-center text-danger py-4">Failed to load activity.</div>');
     });
 
     appAuditDetailDrawer.show();
 }
 
-// One small card per action (rows already come latest-first from the DB), all fields shown
+// One compact block per action (rows already come latest-first from the DB), all fields shown
 function RenderActivity(rows) {
     if (!rows.length) {
-        $("#dtlActivityList").html('<div class="text-center text-muted py-3">No activity found.</div>');
+        $("#dtlActivityList").html('<div class="ccbx text-center text-muted py-4">No activity found.</div>');
         return;
     }
 
+    $("#dtlActivityCount").text(rows.length + (rows.length === 1 ? ' action' : ' actions') + ', latest first');
+
     function field(label, value) {
         var val = (value === null || value === undefined || String(value).trim() === '') ? '-' : value;
-        return '<div class="col-6">' +
-            '<div class="text-muted text-uppercase fw-bold">' + escapeHtml(label) + '</div>' +
-            '<div class="text-break">' + escapeHtml(val) + '</div>' +
+        return '<div class="aal-kv-item">' +
+            '<span class="aal-kv-lbl">' + escapeHtml(label) + '</span>' +
+            '<span class="aal-kv-val">' + escapeHtml(val) + '</span>' +
             '</div>';
     }
 
@@ -206,12 +211,13 @@ function RenderActivity(rows) {
     rows.forEach(function (r) {
         var location = (r.Latitude && r.Longitude) ? (r.Latitude + ', ' + r.Longitude) : '-';
 
-        html += '<div class="card card-body bg-white p-2 mb-2">' +
-            '<div class="d-flex justify-content-between align-items-start gap-2 mb-1">' +
+        // Label -> Value | Label -> Value (two fields per line)
+        html += '<div class="aal-act">' +
+            '<div class="aal-act-head">' +
             '<span class="badge ' + ResponseBadgeClass(r.Audit_Response) + ' text-wrap text-start">' + escapeHtml(r.Audit_Response || '-') + '</span>' +
-            '<span class="text-muted small text-nowrap">' + escapeHtml(r.Created_On || '-') + '</span>' +
+            '<span class="dbcard-sub text-nowrap">' + escapeHtml(r.Created_On || '-') + '</span>' +
             '</div>' +
-            '<div class="row g-2 small">' +
+            '<div class="aal-kv">' +
             field('Audit Id', r.Audit_Id) +
             field('Request URL', r.Request_Url) +
             field('Device', JoinParts([r.Brand_Name, r.Device_Name], ' ')) +

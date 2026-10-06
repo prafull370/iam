@@ -1,6 +1,7 @@
 ﻿using DataLayer.Login;
 using RepositoryLayer.Common.IDropdown;
 using RepositoryLayer.Common.ILog;
+using RepositoryLayer.IAM.BulkDeviceReset;
 using RepositoryLayer.IAM.BulkUpload;
 using RepositoryLayer.IAM.IAction;
 using RepositoryLayer.IAM.IApp;
@@ -78,6 +79,7 @@ public class RepositoryDependencyService
     public IDashboardService dashboard { get; }
 
     public IAppAuditLogService appauditlog { get; }
+    public IBulkDeviceResetService bulkdevicereset { get; }
 
     public RepositoryDependencyService(
         ILogService Log,
@@ -117,8 +119,9 @@ public class RepositoryDependencyService
         IVersionControlService VersionControl,
         IPageActionMappingService PageActionMappingService,
         IDashboardService Dashboard,
-        IAppAuditLogService AppAuditLog
+        IAppAuditLogService AppAuditLog,
         //IAuditLogService AuditLogService
+        IBulkDeviceResetService BulkDeviceReset
         )
     {
         log = Log;
@@ -160,5 +163,6 @@ public class RepositoryDependencyService
         //auditLogService = AuditLogService;
         dashboard = Dashboard;
         appauditlog = AppAuditLog;
+        bulkdevicereset = BulkDeviceReset;
     }
 }

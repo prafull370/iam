@@ -8,3 +8,6 @@ appsettings.Development.json
 appsettings.Production.json
 .Logs
 .ApiLogs
+/IAM_API/Logs
+*.log
+/IAM_API/Logs/*.log

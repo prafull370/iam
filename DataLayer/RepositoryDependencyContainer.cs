@@ -4,6 +4,7 @@ using DataLayer.Common.Log;
 using DataLayer.IAM.Action;
 using DataLayer.IAM.App;
 using DataLayer.IAM.AppAuditLog;
+using DataLayer.IAM.BulkDeviceReset;
 using DataLayer.IAM.BulkUpload;
 using DataLayer.IAM.Company;
 using DataLayer.IAM.CompanyOwner;
@@ -38,6 +39,7 @@ using DataLayer.Login;
 using Microsoft.Extensions.DependencyInjection;
 using RepositoryLayer.Common.IDropdown;
 using RepositoryLayer.Common.ILog;
+using RepositoryLayer.IAM.BulkDeviceReset;
 using RepositoryLayer.IAM.BulkUpload;
 using RepositoryLayer.IAM.IAction;
 using RepositoryLayer.IAM.IApp;
@@ -126,6 +128,7 @@ namespace DataLayer
             //services.AddTransient<IAuditLogService, AuditLogService>();
             services.AddTransient<IDashboardService, DashboardService>();
             services.AddTransient<IAppAuditLogService, AppAuditLogService>();
+            services.AddTransient<IBulkDeviceResetService, BulkDeviceResetService>();
 
         }
     }
