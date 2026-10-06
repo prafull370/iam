@@ -3,7 +3,7 @@ obj/
 *.user
 .vs/
 .svn/
-.appsettings.json
+*appsettings.json
 appsettings.Development.json
 appsettings.Production.json
 .Logs
@@ -11,3 +11,5 @@ appsettings.Production.json
 /IAM_API/Logs
 *.log
 /IAM_API/Logs/*.log
+/IAM_WEB/*appsettings.json
+/IAM_WEB/appsettings.json
