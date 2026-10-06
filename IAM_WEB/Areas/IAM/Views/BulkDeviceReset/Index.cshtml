@@ -1,0 +1,118 @@
+﻿@model ModelLayer.Models.IAM.BulkDeviceReset.BulkDeviceResetRequestModel
+
+@{
+    ViewData["Title"] = "Bulk Device Reset";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+}
+
+<div class="main-body">
+
+    <div class="mbc">
+        <div class="pgName">Bulk Device Reset</div>
+    </div>
+
+    <div class="bd-clearfix mbc-sm"></div>
+
+    @if (TempData["BulkDeviceResetSuccess"] != null)
+    {
+        <div class="alert alert-success">@TempData["BulkDeviceResetSuccess"]</div>
+    }
+    @if (TempData["BulkDeviceResetError"] != null)
+    {
+        <div class="alert alert-danger">@TempData["BulkDeviceResetError"]</div>
+    }
+
+    <form asp-area="IAM"
+          asp-controller="BulkDeviceReset"
+          asp-action="SaveFiles"
+          id="BulkDeviceResetForm"
+          asp-antiforgery="true"
+          enctype="multipart/form-data"
+          class="frmSubmit">
+
+        <div class="row mb-2">
+
+            <div class="col-md-6 col-sm-7">
+                <div class="row gx-2">
+                    <div class="col-lg-8 mbc-sm">
+                        <label class="required">Remarks</label>
+                        <textarea asp-for="Remarks" id="Remarks"
+                                  class="form-control form-control-sm" rows="2" maxlength="200"
+                                  style="resize:none; max-width:100%;"
+                                  placeholder="Enter remarks"></textarea>
+                        <span asp-validation-for="Remarks" class="fv-error"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-5">
+                <div class="mbc-sm">
+                    <div class="ddbwsf">
+                        <label class="ddlabel" for="ExcelFile">
+                            <div class="upload-box-content">
+                                <div class="upload-icon"><i data-lucide="upload"></i></div>
+                                <div class="upload-text">
+                                    <div>Drag and Drop or <span class="text-primary">browse files</span></div>
+                                    <div class="filename" id="fileName">No file chosen</div>
+                                </div>
+                            </div>
+                        </label>
+                        <input asp-for="File_Name" type="file" class="cfile"
+                               id="ExcelFile" accept=".xlsx" hidden />
+                    </div>
+                </div>
+
+                <span asp-validation-for="File_Name" class="text-danger"></span>
+
+
+                @* <a href="~/assets/samplefiles/device_reset_bulk_upload_sample_file.xlsx">~/assets/samplefiles/device_reset_bulk_upload_sample_file.xlsx</a> *@
+                <a href="~/Assets/SampleFiles/Device_Reset_Bulk_Upload_Sample_File.xlsx" download>Download Sample File</a>
+
+
+
+            </div>
+        </div>
+
+        <div class="bd-clearfix mb-2"></div>
+
+        <div class="mbc">
+            <button type="submit" class="btn btn-primary" id="btnUpload">Upload</button>
+        </div>
+    </form>
+
+    <div class="cardbox">
+        <table class="table table-dtc thwsnw" id="tblBulkDeviceReset">
+            <thead>
+                <tr>
+                    <th>Batch No</th>
+                    <th>File Name</th>
+                    <th>Total</th>
+                    <th>Success</th>
+                    <th>Failure</th>
+                    <th>Remarks</th>
+                    <th>Status</th>
+                    <th>Uploaded By</th>
+                    <th>Upload Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="@Url.Content("~/scripts/iam/bulkdevicereset/bulkdevicereset.js").ToLower()"></script>
+}

@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "App Audit Log";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@section styles
+{
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/datatables.bootstrap5.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datatables/responsive.bootstrap5.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/flatpickr.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/appauditlog.css")" asp-append-version="true" />
+}
+
+<div class="main-body">
+    <div class="row align-items-center mbc">
+        <div class="col-9">
+            <div class="pgName">App Audit Log</div>
+        </div>
+    </div>
+    <div class="bd-clearfix mbc"></div>
+
+    <!-- Summary Cards (dashboard KPI card style) -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mbc iam-dashboard">
+        <div class="col">
+            <div class="dbkpi dbkpi-blue h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Total App Users</div>
+                    <div class="dbkpi-val" id="statTotalUsers">0</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">group</i></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dbkpi dbkpi-violet h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Events Today</div>
+                    <div class="dbkpi-val" id="statEventsToday">0</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">grid_view</i></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dbkpi dbkpi-green h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Active Users Today</div>
+                    <div class="dbkpi-val" id="statActiveUsersToday">0</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">how_to_reg</i></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dbkpi dbkpi-amber h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Total Devices</div>
+                    <div class="dbkpi-val" id="statTotalDevices">0</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">phone_android</i></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row gx-2">
+        <div class="col-lg-3 col-sm-4 mbc-sm">
+            <label>Search</label>
+            <input type="text" class="form-control form-control-sm" id="txtsearch" autocomplete="off" placeholder="User, login id, mobile, device...">
+        </div>
+        <div class="col-lg-2 col-sm-4 mbc-sm">
+            <label>From Date</label>
+            <input type="text" class="form-control form-control-sm calicnrgt" id="txtFromDate" autocomplete="off" placeholder="YYYY-MM-DD">
+        </div>
+        <div class="col-lg-2 col-sm-4 mbc-sm">
+            <label>To Date</label>
+            <input type="text" class="form-control form-control-sm calicnrgt" id="txtToDate" autocomplete="off" placeholder="YYYY-MM-DD">
+        </div>
+        <div class="col-xl-2 col-md-3 col-sm-4 col-6 mbc-sm d-flex flex-wrap align-self-end" id="dvbtn">
+            <div class="btn-group">
+                <button type="button" id="btnsearch" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">search</i>
+                </button>
+                <button type="button" id="btnreset" class="btn btn-sm btn-outline-filter">
+                    <i class="ugo-icons">restart_alt</i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cardbox">
+        <table class="table table-dtc thwsnw" id="tblAppAuditLog">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Mobile No</th>
+                    <th>Device</th>
+                    <th>Android Version</th>
+                    <th>App Version</th>
+                    <th>Last Activity</th>
+                    <th>Total Actions</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!-- ===================== DETAIL DRAWER (view icon) ===================== -->
+@* iam-dashboard scopes the dashboard card styles (dbkpi / dbcard / dbico) to this drawer *@
+<div class="offcanvas offcanvas-end w-50 iam-dashboard" tabindex="-1" id="appAuditDetailDrawer" aria-labelledby="appAuditDetailTitle">
+    <div class="offcanvas-header border-bottom">
+        <div class="d-flex align-items-center gap-3">
+            <span class="dbico dbico-primary"><i class="ugo-icons">history</i></span>
+            <div>
+                <h5 class="offcanvas-title dbcard-ttl" id="appAuditDetailTitle">App Audit Log Detail</h5>
+                <div class="dbcard-sub">User profile and app activity</div>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <!-- 1. User Information -->
+        <div class="dbcard-ttl mb-2">User Information</div>
+        <div class="ccbx aal-user mb-4">
+            <div class="aal-user-id">
+                <span class="dbico dbico-primary rounded-circle fw-bold" id="dtlAvatar">?</span>
+                <div>
+                    <div class="dbcard-ttl text-break" id="dtlUser">-</div>
+                    <div class="dbcard-sub text-break" id="dtlLoginId">-</div>
+                </div>
+            </div>
+            <div class="aal-user-stats">
+                <div class="aal-user-stat">
+                    <div class="dbcard-sub">Mobile No</div>
+                    <div class="aal-user-val" id="dtlMobile">-</div>
+                </div>
+                <div class="aal-user-stat">
+                    <div class="dbcard-sub">Total Actions</div>
+                    <div class="aal-user-val text-primary" id="dtlTotalActions">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Activity History (one block per action, latest first) -->
+        <div class="d-flex justify-content-between align-items-baseline gap-2 mb-2">
+            <div class="dbcard-ttl">Activity History</div>
+            <div class="dbcard-sub" id="dtlActivityCount">Latest actions first</div>
+        </div>
+        <div id="dtlActivityList">
+            <div class="text-center text-muted py-3">-</div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/datatables/jquery.dataTables.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.bootstrap5.min.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dataTables.responsive.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/responsive.bootstrap5.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datatables/dtOptions.js").ToLower()"></script>
+    <script src="@Url.Content("~/lib/datepicker/flatpickr.js")"></script>
+
+    <script src="~/scripts/iam/appauditlog/appauditlog.js"></script>
+}

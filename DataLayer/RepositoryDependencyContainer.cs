@@ -3,11 +3,14 @@ using DataLayer.Common.Dropdown;
 using DataLayer.Common.Log;
 using DataLayer.IAM.Action;
 using DataLayer.IAM.App;
+using DataLayer.IAM.AppAuditLog;
+using DataLayer.IAM.BulkDeviceReset;
 using DataLayer.IAM.BulkUpload;
 using DataLayer.IAM.Company;
 using DataLayer.IAM.CompanyOwner;
 using DataLayer.IAM.CompanyProductMapping;
 using DataLayer.IAM.Configuration;
+using DataLayer.IAM.Dashboard;
 using DataLayer.IAM.DataSyncing;
 using DataLayer.IAM.Department;
 using DataLayer.IAM.Designation;
@@ -36,13 +39,16 @@ using DataLayer.Login;
 using Microsoft.Extensions.DependencyInjection;
 using RepositoryLayer.Common.IDropdown;
 using RepositoryLayer.Common.ILog;
+using RepositoryLayer.IAM.BulkDeviceReset;
 using RepositoryLayer.IAM.BulkUpload;
 using RepositoryLayer.IAM.IAction;
 using RepositoryLayer.IAM.IApp;
+using RepositoryLayer.IAM.IAppAuditLog;
 using RepositoryLayer.IAM.ICompany;
 using RepositoryLayer.IAM.ICompanyOwner;
 using RepositoryLayer.IAM.ICompanyProductMapping;
 using RepositoryLayer.IAM.IConfiguration;
+using RepositoryLayer.IAM.IDashboard;
 using RepositoryLayer.IAM.IDataSyncing;
 using RepositoryLayer.IAM.IDepartment;
 using RepositoryLayer.IAM.IDesignation;
@@ -120,6 +126,10 @@ namespace DataLayer
             services.AddTransient<IVersionControlService, VersionControlService>();
             services.AddTransient<IPageActionMappingService, PageActionMappingService>();
             //services.AddTransient<IAuditLogService, AuditLogService>();
+            services.AddTransient<IDashboardService, DashboardService>();
+            services.AddTransient<IAppAuditLogService, AppAuditLogService>();
+            services.AddTransient<IBulkDeviceResetService, BulkDeviceResetService>();
+
         }
     }
 }

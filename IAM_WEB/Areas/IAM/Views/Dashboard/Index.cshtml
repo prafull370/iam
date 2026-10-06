@@ -1,12 +1,191 @@
 ﻿@{
-	ViewData["Title"] = "Dashboard";
-	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="no-dashboard d-flex align-items-center justify-content-center">
-	<div class="text-center">
-		<i class="ugo-icons ndimg">rocket_launch</i>
-		<h2 class="nd-title">Hello, nice to see you!</h2>
-		<div class="nd-desc"> You are now minutes away from creativity than ever before. Enjoy! </div>
-	</div>
+<div class="main-body iam-dashboard">
+    <!-- KPI cards -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-5 g-3 mbc" id="dvKpiCards">
+        <div class="col">
+            <div class="dbkpi dbkpi-blue h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Total Users</div>
+                    <div class="dbkpi-val" id="kpiTotalUsers">
+                        <span class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></span>
+                    </div>
+                    <div class="dbkpi-sub" id="kpiTotalUsersSub">&nbsp;</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">group</i></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dbkpi dbkpi-green h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Active Users</div>
+                    <div class="dbkpi-val" id="kpiActiveUsers">
+                        <span class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></span>
+                    </div>
+                    <div class="dbkpi-sub" id="kpiActiveUsersSub">&nbsp;</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">how_to_reg</i></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dbkpi dbkpi-violet h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">DISCOMs</div>
+                    <div class="dbkpi-val" id="kpiDiscoms">
+                        <span class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></span>
+                    </div>
+                    <div class="dbkpi-sub" id="kpiDiscomsSub">&nbsp;</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">apartment</i></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dbkpi dbkpi-amber h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Products</div>
+                    <div class="dbkpi-val" id="kpiProducts">
+                        <span class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></span>
+                    </div>
+                    <div class="dbkpi-sub" id="kpiProductsSub">&nbsp;</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">inventory_2</i></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="dbkpi dbkpi-teal h-100">
+                <div class="dbkpi-body">
+                    <div class="dbkpi-lbl">Roles</div>
+                    <div class="dbkpi-val" id="kpiRoles">
+                        <span class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></span>
+                    </div>
+                    <div class="dbkpi-sub" id="kpiRolesSub">&nbsp;</div>
+                </div>
+                <span class="dbkpi-icon"><i class="ugo-icons">admin_panel_settings</i></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mbc">
+
+        <!-- Login Trend -->
+        <div class="col-12 col-xl-5">
+            <div class="ccbx h-100">
+                <div class="dbcard-head">
+                    <div>
+                        <div class="dbcard-ttl">Login Trend</div>
+                        <div class="dbcard-sub">Daily logins, last 7 days</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="dbcard-ttl" id="loginTrendTotal">&ndash;</div>
+                        <div class="dbcard-sub">Total logins</div>
+                    </div>
+                </div>
+                <div class="dbchart">
+                    <div class="dbchart-state" id="loginTrendLoader">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    </div>
+                    <div id="loginTrendChart" role="img" aria-label="Daily login count for the last 7 days"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Distribution -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="ccbx h-100">
+                <div class="dbcard-head">
+                    <div>
+                        <div class="dbcard-ttl">Role Distribution</div>
+                        <div class="dbcard-sub">Users assigned per role</div>
+                    </div>
+                </div>
+                <div class="dbrole" id="dvRoleDistribution">
+                    <div class="dbchart-state">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Overview -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="ccbx h-100">
+                <div class="dbcard-head mb-4">
+                    <div>
+                        <div class="dbcard-ttl">Security Overview</div>
+                        <div class="dbcard-sub">Account and session health</div>
+                    </div>
+                </div>
+                <ul class="dslist dbsec">
+                    <li>
+                        <span class="dbico dbico-danger"><i class="ugo-icons">error</i></span>
+                        <span class="dbsec-lbl">Users with failed attempts</span>
+                        <span class="dbsec-val text-danger" id="secFailedAttempts">
+                            <span class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="dbico dbico-warning"><i class="ugo-icons">lock</i></span>
+                        <span class="dbsec-lbl">Locked accounts</span>
+                        <span class="dbsec-val" id="secLocked">
+                            <span class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="dbico dbico-success"><i class="ugo-icons">phone_android</i></span>
+                        <span class="dbsec-lbl">New devices today</span>
+                        <span class="dbsec-val" id="secNewDevices">
+                            <span class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="dbico dbico-primary"><i class="ugo-icons">groups</i></span>
+                        <span class="dbsec-lbl">Active sessions</span>
+                        <span class="dbsec-val text-primary" id="secSessions">
+                            <span class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-12">
+            <div class="ccbx h-100">
+                <div class="dbcard-head">
+                    <div>
+                        <div class="dbcard-ttl">Recent Activity</div>
+                        <div class="dbcard-sub" id="recentActivityCount">Latest user actions across modules</div>
+                    </div>
+                    @* <a href="@Url.Action("Index", "AuditLog", new { area = "IAM" })" class="small">View all</a> *@
+                </div>
+                <div class="table-responsive">
+                    <table class="table thwsnw dbtbl mb-0">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>User Name</th>
+                                <th>Activity</th>
+                                <th>Page / Module</th>
+                                <th>Description</th>
+                                <th>IP Address</th>
+                                <th>Created On</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRecentActivity">
+                            <tr><td colspan="8" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="@Url.Content("~/lib/apexcharts/apexcharts.js")"></script>
+    <script src="@Url.Content("~/scripts/iam/dashboard/dashboard.js").ToLower()"></script>
+}
