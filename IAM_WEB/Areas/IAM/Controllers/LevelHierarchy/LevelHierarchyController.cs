@@ -30,7 +30,13 @@ namespace IAM_WEB.Areas.IAM.Controllers.LevelHierarchy
 		{
 			ViewBag.ZoneList = await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.ZONE.ToString() });
 			ViewBag.Level = await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL.ToString() });
-			LevelHierarchyRequestModel model = new LevelHierarchyRequestModel();
+            ViewBag.Level1 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL1.ToString() }))?.FirstOrDefault()?.Name ?? "Level1";
+            ViewBag.Level2 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL2.ToString() }))?.FirstOrDefault()?.Name ?? "Level2";
+            ViewBag.Level3 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL3.ToString() }))?.FirstOrDefault()?.Name ?? "Level3";
+            ViewBag.Level4 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL4.ToString() }))?.FirstOrDefault()?.Name ?? "Level4";
+            ViewBag.Level5 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL5.ToString() }))?.FirstOrDefault()?.Name ?? "Level5";
+            ViewBag.LEVEL6LB = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL6LB.ToString() }))?.FirstOrDefault()?.Name ?? "Level6";
+            LevelHierarchyRequestModel model = new LevelHierarchyRequestModel();
 			return View("~/Areas/IAM/Views/LevelHierarchy/Add.cshtml", model);
 		}
 
