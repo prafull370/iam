@@ -19,7 +19,7 @@ namespace ModelLayer.DataValidators.IAM.Page
             //RuleFor(x => x.Parent_Id).LessThan(2147483647).WithMessage("Please select a valid parent page.").When(x => !x.Is_Parent);
             RuleFor(x => x.Parent_Id).Must(id => !id.HasValue || id.Value > 0).WithMessage("Please select a valid parent page.");
             RuleFor(x => x.Access_Id).ValidIntDropdown("Access Point");
-            RuleFor(x => x.Page_Name).ValidString("Page Name ", 0, 20);
+            RuleFor(x => x.Page_Name).ValidString("Page Name ", 0, 30);
             //RuleFor(x => x.Page_Url).ValidString("Page Url ",10 , 100);
             RuleFor(x => x.Page_Url).ValidUrlString("Page Url ", 10, 100);
             //RuleFor(x => x.Page_Desc).ValidStringNotRequired("Description ");

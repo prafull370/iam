@@ -40,35 +40,35 @@
 								<span class="text-danger" asp-validation-for="@Model.Level_Type"></span>
 							</div>
 							<div class="col-xl-4 mbc">
-								<label for="DDLZoneId" id="ZoneLabel">Level1</label>
+								<label for="DDLZoneId" id="ZoneLabel">@ViewBag.Level1</label>
 								<select name="Zone_Id" asp-items="@(new SelectList(ViewBag.ZoneList,"Id","Name"))" class="form-control dropdown slct2" id="DDLZoneId">
 									<option value="">Select</option>
 								</select>
 								<span class="text-danger" id="zone_errmsg"></span>
 							</div>
 							<div class="col-xl-4 mbc">
-								<label for="DDLCircleId" id="CircleLabel">Level2</label>
+								<label for="DDLCircleId" id="CircleLabel">@ViewBag.Level2</label>
 								<select name="Circle_Id" class="form-control dropdown slct2" id="DDLCircleId">
 									<option value="">Select</option>
 								</select>
 								<span class="text-danger" id="circle_errmsg"></span>
 							</div>
 							<div class="col-xl-4 mbc">
-								<label for="DDLDivisionId" id="DivLabel">Level3</label>
+								<label for="DDLDivisionId" id="DivLabel">@ViewBag.Level3</label>
 								<select name="Division_Id" class="form-control dropdown slct2" id="DDLDivisionId">
 									<option value="">Select</option>
 								</select>
 								<span class="text-danger" id="div_errmsg"></span>
 							</div>
 							<div class="col-xl-4 mbc">
-								<label for="DDLSubDivisionId" id="SubDivLabel">Level4</label>
+								<label for="DDLSubDivisionId" id="SubDivLabel">@ViewBag.Level4</label>
 								<select name="SubDivision_Id" class="form-control dropdown slct2" id="DDLSubDivisionId">
 									<option value="">Select</option>
 								</select>
 								<span class="text-danger" id="sdiv_errmsg"></span>
 							</div>
 							<div class="col-xl-4 mbc">
-								<label for="DDLBlockId" id="BlockLabel">Level5</label>
+								<label for="DDLBlockId" id="BlockLabel">@ViewBag.Level5</label>
 								<select name="Block_Id" class="form-control dropdown slct2" id="DDLBlockId">
 									<option value="">Select</option>
 								</select>

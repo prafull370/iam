@@ -59,7 +59,7 @@ namespace UtilityLayer.Helper.SendEmail
             bool isSuccess;
             try
             {
-               mailClient.SendAsync(mailMessage,null);
+                mailClient.SendAsync(mailMessage,null);
                 isSuccess = true;
             }
             catch (Exception ex)

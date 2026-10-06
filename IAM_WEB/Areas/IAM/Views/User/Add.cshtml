@@ -259,13 +259,14 @@
 									<table id="myTable" class="table table-bordered table-style">
 										<thead>
 											<tr>
-												<th class="nbdr">DISCOM <span class="text-danger">*</span></th>
-												<th class="nbdr">Zone</th>
-												<th class="nbdr">Circle</th>
-												<th class="nbdr">Division</th>
-												<th class="nbdr">Sub Division</th>
-												<th class="nbdr">Block</th>
-												<th class="nbdr">Level6</th>
+												@* <th class="nbdr">DISCOM <span class="text-danger">*</span></th> *@
+												<th class="nbdr">@ViewBag.DISCOMLB<span class="text-danger">*</span></th>
+												<th class="nbdr">@ViewBag.Level1</th>
+												<th class="nbdr">@ViewBag.Level2</th>
+												<th class="nbdr">@ViewBag.Level3</th>
+												<th class="nbdr">@ViewBag.Level4</th>
+												<th class="nbdr">@ViewBag.Level5</th>
+												<th class="nbdr">@ViewBag.LEVEL6LB</th>
 												<th class="nbdr">Action</th>
 											</tr>
 										</thead>

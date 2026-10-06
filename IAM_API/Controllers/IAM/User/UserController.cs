@@ -139,26 +139,26 @@ namespace IAM_API.Controllers.IAM.User
                 EMAIL_ID = model.Email_Id,
                 SUBJECT = "UGO IAM - Account Verification",
                 BODY = $@"
-<p>Dear {model.User_Name},</p>
+                <p>Dear {model.User_Name},</p>
 
-<p>Your account has been successfully created on <strong>UGO IAM</strong>.</p>
-<p>Your user id is: <strong>{model.Login_Id}</strong> and Password is: <strong>{_utility.cryptography.Decrypt(model?.Password??"")}</strong></p>
-<p>Please verify your account by clicking the button below:</p>
+                <p>Your account has been successfully created on <strong>UGO IAM</strong>.</p>
+                <p>Your user id is: <strong>{model.Login_Id}</strong> and Password is: <strong>{_utility.cryptography.Decrypt(model?.Password??"")}</strong></p>
+                <p>Please verify your account by clicking the button below:</p>
 
-<p>
-    <a href=""{verificationLink}"" 
-       style=""background:#4CAF50;color:#fff;padding:10px 20px;
-              text-decoration:none;border-radius:6px;font-weight:bold;"">
-       Verify Account
-    </a>
-</p>
+                <p>
+                    <a href=""{verificationLink}"" 
+                       style=""background:#4CAF50;color:#fff;padding:10px 20px;
+                              text-decoration:none;border-radius:6px;font-weight:bold;"">
+                       Verify Account
+                    </a>
+                </p>
 
-<p>If the above button does not work, use the link below:</p>
+                <p>If the above button does not work, use the link below:</p>
 
-<p><a href=""{verificationLink}"">{verificationLink}</a></p>
+                <p><a href=""{verificationLink}"">{verificationLink}</a></p>
 
-<p>Thank you,<br/>UGO IAM Team</p>
-",
+                <p>Thank you,<br/>UGO IAM Team</p>
+                 ",
                 IS_HTML_BODY = true
             };
 
