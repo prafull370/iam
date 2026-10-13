@@ -58,5 +58,12 @@ namespace IAM_API.Controllers.IAM.Configuration
             return StatusCode(result.Status ? StatusCodes.Status200OK : StatusCodes.Status400BadRequest, result);
 
         }
+
+        [HttpGet("getbyname")]
+        public async Task<IActionResult> getbyname(string Config_Name)
+        {
+            var result = await _repository.configuration.GetByName(Config_Name);
+            return StatusCode(result.Status ? StatusCodes.Status200OK : StatusCodes.Status400BadRequest, result);
+        }
     }
 }

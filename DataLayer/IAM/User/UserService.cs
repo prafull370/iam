@@ -47,7 +47,7 @@ namespace DataLayer.IAM.User
             var skillIdsJson = JsonSerializer.Serialize(skillObjs);
 
             DynamicParameters dynParameters = new DynamicParameters();
-			dynParameters.Add("p_user_name", objmodel.User_Name);
+			dynParameters.Add("p_user_name", objmodel.User_Name);	
 			dynParameters.Add("p_mobile_no", objmodel.Mobile_No);
 			dynParameters.Add("p_login_id", objmodel.Login_Id);
 			dynParameters.Add("p_email_id", objmodel.Email_Id);
@@ -69,6 +69,8 @@ namespace DataLayer.IAM.User
 			dynParameters.Add("p_password", objmodel.Password);
 			dynParameters.Add("p_flag", objmodel.Flag);
 			dynParameters.Add("p_id", objmodel.User_Id);
+            dynParameters.Add("p_attachment_1", objmodel.Attachment_1);
+            dynParameters.Add("p_attachment_2", objmodel.Attachment_2);
             //dynParameters.Add("p_user_id", objmodel.User_Id);
             // Adding all the parameters for the stored procedure
 
@@ -124,6 +126,8 @@ namespace DataLayer.IAM.User
 			dynParameters.Add("p_user_hierarchy", jsonData2);
             //dynParameters.Add("p_user_id", objmodel.User_Id);
             //dynParameters.Add("p_ip_address", "");
+            dynParameters.Add("p_attachment_1", objmodel.Attachment_1);
+            dynParameters.Add("p_attachment_2", objmodel.Attachment_2);
             return await FactoryService.dbmanager.Execute_SP_Update<string>("iam.sp_update_users", dynParameters, LoggedUserData);
 		}
 

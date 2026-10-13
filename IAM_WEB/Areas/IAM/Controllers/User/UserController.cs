@@ -52,6 +52,7 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
             ViewBag.LEVEL6LB = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL6LB.ToString() }))?.FirstOrDefault()?.Name ?? "Level6";
 
             UserRequestModel model = new UserRequestModel();
+            ViewBag.DocUploadEnabled = await IsDocUploadEnabled();
             return View("~/Areas/IAM/Views/User/Add.cshtml", model);
         }
 
@@ -90,13 +91,14 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
         {
             try
             {
-                var files = HttpContext.Request.Form.Files;
-                IFormFile POSTED_FILE = null;
+                //var files = HttpContext.Request.Form.Files;
+                //IFormFile POSTED_FILE = null;
 
-                if (files.Count > 0)
-                {
-                    POSTED_FILE = HttpContext.Request.Form.Files[0];
-                }
+                //if (files.Count > 0)
+                //{
+                //    POSTED_FILE = HttpContext.Request.Form.Files[0];
+                //}
+                IFormFile POSTED_FILE = HttpContext.Request.Form.Files.GetFile("POSTED_FILE");
 
                 var form = await Request.ReadFormAsync();
 
@@ -153,6 +155,19 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
                     // Generate letter avatar when no file is uploaded
                     var avatarService = HttpContext.RequestServices.GetRequiredService<UtilityLayer.Services.GenerateAvatarService>();
                     model.User_Logo = await avatarService.GenerateLetterAvatar(model.User_Name);
+                }
+
+                if (await IsDocUploadEnabled())
+                {
+                    var med = await SaveDoc(Request.Form.Files.GetFile("MEDICAL_FILE"), "Medical");
+                    var trn = await SaveDoc(Request.Form.Files.GetFile("TRAINING_FILE"), "Training");
+                    if (med != null) model.Attachment_1 = med;
+                    if (trn != null) model.Attachment_2 = trn;
+                }
+                else
+                {
+                    model.Attachment_1 = null;
+                    model.Attachment_2 = null;
                 }
 
                 var result = await FactoryService.PostAsync<string>(BaseApi + "/save", model, "");
@@ -252,6 +267,7 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
             ViewBag.Reporting_List = await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.REPORTING.ToString() });
             ViewBag.SkillList = await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.SKILL.ToString() });
             var model = await Get_By_Id<UserRequestModel>(Convert.ToInt32(_cryptography.Decrypt(Id)));
+            ViewBag.DocUploadEnabled = await IsDocUploadEnabled();
             return View("~/Areas/IAM/Views/User/Add.cshtml", model.ResponseData);
         }
 
@@ -271,13 +287,14 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
         [HttpPost]
         public async Task<IActionResult> Update(UserRequestModel model)
         {
-            var files = HttpContext.Request.Form.Files;
-            IFormFile POSTED_FILE = null;
+            //var files = HttpContext.Request.Form.Files;
+            //IFormFile POSTED_FILE = null;
 
-            if (files.Count > 0)
-            {
-                POSTED_FILE = HttpContext.Request.Form.Files[0];
-            }
+            //if (files.Count > 0)
+            //{
+            //    POSTED_FILE = HttpContext.Request.Form.Files[0];
+            //}
+            IFormFile POSTED_FILE = HttpContext.Request.Form.Files.GetFile("POSTED_FILE");
 
             var form = await Request.ReadFormAsync();
 
@@ -335,7 +352,21 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
                 var avatarService = HttpContext.RequestServices.GetRequiredService<UtilityLayer.Services.GenerateAvatarService>();
                 model.User_Logo = await avatarService.GenerateLetterAvatar(model.User_Name);
             }
-                var result = await FactoryService.PutAsync<string>(BaseApi + "/update", model, "");
+
+            if (await IsDocUploadEnabled())
+            {
+                var med = await SaveDoc(Request.Form.Files.GetFile("MEDICAL_FILE"), "Medical");
+                var trn = await SaveDoc(Request.Form.Files.GetFile("TRAINING_FILE"), "Training");
+                if (med != null) model.Attachment_1 = med;
+                if (trn != null) model.Attachment_2 = trn;
+            }
+            else
+            {
+                model.Attachment_1 = null;
+                model.Attachment_2 = null;
+            }
+
+            var result = await FactoryService.PutAsync<string>(BaseApi + "/update", model, "");
             return Json(result);
         }
 
@@ -357,5 +388,45 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
             return PartialView("_RolesInfo", result.ResponseData);
         }
         #endregion
+
+        #region User Document
+        private async Task<bool> IsDocUploadEnabled()
+        {
+            var q = new Dictionary<string, string> { ["Config_Name"] = "User_Document_Upload" };
+            var r = await FactoryService.GetAsync<ModelLayer.Models.IAM.Configuration.ConfigurationResponseModel>(
+                QueryHelpers.AddQueryString("Configuration/getbyname", q), "");
+
+            ViewBag.DocDebug = $"Status={r?.Status} | Msg={r?.Message} | Code={r?.StatusCode} | Value={r?.ResponseData?.Config_Value} | Active={r?.ResponseData?.Is_Active}";
+
+            return r?.ResponseData != null && r.ResponseData.Is_Active
+                && string.Equals(r.ResponseData.Config_Value, "YES", StringComparison.OrdinalIgnoreCase);
+        }
+
+
+        private async Task<string?> SaveDoc(IFormFile? file, string prefix)
+        {
+            if (file == null) return null;
+            string ext = Path.GetExtension(file.FileName).ToLower();
+            if (!new[] { ".pdf", ".jpg", ".jpeg", ".png" }.Contains(ext) || file.Length > 5 * 1024 * 1024)
+                throw new InvalidOperationException("Only PDF/JPG/PNG up to 5MB allowed.");
+
+            string dateFolder = DateTime.Now.ToString("yyyy-MM-dd");   // e.g. 2026-10-12
+
+            UtilityLayer.Helper.FileDirectory.GenerateFilePath(
+                destFilePath: _config["AppSettings:DestinationFilePath"],
+                GlobalPath: "~/Files/UserDocs/",
+                FolderPath: dateFolder,                       // date-wise folder
+                FileName: prefix,
+                FileExtension: ext.Replace(".", ""),
+                FullFilePath: out string fullpath,
+                AbsoulteFilePath: out string abs,
+                ReturnFileName: out string _);
+
+            using (var fs = new FileStream(fullpath, FileMode.Create)) { await file.CopyToAsync(fs); }
+
+            return "/Assets/Files/UserDocs/" + dateFolder + abs;   // folder must be in the saved path
+        }
+        #endregion
+
     }
 }

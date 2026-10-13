@@ -13,3 +13,7 @@ appsettings.Production.json
 /IAM_API/Logs/*.log
 /IAM_WEB/*appsettings.json
 /IAM_WEB/appsettings.json
+/IAM_WEB/wwwroot/Assets/Files/BulkDeviceReset
+/IAM_WEB/wwwroot/Assets/ApiLogs
+/IAM_WEB/wwwroot/Assets/Files/UserDocs
+/IAM_WEB/wwwroot/Assets/Files/UserLogo

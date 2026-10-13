@@ -14,6 +14,9 @@ namespace ModelLayer.Models.IAM.Product
             public string? Product_Logo { get; set; }
             public string? Product_Desc { get; set; }
             public bool Is_Active { get; set; } = true;
+            public string? Version_Name { get; set; }
+
+        
     }
     public class ProductResponseModel
     {
@@ -27,5 +30,8 @@ namespace ModelLayer.Models.IAM.Product
         public string? Created_On { get; set; }
         public int Display_Order { get; set; }
         public string? Ip_Address { get; set; }
+        public string? Version_Name { get; set; }
+
+
     }
 }

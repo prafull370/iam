@@ -53,5 +53,12 @@ namespace DataLayer.IAM.Configuration
             dynParameters.Add("p_configuration_id", Configuration_Id);
             return await FactoryService.dbmanager.Execute_SP_Select_Single<ConfigurationResponseModel>("mst.sp_configuration_get_by_id", dynParameters, LoggedUserData);
         }
+
+        public async Task<ResponseModel<ConfigurationResponseModel>> GetByName(string Config_Name)
+        {
+            DynamicParameters dynParameters = new DynamicParameters();
+            dynParameters.Add("p_config_name", Config_Name);
+            return await FactoryService.dbmanager.Execute_SP_Select_Single<ConfigurationResponseModel>("mst.sp_configuration_get_by_name", dynParameters, LoggedUserData);
+        }
     }
 }

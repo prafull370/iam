@@ -13,6 +13,7 @@ namespace ModelLayer.DataValidators.IAM.Product
             RuleFor(x => x.Product_Desc).ValidStringNotRequired("Description ", 0, 200);
             RuleFor(x => x.Is_Active).ValidBoolean("IsActive");
             RuleFor(x => x.Product_Id).ValiInt("Product id").When(x => x.Product_Id != 0); // Apply only when ReportId is provided
+            RuleFor(x => x.Version_Name).ValidString("Version ", 0, 20);
         }
     }
 }

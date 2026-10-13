@@ -42,6 +42,9 @@ namespace ModelLayer.Models.IAM.User
         public List<UserSkillModel> User_Skill { get; set; }
         public string? Password { get; set; }
         public string? Flag { get; set; }
+
+        public string? Attachment_1 { get; set; }
+        public string? Attachment_2 { get; set; }
     }
 
     public class UserHierarchy

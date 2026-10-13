@@ -36,6 +36,13 @@
 								<input name="Product_Short_Name" type="text" asp-for="@Model.Product_Short_Name" class="form-control" autocomplete="off" placeholder="Enter Product Short Name" />
 								<span class="text-danger" asp-validation-for="@Model.Product_Short_Name"></span>
 							</div>
+
+							<div class="col-xl-4 mbc">
+								<label class="required">Version Name</label>
+								<input name="Version_Name" type="text" asp-for="@Model.Version_Name" class="form-control" autocomplete="off" placeholder="Enter Version" />
+								<span class="text-danger" asp-validation-for="@Model.Version_Name"></span>
+							</div>
+
 							<div class="col-xl-8 mbc">
 								<label>Description</label>
 								<textarea name="Product_Desc" asp-for="@Model.Product_Desc" class="form-control" autocomplete="off" placeholder="Enter Description Here" maxlength="200" rows="3"></textarea>

@@ -9,5 +9,7 @@ namespace RepositoryLayer.IAM.IConfiguration
         Task<ResponseModel<string>> Update(ConfigurationRequestModel objmodel);
         Task<ResponseModel<List<ConfigurationResponseModel>>> Get(PaginationModel pagination);
         Task<ResponseModel<ConfigurationResponseModel>> GetById(int Config_Id);
+
+        Task<ResponseModel<ConfigurationResponseModel>> GetByName(string Config_Name);
     }
 }
