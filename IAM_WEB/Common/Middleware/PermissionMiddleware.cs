@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using ModelLayer.Models.Common;
 using ModelLayer.Models.IAM.User;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace IAM_WEB.Common.Middleware
 {
@@ -26,7 +27,7 @@ namespace IAM_WEB.Common.Middleware
         }
 
         public async Task Invoke(HttpContext context)
-        {
+         {
             var area = context.GetRouteValue("area")?.ToString()?.ToLower();
             var controller = context.GetRouteValue("controller")?.ToString()?.ToLower();
             var action = context.GetRouteValue("action")?.ToString()?.ToLower();
@@ -35,7 +36,7 @@ namespace IAM_WEB.Common.Middleware
             context.Request.Cookies.TryGetValue("IAM_Token", out var cookieToken);
             string? finaltoken = cookieToken ?? "";
 
-            if (!string.IsNullOrEmpty(controller) && controller != "account" && controller != "errors" && 
+            if (!string.IsNullOrEmpty(controller) && controller != "account" && controller != "errors" &&
                 controller != "companyproductmapping" && controller != "companyowner" && controller != "company")
             {
                 // ✅ FIX: Validate token before processing
@@ -49,6 +50,7 @@ namespace IAM_WEB.Common.Middleware
 
                 // ✅ FIX: Cache permission check result for 5 minutes
                 string permCacheKey = $"PERM_{finaltoken}_{area}_{controller}";
+
                 bool? hasPermission = _cache.Get<bool?>(permCacheKey);
 
                 if (hasPermission == null)
@@ -57,7 +59,7 @@ namespace IAM_WEB.Common.Middleware
                     {
                         // ✅ Only call API if not cached
                         hasPermission = await VerifyUserPermissionAsync(area, controller);
-                        
+
                         // ✅ Cache result for 5 minutes
                         if (hasPermission.HasValue)
                         {
@@ -67,33 +69,10 @@ namespace IAM_WEB.Common.Middleware
                     catch (Exception ex)
                     {
                         _logger.LogError($"Permission check failed: {ex.Message}");
-                        hasPermission = false;
+                        //hasPermission = false;
+                        hasPermission = null;
                     }
                 }
-
-                // Fetch page activity flag (cached 5 min, same as permission)
-                //try
-                //{
-                //    //string Page_Url = string.IsNullOrEmpty(area) ? "/" + controller : "/" + area + "/" + controller;
-                //    string Page_Url = string.IsNullOrEmpty(area) ? $"/{controller}/{action}" : $"/{area}/{controller}/{action}";
-                //    string flagCacheKey = $"AUDITFLAG_{finaltoken}_{Page_Url}";
-                //    bool? activityFlag = _cache.Get<bool?>(flagCacheKey);
-
-                //    if (activityFlag == null)
-                //    {
-                //        var apiPath = $"UserPermission/getPageActivityFlag?Page_Url={System.Net.WebUtility.UrlEncode(Page_Url)}";
-                //        var activityFlagResult = await _factoryservice.GetAsync<bool?>(apiPath);
-                //        activityFlag = activityFlagResult?.ResponseData;
-                //        if (activityFlag.HasValue)
-                //            _cache.Set(flagCacheKey, activityFlag, TimeSpan.FromMinutes(1));
-                //    }
-
-                //    context.Items["Is_Activity_log"] = activityFlag;
-                //}
-                //catch (Exception ex)
-                //{
-                //    _logger.LogWarning($"Failed to load page activity flag: {ex.Message}");
-                //}
 
                 // ✅ Load user product info (cached)
                 var UserProductInfo = _cache.Get<List<UserProductPermissionModel>>("USER_PRODUCT_INFO_" + finaltoken);
@@ -130,8 +109,18 @@ namespace IAM_WEB.Common.Middleware
                     }
                     else
                     {
-                        context.Response.StatusCode = 403;
-                        context.Response.Redirect("/Errors/Error403");
+                        // IAM Permission has not been granted: if return url is present, redirect to product with token, else show error page
+                        var returnUrl = context.Session.GetString("Return_Url");
+                        if (await IsAllowedReturnUrlAsync(context, returnUrl))
+                        {
+                            context.Session.Remove("Return_Url");
+                            context.Response.Redirect(QueryHelpers.AddQueryString(returnUrl!, "token", finaltoken));
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 403;
+                            context.Response.Redirect("/Errors/Error403");
+                        }
                     }
                     return;
                 }
@@ -153,10 +142,29 @@ namespace IAM_WEB.Common.Middleware
             catch (Exception ex)
             {
                 _logger.LogError($"VerifyUserPermission error: {ex.Message}");
-                return false;
+                return null;
             }
         }
+        private async Task<bool> IsAllowedReturnUrlAsync(HttpContext ctx, string? url)
+        {
+            if (string.IsNullOrWhiteSpace(url) || !Uri.TryCreate(url, UriKind.Absolute, out var uri))
+                return false;
 
+            if (uri.Scheme != Uri.UriSchemeHttps && !uri.IsLoopback)
+                return false;
+
+            // Prevent: IAM has its own URL, so redirecting to it will create a loop
+            if (string.Equals(uri.Authority, ctx.Request.Host.Value, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            // Share Token On the registered host only (origin, not path) :Example: https://example.com:5001/path -> https://example.com:5001
+            var origin = uri.GetLeftPart(UriPartial.Authority);
+            var result = await _factoryservice.GetAsync<HostInfoModel>(
+                QueryHelpers.AddQueryString("UserPermission/getHostInfoByHostUrl", "hosturl", origin)
+                );
+
+            return result?.Status == true;
+        }
         public async Task<bool?> UserProductsSetting(HttpContext context)
         {
             try
@@ -170,7 +178,6 @@ namespace IAM_WEB.Common.Middleware
                 }
 
                 var HostInfo = await _factoryservice.GetAsync<HostInfoModel>("UserPermission/getHostInfoByHostUrl?hosturl=" + _config["SSO:WebUrl"] ?? "", "");
-                
                 var apiUrl = $"UserPermission/getProductById?Discom_Id={HostInfo?.ResponseData?.Host_Discom_Id}";
                 var result = await _factoryservice.GetAsync<List<UserProductPermissionModel>>(apiUrl);
                 _cache.Set("USER_PRODUCT_INFO_" + finaltoken, result?.ResponseData, TimeSpan.FromHours(Convert.ToInt32(_config["SSO:ExpireTime"])));
