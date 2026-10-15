@@ -266,6 +266,13 @@ namespace IAM_WEB.Areas.IAM.Controllers.User
             ViewBag.Block_Remark_List = await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.USERBLOCKTYPE.ToString() });
             ViewBag.Reporting_List = await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.REPORTING.ToString() });
             ViewBag.SkillList = await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.SKILL.ToString() });
+            ViewBag.DISCOMLB = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.DISCOMLB.ToString() }))?.FirstOrDefault()?.Name ?? "Discom";
+            ViewBag.Level1 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL1.ToString() }))?.FirstOrDefault()?.Name ?? "Level1";
+            ViewBag.Level2 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL2.ToString() }))?.FirstOrDefault()?.Name ?? "Level2";
+            ViewBag.Level3 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL3.ToString() }))?.FirstOrDefault()?.Name ?? "Level3";
+            ViewBag.Level4 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL4.ToString() }))?.FirstOrDefault()?.Name ?? "Level4";
+            ViewBag.Level5 = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL5.ToString() }))?.FirstOrDefault()?.Name ?? "Level5";
+            ViewBag.LEVEL6LB = (await Dropdown.Get(new DDLRequestModel { Flag = DDLShortcodeEnum.CommonDDL.LEVEL6LB.ToString() }))?.FirstOrDefault()?.Name ?? "Level6";
             var model = await Get_By_Id<UserRequestModel>(Convert.ToInt32(_cryptography.Decrypt(Id)));
             ViewBag.DocUploadEnabled = await IsDocUploadEnabled();
             return View("~/Areas/IAM/Views/User/Add.cshtml", model.ResponseData);
