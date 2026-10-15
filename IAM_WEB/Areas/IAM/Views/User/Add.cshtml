@@ -238,6 +238,31 @@
 										<input type="button" class="form-control btn btn-info" data-bs-toggle="modal" data-bs-target="#vlModal" id="btnShowRoles" onclick="BindRolePermission();" value="User Roles" />
 										<span class="text-danger"></span>
 									</div>
+
+									@* <span class="text-danger">Flag = [@ViewBag.DocUploadEnabled] @ViewBag.DocDebug</span> *@
+
+									@if (ViewBag.DocUploadEnabled == true)
+									{
+										<div class="col-lg-4 col-sm-4 col-6 mbc-sm">
+											<label>Medical Certificate</label>
+											<input type="file" name="MEDICAL_FILE" id="medicalFile" class="form-control docfile" accept=".pdf,.jpg,.jpeg,.png" />
+											<input type="hidden" asp-for="@Model.Attachment_1" />
+											@if (!string.IsNullOrEmpty(Model.Attachment_1))
+											{
+												<a href="@Url.Content(Model.Attachment_1)" target="_blank" class="small">View current file</a>
+											}
+										</div>
+										<div class="col-lg-4 col-sm-4 col-6 mbc-sm">
+											<label>Training Certificate</label>
+											<input type="file" name="TRAINING_FILE" id="trainingFile" class="form-control docfile" accept=".pdf,.jpg,.jpeg,.png" />
+											<input type="hidden" asp-for="@Model.Attachment_2" />
+											@if (!string.IsNullOrEmpty(Model.Attachment_2))
+											{
+												<a href="@Url.Content(Model.Attachment_2)" target="_blank" class="small">View current file</a>
+											}
+										</div>
+									}
+
 								</div>
 							</div>
 						</div>

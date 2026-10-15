@@ -66,7 +66,7 @@ function LoadProductData() {
         "filter": filter,
         responsive: responsive,
         language: language,
-        "order": [[3, 'desc']],
+        "order": [[4, 'desc']],
         "columns": [
             {
                 "data": "Product_Name", "name": "Product_Name", "width": "150px", responsivePriority: 1, orderable: false,
@@ -97,6 +97,9 @@ function LoadProductData() {
             //{
             //    "data": "Product_Desc", "name": "Product_Desc", "width": "140px", responsivePriority: 1, orderable: false
             //},//index 1
+            {
+                "data": "Version_Name", "name": "Version_Name", "width": "40px", responsivePriority: 2, orderable: false
+            },
             {
                 "data": "Is_Active", "name": "Is_Active", "width": "50px", responsivePriority: 3, orderable: false,
                 "render": function (data, type, row) {

@@ -24,6 +24,8 @@ namespace DataLayer.IAM.Product
             dynParameters.Add("p_product_logo", objmodel.Product_Logo);
             dynParameters.Add("p_product_desc", objmodel.Product_Desc);
             dynParameters.Add("p_is_active", objmodel.Is_Active);
+            dynParameters.Add("p_version_name", objmodel.Version_Name);
+
             // Adding all the parameters for the stored procedure
 
 
@@ -38,6 +40,8 @@ namespace DataLayer.IAM.Product
             dynParameters.Add("p_product_logo", objmodel.Product_Logo);
             dynParameters.Add("p_product_desc", objmodel.Product_Desc);
             dynParameters.Add("p_is_active", objmodel.Is_Active);
+            dynParameters.Add("p_version_name", objmodel.Version_Name);
+
             return await FactoryService.dbmanager.Execute_SP_Update<string>("iam.sp_product_update", dynParameters, LoggedUserData);
 
         }

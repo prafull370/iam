@@ -594,6 +594,17 @@ function SubmitForm(formId) {
         event.preventDefault(); // Stop form from submitting
         return;
     }
+
+    //user Document Upload
+    $(document).on("change", ".docfile", function () {
+        var f = this.files[0];
+        if (!f) return;
+        var ok = /\.(pdf|jpe?g|png)$/i.test(f.name) && f.size <= 5 * 1024 * 1024;
+        if (!ok) {
+            showAlert("Only PDF/JPG/PNG up to 5MB allowed.", "Warning", "OkCancel");
+            this.value = "";
+        }
+    });
     
 
     // Check if the form is valid before proceeding

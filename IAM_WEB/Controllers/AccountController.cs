@@ -27,8 +27,11 @@ namespace IAM_WEB.Controllers
             {
                 // Your login view model
                 var model = new UserLoginModel();
-                // Get returnUrl from query string
+                // Get returnUrl from query string 
                 var redirectUrl = Request.Query["returnUrl"].ToString();
+
+                if (!string.IsNullOrEmpty(redirectUrl))
+                    HttpContext.Session.SetString("Return_Url", redirectUrl);
 
                 // Get token from IAM session
                 Request.Cookies.TryGetValue("IAM_Token", out var cookieToken);
@@ -72,8 +75,11 @@ namespace IAM_WEB.Controllers
             try
             {
                 var redirectUrl = Request.Query["returnUrl"].ToString();
+
+                if (!string.IsNullOrEmpty(redirectUrl))
+                    HttpContext.Session.SetString("Return_Url", redirectUrl);
+
                 var Redirect = false;
-                //bool is_superadmin = false;
                 var Validation = ValidationHelper.ValidateModel<UserLoginModel>(model, ModelState);
                 if (!Validation.Status)
                 {
@@ -83,8 +89,10 @@ namespace IAM_WEB.Controllers
                 if (result.RecordId != 0)
                 {
 
+                    // To Get the iam token and user info
                     var userDetails = await FactoryService.GetAsync<LoginResponseModel>("Login/getbyid?id=" + result.RecordId, "");
 
+                    // To get the jwt token 
                     var LoginUSerData = await FactoryService.GetAsync<LoginResponseModel>("Login/getbyiamtoken?iamtoken=" + result.ResponseData ?? "", "");
                     HttpContext.Session.SetInt32("User_Id", LoginUSerData?.ResponseData?.User_Id ?? 0);
                     HttpContext.Session.SetInt32("Company_Id", LoginUSerData?.ResponseData?.Company_Id ?? 0);
@@ -224,7 +232,7 @@ namespace IAM_WEB.Controllers
                 IsEssential = true,
                 SameSite = SameSiteMode.None,
                 Path = "/",
-                // 🔥 IMPORTANT: DO NOT set domain for localhost
+                // IMPORTANT: DO NOT set domain for localhost
                 Domain = string.IsNullOrEmpty(cookieDomain) ? null : cookieDomain
             });
             // Try without domain (fallback)
@@ -267,7 +275,7 @@ namespace IAM_WEB.Controllers
 
         public async Task<IActionResult> Get_Login_Type(string Id)
         {
-            await ValidationHelper.LogErrorToFile($"Error in Get_Login_Type method: Parameter Id: {Id} " + "Log print Scuccessfully");
+            //await ValidationHelper.LogErrorToFile($"Error in Get_Login_Type method: Parameter Id: {Id} " + "Log print Scuccessfully");
             //string url = string.Empty;
             try
             {
@@ -276,9 +284,9 @@ namespace IAM_WEB.Controllers
                     ["Id"] = Id,
                 };
                 string url = QueryHelpers.AddQueryString(BaseApi + "/getbyloginid", queryParams);
-                await ValidationHelper.LogErrorToFile($"Error in Get_Login_Type method: Parameter Id: {url} " + "API URL");
+                //await ValidationHelper.LogErrorToFile($"Error in Get_Login_Type method: Parameter Id: {url} " + "API URL");
                 var Result = await FactoryService.GetAsync<UserOtpModel>(url, "");
-                await ValidationHelper.LogErrorToFile($"Error in Get_Login_Type method: Parameter Id: {Result} " + "");
+                //await ValidationHelper.LogErrorToFile($"Error in Get_Login_Type method: Parameter Id: {Result} " + "");
                 return Json(Result);
             }
             catch (Exception ex)
