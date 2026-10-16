@@ -151,6 +151,7 @@ namespace ModelLayer.Models.IAM.User
         public string? Service_Url { get; set; }
         public string? Service_Api_Url { get; set; }
         public int Display_Order { get; set; }
+        public string? Service_Desc { get; set; }
     }
 
     public class UserModulePermissionModel
