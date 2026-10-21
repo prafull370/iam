@@ -74,7 +74,8 @@
                     @if (!pageHasChildren)
                     {
                         <input type="radio"
-                               name="landingPage_@serviceId"
+                               @* name="landingPage_@serviceId" *@
+                               name="landingPage_@(serviceId)_@(moduleId)"
                                aria-label="Landing Page - @pg.Page_Name"
                                data-product-id="@productId"
                                data-service-id="@serviceId"
