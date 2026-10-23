@@ -145,7 +145,8 @@ $(document).on("change", ".landing-radio", function () {
 /* =========================================================
    INITIAL STATE AFTER PARTIAL LOAD
 ========================================================= */
-$(document).on("DOMNodeInserted", "#rolePagePartial", function () {
+//$(document).on("DOMNodeInserted", "#rolePagePartial", function () {
+function LandingRadio(){
 
     $(".landing-radio").each(function () {
 
@@ -154,7 +155,7 @@ $(document).on("DOMNodeInserted", "#rolePagePartial", function () {
 
         $(this).prop("disabled", !isChecked);
     });
-});
+}
 
 
 /* =========================================================
@@ -235,8 +236,10 @@ function BindList(Role_Id) {
             $("#dvProcessing").hide();
 
             if (typeof data === "string" && data.trim().startsWith('<')) {
+                $("#imgchooseflt").hide();
                 $('#btn').removeClass('d-none');
                 $('#rolePagePartial').html(data);
+                LandingRadio();
             } else {
                 $("#imgchooseflt").show();
                 $('#rolePagePartial').empty();
